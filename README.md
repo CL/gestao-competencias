@@ -10,6 +10,9 @@ O obejtivo do sistema é facilitar a informatização das competências dos cola
 
 Em um mundo em que existem mais frameworks javascript do que programadores javascript entender e conhecer quais são os skills de cada desenvolvedor é um movimento importante na gestão de TI
 
+### Depêndencias
+Em breve
+
 
 
 
