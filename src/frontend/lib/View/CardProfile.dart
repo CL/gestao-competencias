@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Model/SkillProfile.dart';
+import '../Model/SkillProfile.dart';
 import 'StarRating.dart';
 
 class CardProfile extends StatefulWidget{

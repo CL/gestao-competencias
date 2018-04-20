@@ -1,51 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../Model/User.dart';
 import 'BackgroundProfileAppBar.dart';
 import 'CardProfile.dart';
 import 'ChipProfile.dart';
-import 'Model/SkillProfile.dart';
-import 'Profile.dart';
+import '../Model/SkillProfile.dart';
+import 'ProfileView.dart';
 
-class ProfileState extends State<Profile> {
+class ProfileState extends State<ProfileView> {
 
+  List<SkillProfile> skillsProfile;
+  User user;
   GlobalKey globalKey = new GlobalKey();
-  List<SkillProfile> skillsProfile = [
-    new SkillProfile(
-      skillName: "Linguagens",
-      skillRating: 2.5,
-      totalSubSkills: 7,
-      subSkills: [
-        new SubSkill(
-          subSkillName: ".Net C",
-          subSkillRating: 5.0
-        ),
-        new SubSkill(
-          subSkillName: ".Net C#",
-          subSkillRating: 4.0
-        ),
-        new SubSkill(
-          subSkillName: ".Net VB",
-          subSkillRating: 3.0
-        ),
-        new SubSkill(
-          subSkillName: "Java",
-          subSkillRating: 2.0
-        ),
-        new SubSkill(
-          subSkillName: "C++",
-          subSkillRating: 1.0
-        ),
-        new SubSkill(
-          subSkillName: "Python",
-          subSkillRating: 0.0
-        )
-      ]
-    )
-  ];
 
-  void teste(){
-
-  }
+  ProfileState(this.skillsProfile, this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +35,7 @@ class ProfileState extends State<Profile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   new Text(
-                    "Mariana Azzi",
+                    user.name,
                     style: new TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
@@ -75,7 +43,7 @@ class ProfileState extends State<Profile> {
                     ),
                   ),
                   new Text(
-                    "UI/UX Designer | Sênior",
+                    user.role,
                     style: new TextStyle(
                       color: Colors.white,
                       fontSize: 14.0,
@@ -83,14 +51,14 @@ class ProfileState extends State<Profile> {
                   ),
                   new Divider(),
                   new Text(
-                    "mariana.azzi@dtidigital.com.br",
+                    user.email,
                     style: new TextStyle(
                       color: Colors.white,
                       fontSize: 14.0,
                     ),
                   ),
                   new Text(
-                    "31 00000-0000",
+                    user.phone,
                     style: new TextStyle(
                       color: Colors.white,
                       fontSize: 14.0,
@@ -98,12 +66,7 @@ class ProfileState extends State<Profile> {
                   ),
                   new Divider(),
                   new Row(
-                    children: [
-                      new ChipProfile("UX"),
-                      new ChipProfile("UI"),
-                      new ChipProfile("Strategist"),
-                      new ChipProfile("Experience"),
-                    ],
+                    children: getChipList(),
                   )
                 ],
               ),
@@ -112,7 +75,7 @@ class ProfileState extends State<Profile> {
         ),
         new SliverList(
           delegate: new SliverChildListDelegate(
-            gerarListaCards()
+            getCardsList()
           ),
         ),
         ],
@@ -120,7 +83,7 @@ class ProfileState extends State<Profile> {
     );
   }
 
-  List<Widget> gerarListaCards(){
+  List<Widget> getCardsList(){
     List<Widget> skillsCards = [];
 
     skillsProfile.forEach((skill){
@@ -128,5 +91,15 @@ class ProfileState extends State<Profile> {
     });
 
     return skillsCards;
+  }
+
+  List<Widget> getChipList(){
+    List<Widget> chips = [];
+
+    user.skillsSummary.forEach((skill){
+      chips.add(new ChipProfile(skill));
+    });
+
+    return chips;
   }
 }

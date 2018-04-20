@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'Profile.dart';
 import 'View/loginView.dart';
 
 void main() => runApp(new MyApp());
