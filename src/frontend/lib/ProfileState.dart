@@ -3,11 +3,45 @@ import 'package:flutter/material.dart';
 import 'BackgroundProfileAppBar.dart';
 import 'CardProfile.dart';
 import 'ChipProfile.dart';
+import 'Model/SkillProfile.dart';
 import 'Profile.dart';
 
 class ProfileState extends State<Profile> {
 
   GlobalKey globalKey = new GlobalKey();
+  List<SkillProfile> skillsProfile = [
+    new SkillProfile(
+      skillName: "Linguagens",
+      skillRating: 2.5,
+      totalSubSkills: 7,
+      subSkills: [
+        new SubSkill(
+          subSkillName: ".Net C",
+          subSkillRating: 5.0
+        ),
+        new SubSkill(
+          subSkillName: ".Net C#",
+          subSkillRating: 4.0
+        ),
+        new SubSkill(
+          subSkillName: ".Net VB",
+          subSkillRating: 3.0
+        ),
+        new SubSkill(
+          subSkillName: "Java",
+          subSkillRating: 2.0
+        ),
+        new SubSkill(
+          subSkillName: "C++",
+          subSkillRating: 1.0
+        ),
+        new SubSkill(
+          subSkillName: "Python",
+          subSkillRating: 0.0
+        )
+      ]
+    )
+  ];
 
   void teste(){
 
@@ -78,13 +112,21 @@ class ProfileState extends State<Profile> {
         ),
         new SliverList(
           delegate: new SliverChildListDelegate(
-            [
-              new CardProfile(),
-            ],
+            gerarListaCards()
           ),
         ),
         ],
       )
     );
+  }
+
+  List<Widget> gerarListaCards(){
+    List<Widget> skillsCards = [];
+
+    skillsProfile.forEach((skill){
+      skillsCards.add(new CardProfile(skill));
+    });
+
+    return skillsCards;
   }
 }

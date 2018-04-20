@@ -52,7 +52,7 @@ class CardProfileState extends State<CardProfile>{
                         ),
                       ),
                       new Text(
-                        "skills",
+                        " skills",
                         style: new TextStyle(
                           color: new Color.fromRGBO(190, 190, 190, 100.0),
                           fontSize: 14.0,
@@ -81,10 +81,12 @@ class CardProfileState extends State<CardProfile>{
                 ],
               ),
             ),
-            expanded ? new ListView(
-              shrinkWrap: true,
-              children: listSubSkills(),
-            ) : new Container(height: 0.0, width: 0.0)
+            new Container(
+              child: expanded ? new Column(
+                      children: listSubSkills(),
+                    ) : new Container(height: 0.0, width: 0.0),
+            )
+            
           ],
         ), 
       )
@@ -102,13 +104,13 @@ class CardProfileState extends State<CardProfile>{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               new Text(
-                '.Net C',
+                sub.subSkillName,
                 style: new TextStyle(
                   color: new Color.fromRGBO(97, 97, 97, 100.0),
                   fontSize: 12.0
                 ),
               ),
-              new StarRating(rating: 5.0, color: new Color.fromRGBO(245, 184, 43, 100.0))
+              new StarRating(rating: sub.subSkillRating, color: new Color.fromRGBO(245, 184, 43, 100.0))
             ],
           ),
         )
