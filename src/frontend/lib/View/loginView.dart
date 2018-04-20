@@ -40,6 +40,7 @@ class _LoginInputState extends State<LoginInput> {
     content: new Text('Email ou senha incorretos. Você só pode errar a senha por 3 vezes ou seu login será bloqueado.'), 
     duration: new Duration(seconds: 3)
   );
+  bool logingIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,34 +86,56 @@ class _LoginInputState extends State<LoginInput> {
             )),
         new Expanded(
           child: new Center(
-              child: new Container(
-                  height: 48.0,
-                  width: 258.0,
-                  child: new RaisedButton(
-                    color: Colors.white,
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(36.0)),
-                    child: new Text(
-                      'ENTRAR',
-                      style: new TextStyle(
-                          color: const Color(0xff5e529d), fontSize: 12.0),
-                    ),
-                    onPressed: () {
-                      bool loginValido = _loginViewModel.logIn(_controllerEmail.text, _controllerSenha.text);
-                      if(loginValido){
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => new MyHomePage(
-                                  title: 'Gestão de competências')));
-                      }
-                      else{
-                        Scaffold.of(context).showSnackBar(snackBarError);
-                      }
-                    },
-                  ))),
+            child: new Container(
+              height: 48.0,
+              width: 258.0,
+              child: logingIn == false ? 
+              new RaisedButton(
+                color: Colors.white,
+                shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(36.0)
+                ),
+                child: new Text(
+                  'ENTRAR',
+                  style: new TextStyle(
+                      color: const Color(0xff5e529d), fontSize: 12.0
+                  ),
+                ),
+                onPressed: () {
+                  setState(() { logingIn = true;} );
+                  _loginViewModel.logIn(_controllerEmail.text, _controllerSenha.text)
+                        .catchError(() {setState(() { logingIn = false;} );})
+                        .then(logInUser);
+                },
+              ) : new RaisedButton(
+                onPressed: (){},
+                shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(36.0)
+                ),
+                child: new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation<Color>(
+                    const Color(0xff5e529d)
+                  ),
+                )
+              )
+            )
+          ),
         ),
       ],
     );
+  }
+
+  void logInUser(bool loginValido){
+    setState(() { logingIn = false;} );
+    if(loginValido){
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => new MyHomePage(
+                  title: 'Gestão de competências')));
+    }
+    else{
+      Scaffold.of(context).showSnackBar(snackBarError);
+    }
   }
 }
