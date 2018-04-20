@@ -12,7 +12,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Welcome to Flutter',
       home: new Scaffold(
         body: new Container(
             padding: const EdgeInsets.symmetric(horizontal: 51.0),
@@ -72,6 +71,7 @@ class _LoginInputState extends State<LoginInput> {
                   controller: _controllerEmail,
                 ),
                 new TextField(
+                  obscureText: true,
                   style: new TextStyle(
                     color: Colors.white,
                   ),
