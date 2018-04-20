@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/View/FirstLoginView.dart';
 
 import '../ViewModel/loginViewModel.dart';
 import '../main.dart';
@@ -6,8 +7,8 @@ import '../main.dart';
 
 LoginViewModel _loginViewModel = new LoginViewModel();
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key key}) : super(key: key);
+class LoginView extends StatelessWidget {
+  LoginView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,13 +99,12 @@ class _LoginInputState extends State<LoginInput> {
                           color: const Color(0xff5e529d), fontSize: 12.0),
                     ),
                     onPressed: () {
-                      bool loginValido = _loginViewModel.logIn(_controllerEmail.text, _controllerSenha.text);
+                      bool loginValido = true;//_loginViewModel.logIn(_controllerEmail.text, _controllerSenha.text);
                       if(loginValido){
                       Navigator.push(
                           context,
                           new MaterialPageRoute(
-                              builder: (context) => new MyHomePage(
-                                  title: 'Gestão de competências')));
+                              builder: (context) => new FirstLoginView()));
                       }
                       else{
                         Scaffold.of(context).showSnackBar(snackBarError);
