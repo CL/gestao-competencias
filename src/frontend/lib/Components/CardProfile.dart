@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../Model/SkillProfile.dart';
+import '../Model/Skill.dart';
 import 'StarRating.dart';
 
 class CardProfile extends StatefulWidget{
-  final SkillProfile skillProfile;
+  final Skill skillProfile;
 
   CardProfile(this.skillProfile);
 
@@ -15,7 +15,7 @@ class CardProfile extends StatefulWidget{
 
 class CardProfileState extends State<CardProfile>{
   bool expanded = false;
-  SkillProfile skillProfile;
+  Skill skillProfile;
 
   CardProfileState(this.skillProfile);
 

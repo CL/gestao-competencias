@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../ViewModel/loginViewModel.dart';
 import '../main.dart';
+import 'MapSkillsView.dart';
 
 
 LoginViewModel _loginViewModel = new LoginViewModel();
@@ -131,8 +132,7 @@ class _LoginInputState extends State<LoginInput> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new MyHomePage(
-                  title: 'Gestão de competências')));
+              builder: (context) => new MapSkillsView()));
     }
     else{
       Scaffold.of(context).showSnackBar(snackBarError);

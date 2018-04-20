@@ -1,10 +1,11 @@
-class SkillProfile{
+class Skill{
+  String skillId;
   String skillName;
   double skillRating;
   int totalSubSkills;
   List<SubSkill> subSkills;
 
-  SkillProfile({this.skillName, this.skillRating, this.subSkills, this.totalSubSkills});
+  Skill({this.skillName, this.skillRating, this.subSkills, this.totalSubSkills, this.skillId});
 }
 
 class SubSkill{
