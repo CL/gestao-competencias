@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Model/SkillProfile.dart';
+import '../Model/Skill.dart';
 import '../Model/User.dart';
 import '../Components/BackgroundProfileAppBar.dart';
 import '../Components/CardProfile.dart';
@@ -9,7 +9,7 @@ import '../Components/ChipProfile.dart';
 
 class ProfileView extends StatefulWidget {
 
-  final List<SkillProfile> skillsProfile;
+  final List<Skill> skillsProfile;
   final User user;
 
   ProfileView(this.skillsProfile, this.user);
@@ -21,7 +21,7 @@ class ProfileView extends StatefulWidget {
 
 class ProfileState extends State<ProfileView> {
 
-  List<SkillProfile> skillsProfile;
+  List<Skill> skillsProfile;
   User user;
   GlobalKey globalKey = new GlobalKey();
 
