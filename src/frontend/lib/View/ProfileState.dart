@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../Model/User.dart';
-import 'BackgroundProfileAppBar.dart';
-import 'CardProfile.dart';
-import 'ChipProfile.dart';
+import '../Components/BackgroundProfileAppBar.dart';
+import '../Components/CardProfile.dart';
+import '../Components/ChipProfile.dart';
 import '../Model/SkillProfile.dart';
 import 'ProfileView.dart';
 
