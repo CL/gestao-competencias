@@ -6,25 +6,34 @@ import 'dart:async';
 
 import 'package:http/http.dart';
 
+import '../Model/User.dart';
+
+import '../global.dart' as globals;
+
 class LoginViewModel {
 
-  String BACKEND_LOGIN_URL = "";
+ static const String BACKEND_LOGIN_URL = "https://539ee9a8.ngrok.io/login/";
 
   Future<bool> logIn(String email, String password) async {
-     Response response = await http.post(BACKEND_LOGIN_URL, body: {"email": email, "password": password});
-     LoginUser user = JSON.decode(response.body);
-     if(user.email == email){
-       return true;
-     }
-     return false;
+    String jsonLogin = "{ \"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
+    Response response = await http.post(BACKEND_LOGIN_URL, body: jsonLogin, headers: {"content-type": "application/json"});
+    if(response.statusCode != 200 || response.body == ""){
+      return false;
+    }
+    
+    Map<String, String> jsonResponse = JSON.decode(response.body);
+
+    User user = new User(
+      id: jsonResponse["id"].toString(), 
+      email: jsonResponse["email"].toString(), 
+      name: jsonResponse["name"].toString(), 
+      role: jsonResponse["role"].toString()
+    );
+
+    if(user.email == email){
+      globals.user = user;
+      return true;
+    }
+    return false;
   }
-}
-
-class LoginUser{
-  String id;
-  String email;
-  String name;
-  String role;
-
-  LoginUser(this.id, this.email, this.name, this.role);
 }

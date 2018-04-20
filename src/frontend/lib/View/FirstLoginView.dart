@@ -19,7 +19,7 @@ class FirstLoginView extends StatelessWidget {
                 ),
                 new Container(
                   child: new Text(
-                    'Olá Vitor Rodarte',
+                    'Olá Rodrigo Rodrigues',
                     style: new TextStyle(
                       fontWeight: FontWeight.bold,
                       color: new Color(4284572001),
@@ -31,12 +31,23 @@ class FirstLoginView extends StatelessWidget {
                     'Informe quais habilidades você possui e quais você ainda '
                     'não tem domínio, mas tem interesse em aprender.',
                   style: new TextStyle(
-                    
+                    color: new Color(4284572001),
+                    fontSize: 16.0,
                   ),
                 ),
                 new Text('Reserve 5 minutos para iniciar o mapeamento das suas '
-                    'skills.'),
-                new Text('É importante manter seu perfil sempre atualizado.'),
+                    'skills.',
+                  style: new TextStyle(
+                    color: new Color(4284572001),
+                    fontSize: 16.0,
+                  ),
+                ),
+                new Text('É importante manter seu perfil sempre atualizado.',
+                  style: new TextStyle(
+                    color: new Color(4284572001),
+                    fontSize: 16.0,
+                  ),
+                ),
               ],
             ),
           ),
