@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../Model/User.dart';
 import '../ViewModel/loginViewModel.dart';
-import '../main.dart';
 import 'MapSkillsView.dart';
+
+import '../global.dart' as globals;
 
 
 LoginViewModel _loginViewModel = new LoginViewModel();

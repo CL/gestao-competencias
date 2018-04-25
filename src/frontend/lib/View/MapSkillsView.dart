@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../Model/Skill.dart';
 
+import '../global.dart' as globals;
+
 
 class MapSkillsView extends StatefulWidget {
   MapSkillsView({Key key}) : super(key: key);
@@ -55,7 +57,13 @@ class MapSkillsState extends State<MapSkillsView>{
   }
 
   void save(){
-
+    List<Skill> selectedSkills = [];
+    selectedSkillsIds.forEach((key, value) {
+      if(value){
+        selectedSkills.add(skills.firstWhere((element) => element.skillId == key));
+      }
+    });
+    globals.selectedSkills = selectedSkills;
   }
 
   List<Widget> getSkillsList(){
