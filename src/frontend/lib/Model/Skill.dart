@@ -9,8 +9,10 @@ class Skill{
 }
 
 class SubSkill{
+  String subSkillId;
   String subSkillName;
   double subSkillRating;
+  bool subSkillInterest;
 
-  SubSkill({this.subSkillName, this.subSkillRating});
+  SubSkill({this.subSkillId, this.subSkillName, this.subSkillRating, this.subSkillInterest = false});
 }
