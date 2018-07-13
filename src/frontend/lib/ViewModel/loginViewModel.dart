@@ -12,7 +12,7 @@ import '../global.dart' as globals;
 
 class LoginViewModel {
 
- static const String BACKEND_LOGIN_URL = "https://539ee9a8.ngrok.io/login/";
+ static const String BACKEND_LOGIN_URL = "https://d70fbd8c.ngrok.io/login/";
 
   Future<bool> logIn(String email, String password) async {
     String jsonLogin = "{ \"email\": \"" + email + "\", \"password\": \"" + password + "\"}";

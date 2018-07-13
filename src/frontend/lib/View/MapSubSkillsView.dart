@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
 
 
@@ -12,7 +13,7 @@ class MapSubSkillsView extends StatefulWidget {
   createState() => new MapSubSkillsState(skills);
 }
 
-class MapSubSkillsState extends State<MapSubSkillsView>{
+class MapSubSkillsState extends State<MapSubSkillsView> {
   List<Skill> skills;
 
   MapSubSkillsState(this.skills);
@@ -32,10 +33,18 @@ class MapSubSkillsState extends State<MapSubSkillsView>{
       ),
       body: new Container(
         padding: new EdgeInsets.all(18.0),
-        child: new Column(
-          children: getSubSkillsList()
+        child: new Scrollbar(
+          child: new CustomScrollView(
+            slivers: [new SliverList(
+              delegate: new SliverChildListDelegate(
+                getSubSkillsList()
+              ),
+            )]
+          )
+          
         ),
-      ),
+      )
+      
     );
   }
 
@@ -66,40 +75,56 @@ class MapSubSkillsState extends State<MapSubSkillsView>{
 
     skills.forEach((skill){
       newWidgets.add(
-        new Container(
-          padding: new EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-          child: new Card(
-            child: new Container(
-              padding: new EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
-              child: new Column(
-                children: [
-                  new Text(
-                    skill.skillName,
-                    style: new TextStyle(
-                      color: new Color.fromRGBO(45, 182, 195, 1.0),
-                      fontSize: 16.0
+        new Card(
+          child: new Column(
+            children: [
+              new Container(
+                padding: new EdgeInsets.only(top: 16.0, bottom: 8.0, left: 16.0, right: 16.0),
+                child: new Row(
+                  textDirection: TextDirection.ltr,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    new Text(
+                      skill.skillName,
+                      style: new TextStyle(
+                        color: new Color.fromRGBO(45, 182, 195, 100.0),
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
-                  ),
-                  new Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      new Container(
-                        padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
-                        child: new Text(
-                          "Skills dessa categoria",
+                    new Row(
+                      children: [
+                        new Text(
+                          skill.totalSubSkills.toString(),
                           style: new TextStyle(
-                            color: new Color.fromRGBO(97, 97, 97, 1.0),
-                            fontSize: 10.0
+                            color: new Color.fromRGBO(97, 97, 97, 100.0),
+                            fontSize: 14.0,
                           ),
                         ),
-                      )
-                    ]
-                  )
-                ],
-              ) 
-            ),
-          ),
-        ),
+                        new Text(
+                          " skills",
+                          style: new TextStyle(
+                            color: new Color.fromRGBO(190, 190, 190, 100.0),
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              new Container(
+                child: new Divider(height: 15.0,color: Colors.grey[300])
+              ),
+              new Container(
+                child: new Column(
+                  children: listSubSkills(skill),
+                )
+              )
+              
+            ],
+          ), 
+        )
       );
       
     });
@@ -107,4 +132,64 @@ class MapSubSkillsState extends State<MapSubSkillsView>{
     return newWidgets;
   }
 
+  List<Widget> listSubSkills(Skill skill){
+    List<Widget> subSkills = [];
+
+    skill.subSkills.forEach((sub) {
+      subSkills.add(
+        new Container(
+          padding: new EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 5.0),
+          child: new Column(
+            children: [
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  new Text(
+                    sub.subSkillName,
+                    style: new TextStyle(
+                      color: new Color.fromRGBO(97, 97, 97, 100.0),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ],
+              ),
+              new Container(
+                 padding: new EdgeInsets.fromLTRB(0.0, 6.0, 0.0, 6.0),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    new StarRating(rating: sub.subSkillRating, color: new Color.fromRGBO(245, 184, 43, 100.0)),
+                    new GestureDetector(
+                      child: new Icon(
+                        sub.subSkillInterest ? Icons.favorite : Icons.favorite_border, 
+                        color: sub.subSkillInterest ? Colors.red : Colors.grey,
+                      ),
+                      onTap: () { favoritarSubSkill(skill, sub); },
+                    ) 
+                  ]
+                ),
+              )
+              
+            ]
+          )
+        )
+      );
+      subSkills.add(
+        new Container(
+          padding: new EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 5.0),
+          child: new Divider(height: 15.0,color: Colors.grey[300])
+        ),
+      );
+    });
+    return subSkills;
+  }
+
+  void favoritarSubSkill(Skill skill, SubSkill sub) {
+    int indexSkill = skills.indexOf(skill);
+    int indexSubskill = skill.subSkills.indexOf(sub);
+    List<Skill> skillsTemp = skills;
+    skillsTemp[indexSkill].subSkills[indexSubskill].subSkillInterest = !skillsTemp[indexSkill].subSkills[indexSubskill].subSkillInterest;
+    setState(() { skills = skillsTemp; });
+  }
 }
