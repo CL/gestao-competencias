@@ -28,8 +28,8 @@ class FirstLoginView extends StatelessWidget {
                   ),
                 ),
                 new Text(
-                    'Informe quais habilidades você possui e quais você ainda '
-                    'não tem domínio, mas tem interesse em aprender.',
+                  'Informe quais habilidades você possui e quais você ainda '
+                      'não tem domínio, mas tem interesse em aprender.',
                   style: new TextStyle(
                     color: new Color(4284572001),
                     fontSize: 16.0,
