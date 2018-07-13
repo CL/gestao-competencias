@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
+import '../Model/User.dart';
+import 'ProfileView.dart';
+import '../global.dart' as globals;
 
 
 class MapSubSkillsView extends StatefulWidget {
@@ -49,7 +52,17 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   void save(){
-
+    Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => new ProfileView(skills, new User(
+                name: "Teste",
+                phone: "44444444",
+                role: "Teste",
+                email: "email@email.com",
+                skillsSummary: ["Teste"],
+                id: "1"
+              ))));
   }
 
   List<Widget> getSubSkillsList(){
@@ -159,7 +172,11 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
                 child: new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    new StarRating(rating: sub.subSkillRating, color: new Color.fromRGBO(245, 184, 43, 100.0)),
+                    new StarRating(
+                      rating: sub.subSkillRating, 
+                      color: new Color.fromRGBO(245, 184, 43, 100.0),
+                      onRatingChanged: (rating) { changeRating(rating, skill, sub); },
+                    ),
                     new GestureDetector(
                       child: new Icon(
                         sub.subSkillInterest ? Icons.favorite : Icons.favorite_border, 
@@ -183,6 +200,14 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       );
     });
     return subSkills;
+  }
+
+  void changeRating(double rating, Skill skill, SubSkill sub) {
+    int indexSkill = skills.indexOf(skill);
+    int indexSubskill = skill.subSkills.indexOf(sub);
+    List<Skill> skillsTemp = skills;
+    skillsTemp[indexSkill].subSkills[indexSubskill].subSkillRating = rating;
+    setState(() { skills = skillsTemp; });
   }
 
   void favoritarSubSkill(Skill skill, SubSkill sub) {
