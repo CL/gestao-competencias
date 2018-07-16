@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/View/FirstLoginView.dart';
+import 'package:frontend/View/SearchView.dart';
 
 import '../Model/User.dart';
 import '../ViewModel/loginViewModel.dart';
@@ -135,7 +136,7 @@ class _LoginInputState extends State<LoginInput> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new MapSkillsView()));
+              builder: (context) => new SearchView()));
     }
     else{
       Scaffold.of(context).showSnackBar(snackBarError);
