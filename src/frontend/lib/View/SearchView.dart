@@ -13,13 +13,14 @@ class SearchViewState extends State<SearchView>{
   List<User> users;
   List<String> roles;
   String searchedRole="";
+  String searchedName="";
 
   SearchViewState(){
     this.users = this.getUsers();
     this.roles = this.getRoles();
   }
 
-  List<User> getUsers({String role = ""}){
+  List<User> getUsers({String role = "", String name = ""}){
     List<User> users = [
       new User(id: "1", name: "Lucas Hofner",role: "DEV"),
       new User(id: "2", name: "Fulano",role: "Design"),
@@ -43,15 +44,18 @@ class SearchViewState extends State<SearchView>{
     globals.users = users;
 
     List<User> filteredUsers;
-    if(role != ""){
+    List<User> doubleFilteredUsers;
+    if(role != "" && name == ""){
       filteredUsers = users.where((i) => i.role == role).toList();
-      for(int i = 0; i < filteredUsers.length; i++){
-        print(filteredUsers[i].id);
-      }
-
+      return filteredUsers;
+    }else if(role != "" && name != ""){
+      filteredUsers = users.where((i) => i.role == role).toList();
+      doubleFilteredUsers = filteredUsers.where((i) => i.name.contains(name)).toList();
+      return doubleFilteredUsers;
+    }else if( role == "" && name != ""){
+      filteredUsers = users.where( (i) => i.name.contains(name)).toList();
       return filteredUsers;
     }
-
 
     return users;
   }
@@ -73,6 +77,7 @@ class SearchViewState extends State<SearchView>{
     return new MaterialApp(
       title: 'Mulambos dti',
       home: new Scaffold(
+        resizeToAvoidBottomPadding: false,
         body: new Column(
           children: <Widget>[
             new Container(
@@ -87,6 +92,12 @@ class SearchViewState extends State<SearchView>{
                     prefixIcon:
                     new Icon(Icons.search, color: Color(0xffbebebe))),
                     controller: _controllerPesquisa,
+                    onChanged: (text) {
+                        setState(() {
+                          searchedName = text;
+                        });
+                        users = getUsers(role: searchedRole, name: searchedName);
+                    },
               ),
             ),
             new Container(
@@ -117,9 +128,7 @@ class SearchViewState extends State<SearchView>{
                         setState(() {
                           searchedRole = roles[index];
                         });
-                        if(searchedRole != ""){
-                          users = getUsers(role: searchedRole);
-                        }
+                        users = getUsers(role: searchedRole, name: searchedName);
 
                       },
                     ) ,
