@@ -18,11 +18,15 @@ class SkillsService {
 
   String urlGetUserSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS;
 
-  Future<bool> logIn(String email, String password) async {
+  String urlGetAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
 
-    String jsonLogin = "{ \"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
-    Response response = await http.post(BACKEND_LOGIN_URL, body: jsonLogin, headers: {"content-type": "application/json"});
-    debugPrint(response.body.toString());
+  Future<bool> getUserSkills(User user) async {
+    JsonEncoder encoder = new JsonEncoder(user);
+
+    String jsonUser = encoder.convert(user);
+
+    Response response = await http.post(urlGetUserSkills, body: jsonUser, headers: {"content-type": "application/json"});
+    
     if(response.statusCode != 200 || response.body == ""){
       return false;
     }
