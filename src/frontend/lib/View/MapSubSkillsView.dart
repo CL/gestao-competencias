@@ -8,7 +8,7 @@ import '../global.dart' as globals;
 
 
 class MapSubSkillsView extends StatefulWidget {
-  List<Skill> skills;
+  final List<Skill> skills;
   
   MapSubSkillsView(this.skills, {Key key}) : super(key: key);
 
