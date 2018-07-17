@@ -12,12 +12,14 @@ class ChipProfile extends StatelessWidget {
     return new Padding(
       padding: new EdgeInsets.all(4.0),
       child: new Chip(
+        /*
         border: new StadiumBorder(
           side: new BorderSide(
             color: Colors.white,
             width: 1.5
           )
         ),
+        */
         backgroundColor: Colors.transparent,
         label: new Padding(
           padding: new EdgeInsets.only(left: 2.0, right: 2.0),
