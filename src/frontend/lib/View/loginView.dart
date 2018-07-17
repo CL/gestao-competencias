@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:frontend/View/FirstLoginView.dart';
 
 import '../Model/User.dart';
-import '../ViewModel/loginViewModel.dart';
+import '../Service/LoginService.dart';
 import 'MapSkillsView.dart';
 
-import '../global.dart' as globals;
+import '../Shared/global.dart' as globals;
 
 
-LoginViewModel _loginViewModel = new LoginViewModel();
+LoginService _loginViewModel = new LoginService();
 
 class LoginView extends StatelessWidget {
   LoginView({Key key}) : super(key: key);
@@ -129,9 +129,10 @@ class _LoginInputState extends State<LoginInput> {
     );
   }
 
-  void logInUser(bool loginValido){
+  void logInUser(bool validLogin){
     setState(() { logingIn = false;} );
-    if(true){
+    if(validLogin){
+      
       Navigator.push(
           context,
           new MaterialPageRoute(

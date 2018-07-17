@@ -8,11 +8,13 @@ import 'package:http/http.dart';
 
 import '../Model/User.dart';
 
-import '../global.dart' as globals;
+import '../Shared/Constants.dart';
 
-class LoginViewModel {
+import '../Shared/global.dart' as globals;
 
- static const String BACKEND_LOGIN_URL = "https://d70fbd8c.ngrok.io/login/";
+class SkillsService {
+
+  String urlGetUserSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS;
 
   Future<bool> logIn(String email, String password) async {
     String jsonLogin = "{ \"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
@@ -27,7 +29,8 @@ class LoginViewModel {
       id: jsonResponse["id"].toString(), 
       email: jsonResponse["email"].toString(), 
       name: jsonResponse["name"].toString(), 
-      role: jsonResponse["role"].toString()
+      role: jsonResponse["role"].toString(),
+      password: jsonResponse["password"].toString()
     );
 
     if(user.email == email){
