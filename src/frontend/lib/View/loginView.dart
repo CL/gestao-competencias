@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/View/FirstLoginView.dart';
+import 'package:frontend/View/SearchView.dart';
 
 import '../Model/User.dart';
 import '../ViewModel/loginViewModel.dart';
