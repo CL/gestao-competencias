@@ -35,7 +35,10 @@ class MapSkillsState extends State<MapSkillsView>{
     ];
 
     List<Skill> allSkills = [
-      new Skill(skillName: "LINGUAGENS", skillId: "1", skillRating: 2.0, subSkills: subSkills, totalSubSkills: 6)
+      new Skill(skillName: "LINGUAGENS", skillId: "1", skillRating: 2.0, subSkills: subSkills, totalSubSkills: 6),
+      new Skill(skillName: "LINGUAGENS 2", skillId: "2", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6),
+      new Skill(skillName: "LINGUAGENS 3", skillId: "3", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6),
+      new Skill(skillName: "LINGUAGENS 3", skillId: "4", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6)
     ];
 
     return allSkills;
@@ -60,9 +63,16 @@ class MapSkillsState extends State<MapSkillsView>{
       ),
       body: new Container(
         padding: new EdgeInsets.all(18.0),
-        child: new Column(
-          children: getSkillsList()
-        ),
+        child: new Scrollbar(
+          child: new CustomScrollView(
+            shrinkWrap: true,
+            slivers: [new SliverList(
+              delegate: new SliverChildListDelegate(
+                getSkillsList()
+              ),
+            )],
+          ),
+        ) 
       ),
     );
   }
@@ -94,10 +104,10 @@ class MapSkillsState extends State<MapSkillsView>{
     skills.forEach((skill){
       newWidgets.add(
         new Container(
-          padding: new EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+          padding: new EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),
           child: new Card(
             child: new Container(
-              padding: new EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 5.0),
+              padding: new EdgeInsets.fromLTRB(15.0, 5.0, 5.0, 15.0),
               child: new Column(
                 children: [
                   new Row(
@@ -138,11 +148,11 @@ class MapSkillsState extends State<MapSkillsView>{
                       )
                     ]
                   ),
-                  new Row(
-                    
+                  new Wrap(
+                    spacing: 6.0,
+                    runSpacing: 4.0,
                     children: getChipsSubSkills(skill.subSkills)
                   )
-                  
                 ],
               ) 
             ),
@@ -160,13 +170,20 @@ class MapSkillsState extends State<MapSkillsView>{
 
     subSkills.forEach((subSkill) {
       chips.add(
-        new Chip(
-          label: new Text(
-            subSkill.subSkillName,
-            style: new TextStyle(
-              fontSize: 12.0,
-              color: new Color.fromRGBO(97, 97, 97, 1.0)
+        new Container(
+          decoration: new BoxDecoration(
+            borderRadius: new BorderRadius.all(new Radius.circular(36.0)),
+            border: new Border.all(color: new Color.fromARGB(255, 190, 190, 190))
+          ),
+          child: new Chip(
+            label: new Text(
+              subSkill.subSkillName,
+              style: new TextStyle(
+                fontSize: 12.0,
+                color: new Color.fromRGBO(97, 97, 97, 1.0)
+              ),
             ),
+            backgroundColor: Colors.transparent,
           ),
         )
       );
