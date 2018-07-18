@@ -1,0 +1,58 @@
+Flutter crash report; please file at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter build flx --suppress-analytics --target C:\Users\Dell\Desktop\gestao-competencias\src\frontend\lib\main.dart --output-file C:\Users\Dell\Desktop\gestao-competencias\src\frontend\build\app\intermediates\flutter\debug/app.flx --snapshot C:\Users\Dell\Desktop\gestao-competencias\src\frontend\build\app\intermediates\flutter\debug/snapshot_blob.bin --depfile C:\Users\Dell\Desktop\gestao-competencias\src\frontend\build\app\intermediates\flutter\debug/snapshot_blob.bin.d --working-dir C:\Users\Dell\Desktop\gestao-competencias\src\frontend\build\app\intermediates\flutter\debug/flutter_assets
+
+## exception
+
+FileSystemException: FileSystemException: Cannot open file, path = 'C:\Users\Dell\Desktop\gestao-competencias\src\frontend\build\app\intermediates\flutter\debug/app.flx' (OS Error: O arquivo já está sendo usado por outro processo.
+, errno = 32)
+
+```
+#0      _File.open.<anonymous closure> (dart:io/file_impl.dart:351)
+#1      _rootRunUnary (dart:async/zone.dart:1134)
+#2      _CustomZone.runUnary (dart:async/zone.dart:1031)
+#3      _FutureListener.handleValue (dart:async/future_impl.dart:129)
+#4      _Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:633)
+#5      _Future._propagateToListeners (dart:async/future_impl.dart:662)
+#6      _Future._completeWithValue (dart:async/future_impl.dart:477)
+#7      _Future._asyncComplete.<anonymous closure> (dart:async/future_impl.dart:507)
+#8      _rootRun (dart:async/zone.dart:1126)
+#9      _CustomZone.run (dart:async/zone.dart:1023)
+#10     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:949)
+#11     _microtaskLoop (dart:async/schedule_microtask.dart:41)
+#12     _startMicrotaskLoop (dart:async/schedule_microtask.dart:50)
+#13     _runPendingImmediateCallback (dart:isolate-patch/dart:isolate/isolate_patch.dart:113)
+#14     _RawReceivePortImpl._handleMessage (dart:isolate-patch/dart:isolate/isolate_patch.dart:166)
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel beta, v0.1.5, on Microsoft Windows [versÃ£o 10.0.17134.165], locale pt-BR)
+    • Flutter version 0.1.5 at C:\Users\Dell\flutter
+    • Framework revision 3ea4d06340 (5 months ago), 2018-02-22 11:12:39 -0800
+    • Engine revision ead227f118
+    • Dart version 2.0.0-dev.28.0.flutter-0b4f01f759
+
+[✓] Android toolchain - develop for Android devices (Android SDK 27.0.3)
+    • Android SDK at C:\Users\Dell\AppData\Local\Android\sdk
+    • Android NDK location not configured (optional; useful for native profiling support)
+    • Platform android-27, build-tools 27.0.3
+    • Java binary at: C:\Program Files\Android\Android Studio\jre\bin\java
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-915-b01)
+
+[✓] Android Studio (version 3.0)
+    • Android Studio at C:\Program Files\Android\Android Studio
+    • Java version OpenJDK Runtime Environment (build 1.8.0_152-release-915-b01)
+
+[✓] VS Code (version 1.21.1)
+    • VS Code at C:\Program Files\Microsoft VS Code
+    • Dart Code extension version 2.11.2
+
+[✓] Connected devices (1 available)
+    • Vibe K5 • 6771f288 • android-arm64 • Android 7.1.2 (API 25)
+
+• No issues found!
+```

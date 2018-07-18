@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/View/FirstLoginView.dart';
-import 'package:frontend/View/SearchView.dart';
 
+import '../Model/Skill.dart';
 import '../Model/User.dart';
 import '../Service/LoginService.dart';
-import 'MapSkillsView.dart';
+import '../Service/SkillsService.dart';
 
-import '../Shared/global.dart' as globals;
+import 'ProfileView.dart';
 
 
 LoginService _loginViewModel = new LoginService();
@@ -59,7 +58,7 @@ class _LoginInputState extends State<LoginInput> {
       children: <Widget>[
         new LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints ){
-            return SingleChildScrollView(
+            return new SingleChildScrollView(
               child: new ConstrainedBox(
                   constraints: new BoxConstraints(
                     minHeight: viewportConstraints.maxHeight,
@@ -163,7 +162,7 @@ class _LoginInputState extends State<LoginInput> {
             child: new Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              color: Color(0xccffffff),
+              color: new Color(0xccffffff),
             ),
           ),
         ): new Container(),
@@ -173,14 +172,25 @@ class _LoginInputState extends State<LoginInput> {
     );
   }
 
-  void logInUser(bool validLogin){
+  void logInUser(User user){
     setState(() { logingIn = false;} );
-    if(validLogin){
+    if(user != null){
+      new SkillsService().getUserSkills(user).then((List<Skill> skills){
+        if(skills.length == 0) {
+          Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new FirstLoginView()));
+        } else {
+          Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new ProfileView(skills, user)));
+        }
+        
+      });
+
       
-      Navigator.push(
-          context,
-          new MaterialPageRoute(
-              builder: (context) => new FirstLoginView()));
     }
     else{
       debugPrint("Erro");
