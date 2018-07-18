@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:convert/convert.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async';
-
+import 'dart:developer';
 import 'package:http/http.dart';
 
 import '../Model/User.dart';
@@ -16,13 +18,18 @@ class SkillsService {
 
   String urlGetUserSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS;
 
-  Future<bool> logIn(String email, String password) async {
-    String jsonLogin = "{ \"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
-    Response response = await http.post(BACKEND_LOGIN_URL, body: jsonLogin, headers: {"content-type": "application/json"});
+  String urlGetAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
+
+  Future<bool> getUserSkills(User user) async {
+    JsonEncoder encoder = new JsonEncoder(user);
+
+    String jsonUser = encoder.convert(user);
+
+    Response response = await http.post(urlGetUserSkills, body: jsonUser, headers: {"content-type": "application/json"});
+    
     if(response.statusCode != 200 || response.body == ""){
       return false;
     }
-    
     Map<String, String> jsonResponse = JSON.decode(response.body);
 
     User user = new User(
@@ -32,6 +39,7 @@ class SkillsService {
       role: jsonResponse["role"].toString(),
       password: jsonResponse["password"].toString()
     );
+
 
     if(user.email == email){
       globals.user = user;
