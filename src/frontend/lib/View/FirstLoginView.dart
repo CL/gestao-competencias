@@ -5,12 +5,20 @@ import '../Model/User.dart';
 import '../Service/SkillsService.dart';
 import 'MapSkillsView.dart';
 
-class FirstLoginView extends StatelessWidget {
+class FirstLoginView extends StatefulWidget {
+  final User user;
+
+  FirstLoginView(this.user);
+
+  @override
+  createState() => new FirstLoginState(user);
+}
+
+class FirstLoginState extends State<FirstLoginView>{
+
   User user;
 
-  FirstLoginView(User user) {
-    this.user = user;
-  }
+  FirstLoginState(this.user);
 
   @override
   Widget build(BuildContext context) {

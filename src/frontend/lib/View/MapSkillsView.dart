@@ -3,8 +3,6 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../Model/Skill.dart';
-
-import '../Shared/global.dart' as globals;
 import 'MapSubSkillsView.dart';
 
 
@@ -68,7 +66,6 @@ class MapSkillsState extends State<MapSkillsView>{
         selectedSkills.add(skills.firstWhere((element) => element.skillId == key));
       }
     });
-    globals.selectedSkills = selectedSkills;
 
     Navigator.push(
           context,

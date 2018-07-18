@@ -13,7 +13,7 @@ def save_skills():
 
     return ''
 
-@skills.route('/', methods=['GET'])
+@skills.route('', methods=['GET'])
 def list_user_skills():
     id = request.args.get('id')
     role = request.args.get('role')
@@ -21,7 +21,7 @@ def list_user_skills():
     name = request.args.get('name')
     password = request.args.get('password')
 
-    user_data = User(email=email, name=name, id=id, role=role, password=password)
+    user_data = User(email=email, name=name, user_id=id, role=role, password=password)
 
     user_skills = SkillsService.list_user_skills(user_data)
 
@@ -38,7 +38,7 @@ def list_all_skills():
     name = request.args.get('name')
     password = request.args.get('password')
 
-    user_data = User(email=email, name=name, id=id, role=role, password=password)
+    user_data = User(email=email, name=name, user_id=id, role=role, password=password)
 
     return json.dumps(SkillsService.list_all_skills(user_data), default=object_handler)
 

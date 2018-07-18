@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/View/FirstLoginView.dart';
+import '../View/FirstLoginView.dart';
 
 import '../Model/Skill.dart';
 import '../Model/User.dart';
@@ -180,7 +180,7 @@ class _LoginInputState extends State<LoginInput> {
           Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new FirstLoginView()));
+                builder: (context) => new FirstLoginView(user)));
         } else {
           Navigator.push(
             context,

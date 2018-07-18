@@ -4,7 +4,6 @@ import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
 import 'ProfileView.dart';
-import '../Shared/global.dart' as globals;
 
 
 class MapSubSkillsView extends StatefulWidget {

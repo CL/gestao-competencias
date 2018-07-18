@@ -41,24 +41,44 @@ class SkillsService {
   }
 
   Future<List<Skill>> getAllSkills(User user) async {
-    Response response = await http.get(urlGetUserSkills, headers: {"content-type": "application/json", 
-                                                                   "email": user.email, 
-                                                                   "id": user.id,
-                                                                   "name": user.name,
-                                                                   "password": user.password,
-                                                                   "role": user.role});
+    String urlParams = urlGetAllSkills + "?email="+user.email+"&id="+user.id+"&name="
+                      +user.name+"&password="+user.password+"&role=" + user.role;
+    Response response = await http.get(urlParams, headers: {"content-type": "application/json"});
     
     if(response.statusCode != 200 || response.body == ""){
       return [];
     }
 
-    List<Map<String, String>> jsonResponse = JSON.decode(response.body);
+    List<dynamic> jsonResponse = JSON.decode(response.body);
 
     List<Skill> skills = new List<Skill>();
 
-    jsonResponse.forEach((skill) {
-      
-    });
+    for(Map<String, dynamic> skill in jsonResponse) {
+      Skill skillObj = new Skill(
+        skillId: skill["skill_id"].toString(),
+        skillName: skill["skill_name"].toString(),
+        skillRating: double.parse(["skill_rating"].toString()),
+        totalSubSkills: int.parse(["total_sub_skills"].toString())
+      );
+
+      List<SubSkill> subskillList = [];
+
+      skill["sub_skills"].forEach((subskill) {
+        SubSkill subSkillObj = new SubSkill(
+          subSkillId: subskill["subskill_id"].toString(),
+          subSkillInterest: subskill["sub_skill_interest"],
+          subSkillName: subskill["subskill_name"].toString(),
+          subSkillRating: double.parse(["subskill_rating"].toString()),
+          associationId: subskill["subskill_assoc_id"].toString()
+        );
+
+        subskillList.add(subSkillObj);
+      });
+
+      skillObj.subSkills = subskillList;
+
+      skills.add(skillObj);
+    }
 
     return skills;
   }
