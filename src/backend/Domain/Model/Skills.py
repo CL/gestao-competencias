@@ -1,6 +1,6 @@
 class Skills:
     def __init__(self, employee,category,knowledgeLevel,interest):
-        self.employee = employee
-        self.category = category
-        self.knowledgeLevel = knowledgeLevel
-        self.interest = interest
+        self.funcionario = employee
+        self.categoria = category
+        self.nivelConhecimento = knowledgeLevel
+        self.interesse = interest

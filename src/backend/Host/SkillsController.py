@@ -10,34 +10,40 @@ skills = Blueprint('skills', __name__)
 
 @skills.route('/', methods=['POST'])
 def save_skills():
-    id = request.json.get('id')
-    role = request.json.get('role')
-    email = request.json.get('email')
-    name = request.json.get('name')
-    password = request.json.get('password')
 
-    user_data = User(id, role, email, name, password)
+    authorization_header = request.headers['Authorization']
+    authorization_split_comma = authorization_header.split(',')
+    nlauth_account = authorization_split_comma[0].split('=')[1]
+    nlauth_email = authorization_split_comma[1].split('=')[1]
+    nlauth_signature = authorization_split_comma[2].split('=')[1]
 
-    json_response = request.json
-    data_response = json.loads(json_response)
+    user_data = User(email=nlauth_email, password=nlauth_signature)
 
     skill_list = list()
 
-    for data in data_response:
-        employee = data.employee
-        category = data.category
-        knowledgeLevel = data.knowledgeLevel
-        interest = data.interest
+    for data in request.json:
+        employee = data['funcionario']
+        category = data['categoria']
+        knowledgeLevel = data['nivelConhecimento']
+        interest = data['interesse']
 
-        skill_data = Skills(employee, category, knowledgeLevel, interest)
+        skill_data = Skills(employee=employee, category=category, knowledgeLevel=knowledgeLevel, interest=interest)
         skill_list.append(skill_data)
 
     skill_response = SkillsService.save_skills(skill_list, user_data)
 
-    if(skill_response) is not None:
-        return json.dumps(skill_response.__dict__)
-    else:
-        return ''
+    final_response_json = "["
+
+    for i,response in enumerate(skill_response):
+        if(response==None):
+            return "False"
+        if(i==0):
+            final_response_json += '"'+response+'"'
+        else:
+            final_response_json += ',"' + response + '"'
+    final_response_json += "]"
+
+    return "True"
 
 @skills.route('/', methods=['GET'])
 def list_user_skills():

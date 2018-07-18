@@ -14,13 +14,14 @@ def save_skills(skill_list, user_data):
     response_list = list()
 
     for skill_data in skill_list:
-        skill_data_json = json.dumps(skill_data)
+        skill_data_json = json.dumps(skill_data.__dict__)
+        print(skill_data_json)
         response = requests.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
+        print(response.text)
         response_data = json.loads(response.text)
         if "error" in response_data:
             return None
         response_list.append(response_data)
-
     return response_list
 
 def list_user_skills(user_data):
