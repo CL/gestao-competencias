@@ -5,9 +5,9 @@ search = Blueprint('search', __name__)
 
 
 @search.route('/category', methods=['GET'])
-def searchByCategory(id_category):
+def search_by_category(id_category):
     return ''
 
 @search.route('/name', methods=['GET'])
-def searchByName(name):
+def search_by_name(name):
     return ''

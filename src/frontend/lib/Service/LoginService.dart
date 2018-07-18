@@ -10,20 +10,18 @@ import '../Model/User.dart';
 
 import '../Shared/Constants.dart';
 
-import '../Shared/Global.dart' as globals;
-
 class LoginService {
 
   String urlLogin = Constants.URL_BACKEND + Constants.PATH_LOGIN;
 
-  Future<bool> logIn(String email, String password) async {
+  Future<User> logIn(String email, String password) async {
     String jsonLogin = "{ \"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
     Response response = await http.post(urlLogin, body: jsonLogin, headers: {"content-type": "application/json"});
     if(response.statusCode != 200 || response.body == ""){
-      return false;
+      return null;
     }
     
-    Map<String, String> jsonResponse = JSON.decode(response.body);
+    Map<String, dynamic> jsonResponse = JSON.decode(response.body);
 
     User user = new User(
       id: jsonResponse["id"].toString(), 
@@ -34,9 +32,8 @@ class LoginService {
     );
 
     if(user.email == email){
-      globals.user = user;
-      return true;
+      return user;
     }
-    return false;
+    return null;
   }
 }

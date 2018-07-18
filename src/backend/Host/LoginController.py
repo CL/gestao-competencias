@@ -6,7 +6,7 @@ from Domain.Service import LoginService
 login = Blueprint('login', __name__)
 
 
-@login.route('/', methods=['POST'])
+@login.route('', methods=['POST'])
 def login_user():
     data_login = Login(request.json.get('email'), request.json.get('password'))
     user = LoginService.login(data_login)

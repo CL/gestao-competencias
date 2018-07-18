@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frontend/Model/User.dart';
-import '../global.dart' as globals;
+import '../Model/User.dart';
 
 class SearchView extends StatefulWidget{
   @override
-  createState() => new SearchViewState();
+  createState() => new SearchViewState([]);
 }
 
 class SearchViewState extends State<SearchView>{
@@ -15,7 +14,7 @@ class SearchViewState extends State<SearchView>{
   String searchedRole="";
   String searchedName="";
 
-  SearchViewState(){
+  SearchViewState(List<User> users){
     this.users = this.getUsers();
     this.roles = this.getRoles();
   }
@@ -40,8 +39,6 @@ class SearchViewState extends State<SearchView>{
       new User(id: "16", name: "Lucas Hofner",role: "GP"),
       new User(id: "17", name: "Lucas Hofner",role: "DEV"),
     ];
-
-    globals.users = users;
 
     List<User> filteredUsers;
     List<User> doubleFilteredUsers;
@@ -68,7 +65,6 @@ class SearchViewState extends State<SearchView>{
       "Outro",
       "Outra",
     ];
-    globals.roles = roles;
     return roles;
   }
 
@@ -90,7 +86,7 @@ class SearchViewState extends State<SearchView>{
                 decoration: new InputDecoration(
                     hintText: 'Pesquisa',
                     prefixIcon:
-                    new Icon(Icons.search, color: Color(0xffbebebe))),
+                    new Icon(Icons.search, color: new Color(0xffbebebe))),
                     controller: _controllerPesquisa,
                     onChanged: (text) {
                         setState(() {
@@ -109,7 +105,7 @@ class SearchViewState extends State<SearchView>{
                   return new Container(
                     width: 104.0,
                     margin: new EdgeInsets.only(right: 8.0),
-                    child: FlatButton(
+                    child: new FlatButton(
                       color: searchedRole == roles[index] ? const Color(0xff2db6c3) : Colors.white ,
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(36.0),

@@ -1,18 +1,14 @@
 import 'dart:convert';
 
-import 'package:convert/convert.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async';
-import 'dart:developer';
 import 'package:http/http.dart';
 
+import '../Model/Skill.dart';
 import '../Model/User.dart';
 
 import '../Shared/Constants.dart';
-
-import '../Shared/global.dart' as globals;
 
 class SkillsService {
 
@@ -20,31 +16,50 @@ class SkillsService {
 
   String urlGetAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
 
-  Future<bool> getUserSkills(User user) async {
-    JsonEncoder encoder = new JsonEncoder(user);
+  Future<List<Skill>> getUserSkills(User user) async {
+    Response response = await http.get(urlGetUserSkills, headers: {"content-type": "application/json", 
+                                                                   "email": user.email, 
+                                                                   "id": user.id,
+                                                                   "name": user.name,
+                                                                   "password": user.password,
+                                                                   "role": user.role});
+    
+    /*if(response.statusCode != 200 || response.body == ""){
+      return [];
+    }*/
+    return [];
 
-    String jsonUser = encoder.convert(user);
+    List<Map<String, String>> jsonResponse = JSON.decode(response.body);
 
-    Response response = await http.post(urlGetUserSkills, body: jsonUser, headers: {"content-type": "application/json"});
+    List<Skill> skills = new List<Skill>();
+
+    jsonResponse.forEach((skill) {
+      
+    });
+
+    return skills;
+  }
+
+  Future<List<Skill>> getAllSkills(User user) async {
+    Response response = await http.get(urlGetUserSkills, headers: {"content-type": "application/json", 
+                                                                   "email": user.email, 
+                                                                   "id": user.id,
+                                                                   "name": user.name,
+                                                                   "password": user.password,
+                                                                   "role": user.role});
     
     if(response.statusCode != 200 || response.body == ""){
-      return false;
+      return [];
     }
-    Map<String, String> jsonResponse = JSON.decode(response.body);
 
-    User user = new User(
-      id: jsonResponse["id"].toString(), 
-      email: jsonResponse["email"].toString(), 
-      name: jsonResponse["name"].toString(), 
-      role: jsonResponse["role"].toString(),
-      password: jsonResponse["password"].toString()
-    );
+    List<Map<String, String>> jsonResponse = JSON.decode(response.body);
 
+    List<Skill> skills = new List<Skill>();
 
-    if(user.email == email){
-      globals.user = user;
-      return true;
-    }
-    return false;
+    jsonResponse.forEach((skill) {
+      
+    });
+
+    return skills;
   }
 }

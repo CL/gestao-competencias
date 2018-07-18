@@ -9,10 +9,14 @@ import 'MapSubSkillsView.dart';
 
 
 class MapSkillsView extends StatefulWidget {
-  MapSkillsView({Key key}) : super(key: key);
+  List<Skill> skills;
+  
+  MapSkillsView(List<Skill> skills, {Key key}) : super(key: key) {
+    this.skills = skills;
+  }
 
   @override
-  createState() => new MapSkillsState();
+  createState() => new MapSkillsState(skills);
 }
 
 class MapSkillsState extends State<MapSkillsView>{
@@ -20,28 +24,8 @@ class MapSkillsState extends State<MapSkillsView>{
 
   List<Skill> skills;
 
-  MapSkillsState(){
-    skills = getAllSkills();
-  }
-
-  List<Skill> getAllSkills(){
-    List<SubSkill> subSkills = [
-      new SubSkill(subSkillName: ".Net C", subSkillRating: 5.0, subSkillId: "1"),
-      new SubSkill(subSkillName: ".Net C#", subSkillRating: 4.0, subSkillId: "2"),
-      new SubSkill(subSkillName: ".Net VB", subSkillRating: 3.0, subSkillId: "3"),
-      new SubSkill(subSkillName: "Java", subSkillRating: 2.0, subSkillId: "4"),
-      new SubSkill(subSkillName: "C++", subSkillRating: 1.0, subSkillId: "5"),
-      new SubSkill(subSkillName: "Python", subSkillRating: 0.0, subSkillId: "6"),
-    ];
-
-    List<Skill> allSkills = [
-      new Skill(skillName: "LINGUAGENS", skillId: "1", skillRating: 2.0, subSkills: subSkills, totalSubSkills: 6),
-      new Skill(skillName: "LINGUAGENS 2", skillId: "2", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6),
-      new Skill(skillName: "LINGUAGENS 3", skillId: "3", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6),
-      new Skill(skillName: "LINGUAGENS 3", skillId: "4", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6)
-    ];
-
-    return allSkills;
+  MapSkillsState(List<Skill> skills){
+    this.skills = skills;
   }
 
   @override
