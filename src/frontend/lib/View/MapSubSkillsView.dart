@@ -23,6 +23,11 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
   MapSubSkillsState(this.skills, this.user);
 
+  final snackBarError = new SnackBar(
+      content: new Text('Erro ao salvar. Tente novamente mais tarde.'),
+      duration: new Duration(seconds: 3)
+  );
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -54,11 +59,18 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   void save(){
-    new SkillsService().saveSkills(skills, user);
-    Navigator.push(
+    new SkillsService().saveSkills(skills, user).then((success) {
+      if(success) {
+        Navigator.push(
           context,
           new MaterialPageRoute(
               builder: (context) => new ProfileView(skills, user)));
+      } else {
+          Scaffold.of(context).showSnackBar(snackBarError);
+      }
+      
+    });
+    
   }
 
   List<Widget> getSubSkillsList(){

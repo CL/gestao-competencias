@@ -26,8 +26,11 @@ def list_user_skills(user_data):
 
     for competence in competences:
         subskill = Subskill(competence.id_subskill, competence.text_subskill, competence.category)
-        macro_dict[competence.id_skill].skill_id = competence.id_skill
-        macro_dict[competence.id_skill].skill_name = competence.text_skill
+        if macro_dict[competence.category_macro].skill_id is '':
+            macro_dict[competence.category_macro].skill_id = competence.category_macro
+            macro_dict[competence.category_macro].skill_name = competence.category_macro_text
+            macro_dict[competence.category_macro].sub_skills = []
+
         macro_dict[competence.id_skill].sub_skills.append(subskill)
         macro_dict[competence.id_skill].total_sub_skills = len(macro_dict[competence.id_skill].sub_skills)
 

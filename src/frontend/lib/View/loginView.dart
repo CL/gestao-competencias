@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import '../View/FirstLoginView.dart';
 
@@ -173,9 +171,9 @@ class _LoginInputState extends State<LoginInput> {
   }
 
   void logInUser(User user){
-    setState(() { logingIn = false;} );
     if(user != null){
       new SkillsService().getUserSkills(user).then((List<Skill> skills){
+        setState(() { logingIn = false;} );
         if(skills.length == 0) {
           Navigator.push(
             context,
@@ -193,6 +191,7 @@ class _LoginInputState extends State<LoginInput> {
       
     }
     else{
+      setState(() { logingIn = false;} );
       debugPrint("Erro");
       Scaffold.of(context).showSnackBar(snackBarError);
     }

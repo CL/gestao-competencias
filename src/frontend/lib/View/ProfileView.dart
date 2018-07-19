@@ -55,22 +55,7 @@ class ProfileState extends State<ProfileView> {
                     ),
                   ),
                   new Text(
-                    user.role,
-                    style: new TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  new Divider(),
-                  new Text(
                     user.email,
-                    style: new TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  new Text(
-                    user.phone,
                     style: new TextStyle(
                       color: Colors.white,
                       fontSize: 14.0,
@@ -108,8 +93,12 @@ class ProfileState extends State<ProfileView> {
   List<Widget> getChipList(){
     List<Widget> chips = [];
 
-    user.skillsSummary.forEach((skill){
-      chips.add(new ChipProfile(skill));
+    skillsProfile.forEach((skill){
+      skill.subSkills.forEach((subskill){
+        if(subskill.subSkillRating != 0.0) {
+          chips.add(new ChipProfile(subskill.subSkillName));
+        }
+      });
     });
 
     return chips;

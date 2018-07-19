@@ -34,7 +34,7 @@ def list_user_skills(user_data):
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
-    response = requests.get(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'?id='+user_data.id, headers=headers)
+    response = requests.get(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'&id='+user_data.id, headers=headers)
     response_data = json.loads(response.text)
     response_data = json.loads(response_data)
     if "error" in response_data:
