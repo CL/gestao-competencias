@@ -39,8 +39,11 @@ def list_all_skills(user_data):
 
     for skill_data in skills_dto:
         subskill = Subskill(skill_data.category_micro, skill_data.category_micro_text, skill_data.id)
-        macro_dict[skill_data.category_macro].skill_id = skill_data.category_macro
-        macro_dict[skill_data.category_macro].skill_name = skill_data.category_macro_text
+        if macro_dict[skill_data.category_macro].skill_id is '':
+            macro_dict[skill_data.category_macro].skill_id = skill_data.category_macro
+            macro_dict[skill_data.category_macro].skill_name = skill_data.category_macro_text
+            macro_dict[skill_data.category_macro].sub_skills = []
+
         macro_dict[skill_data.category_macro].sub_skills.append(subskill)
         macro_dict[skill_data.category_macro].total_sub_skills = len(macro_dict[skill_data.category_macro].sub_skills)
 

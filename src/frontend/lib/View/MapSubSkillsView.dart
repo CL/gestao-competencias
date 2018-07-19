@@ -8,17 +8,19 @@ import 'ProfileView.dart';
 
 class MapSubSkillsView extends StatefulWidget {
   final List<Skill> skills;
+  final User user;
   
-  MapSubSkillsView(this.skills, {Key key}) : super(key: key);
+  MapSubSkillsView(this.skills, this.user, {Key key}) : super(key: key);
 
   @override
-  createState() => new MapSubSkillsState(skills);
+  createState() => new MapSubSkillsState(skills, user);
 }
 
 class MapSubSkillsState extends State<MapSubSkillsView> {
   List<Skill> skills;
+  User user;
 
-  MapSubSkillsState(this.skills);
+  MapSubSkillsState(this.skills, this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +56,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
     Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new ProfileView(skills, new User(
-                name: "Teste",
-                phone: "44444444",
-                role: "Teste",
-                email: "email@email.com",
-                skillsSummary: ["Teste"],
-                id: "1"
-              ))));
+              builder: (context) => new ProfileView(skills, user)));
   }
 
   List<Widget> getSubSkillsList(){

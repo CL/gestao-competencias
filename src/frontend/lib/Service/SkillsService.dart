@@ -57,8 +57,8 @@ class SkillsService {
       Skill skillObj = new Skill(
         skillId: skill["skill_id"].toString(),
         skillName: skill["skill_name"].toString(),
-        skillRating: double.parse(["skill_rating"].toString()),
-        totalSubSkills: int.parse(["total_sub_skills"].toString())
+        skillRating: double.parse(skill["skill_rating"].toString()),
+        totalSubSkills: int.parse(skill["total_sub_skills"].toString())
       );
 
       List<SubSkill> subskillList = [];
@@ -68,7 +68,7 @@ class SkillsService {
           subSkillId: subskill["subskill_id"].toString(),
           subSkillInterest: subskill["sub_skill_interest"],
           subSkillName: subskill["subskill_name"].toString(),
-          subSkillRating: double.parse(["subskill_rating"].toString()),
+          subSkillRating: double.parse(subskill["subskill_rating"].toString()),
           associationId: subskill["subskill_assoc_id"].toString()
         );
 

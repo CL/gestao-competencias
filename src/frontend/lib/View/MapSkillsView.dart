@@ -2,29 +2,28 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import '../Model/User.dart';
 import '../Model/Skill.dart';
 import 'MapSubSkillsView.dart';
 
 
 class MapSkillsView extends StatefulWidget {
-  List<Skill> skills;
+  final List<Skill> skills;
+  final User user;
   
-  MapSkillsView(List<Skill> skills, {Key key}) : super(key: key) {
-    this.skills = skills;
-  }
+  MapSkillsView(this.skills, this.user, {Key key}) : super(key: key);
 
   @override
-  createState() => new MapSkillsState(skills);
+  createState() => new MapSkillsState(skills, user);
 }
 
 class MapSkillsState extends State<MapSkillsView>{
   HashMap<String, bool> selectedSkillsIds = new HashMap();
 
   List<Skill> skills;
+  User user;
 
-  MapSkillsState(List<Skill> skills){
-    this.skills = skills;
-  }
+  MapSkillsState(this.skills, this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,7 @@ class MapSkillsState extends State<MapSkillsView>{
     Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new MapSubSkillsView(selectedSkills)));
+              builder: (context) => new MapSubSkillsView(selectedSkills, user)));
   }
 
   List<Widget> getSkillsList(){
