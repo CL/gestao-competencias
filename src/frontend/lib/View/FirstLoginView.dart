@@ -1,8 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../global.dart' as globals;
+import '../Model/Skill.dart';
+import '../Model/User.dart';
+import '../Service/SkillsService.dart';
+import 'MapSkillsView.dart';
 
-class FirstLoginView extends StatelessWidget {
+class FirstLoginView extends StatefulWidget {
+  final User user;
+
+  FirstLoginView(this.user);
+
+  @override
+  createState() => new FirstLoginState(user);
+}
+
+class FirstLoginState extends State<FirstLoginView>{
+
+  User user;
+
+  FirstLoginState(this.user);
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -23,7 +40,7 @@ class FirstLoginView extends StatelessWidget {
                     new Container(
                       margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 27.0),
                       child: new Text(
-                        'Olá Rodrigo Rodrigues',
+                        'Olá ' + user.name,
                         style: new TextStyle(
                           fontWeight: FontWeight.bold,
                           color: new Color(0xff616161),
@@ -81,6 +98,12 @@ class FirstLoginView extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
+                            new SkillsService().getAllSkills(user).then((List<Skill> skills) {
+                              Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new MapSkillsView(skills, user)));
+                            });
                           },
                         )
                     ),

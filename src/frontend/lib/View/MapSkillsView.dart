@@ -2,47 +2,28 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import '../Model/User.dart';
 import '../Model/Skill.dart';
-
-import '../global.dart' as globals;
 import 'MapSubSkillsView.dart';
 
 
 class MapSkillsView extends StatefulWidget {
-  MapSkillsView({Key key}) : super(key: key);
+  final List<Skill> skills;
+  final User user;
+  
+  MapSkillsView(this.skills, this.user, {Key key}) : super(key: key);
 
   @override
-  createState() => new MapSkillsState();
+  createState() => new MapSkillsState(skills, user);
 }
 
 class MapSkillsState extends State<MapSkillsView>{
   HashMap<String, bool> selectedSkillsIds = new HashMap();
 
   List<Skill> skills;
+  User user;
 
-  MapSkillsState(){
-    skills = getAllSkills();
-  }
-
-  List<Skill> getAllSkills(){
-    List<SubSkill> subSkills = [
-      new SubSkill(subSkillName: ".Net C", subSkillRating: 5.0, subSkillId: "1"),
-      new SubSkill(subSkillName: ".Net C#", subSkillRating: 4.0, subSkillId: "2"),
-      new SubSkill(subSkillName: ".Net VB", subSkillRating: 3.0, subSkillId: "3"),
-      new SubSkill(subSkillName: "Java", subSkillRating: 2.0, subSkillId: "4"),
-      new SubSkill(subSkillName: "C++", subSkillRating: 1.0, subSkillId: "5"),
-      new SubSkill(subSkillName: "Python", subSkillRating: 0.0, subSkillId: "6"),
-    ];
-
-    List<Skill> allSkills = [
-      new Skill(skillName: "LINGUAGENS", skillId: "1", skillRating: 2.0, subSkills: subSkills, totalSubSkills: 6),
-      new Skill(skillName: "LINGUAGENS 2", skillId: "2", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6),
-      new Skill(skillName: "LINGUAGENS 3", skillId: "3", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6),
-      new Skill(skillName: "LINGUAGENS 3", skillId: "4", skillRating: 0.0, subSkills: subSkills, totalSubSkills: 6)
-    ];
-
-    return allSkills;
-  }
+  MapSkillsState(this.skills, this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +65,11 @@ class MapSkillsState extends State<MapSkillsView>{
         selectedSkills.add(skills.firstWhere((element) => element.skillId == key));
       }
     });
-    globals.selectedSkills = selectedSkills;
 
     Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new MapSubSkillsView(selectedSkills)));
+              builder: (context) => new MapSubSkillsView(selectedSkills, user)));
   }
 
   List<Widget> getSkillsList(){

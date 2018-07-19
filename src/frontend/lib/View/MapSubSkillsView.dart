@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 
+import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
 import 'ProfileView.dart';
-import '../global.dart' as globals;
 
 
 class MapSubSkillsView extends StatefulWidget {
   final List<Skill> skills;
+  final User user;
   
-  MapSubSkillsView(this.skills, {Key key}) : super(key: key);
+  MapSubSkillsView(this.skills, this.user, {Key key}) : super(key: key);
 
   @override
-  createState() => new MapSubSkillsState(skills);
+  createState() => new MapSubSkillsState(skills, user);
 }
 
 class MapSubSkillsState extends State<MapSubSkillsView> {
   List<Skill> skills;
+  User user;
 
-  MapSubSkillsState(this.skills);
+  MapSubSkillsState(this.skills, this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -52,17 +54,11 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   void save(){
+    new SkillsService().saveSkills(skills, user);
     Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new ProfileView(skills, new User(
-                name: "Teste",
-                phone: "44444444",
-                role: "Teste",
-                email: "email@email.com",
-                skillsSummary: ["Teste"],
-                id: "1"
-              ))));
+              builder: (context) => new ProfileView(skills, user)));
   }
 
   List<Widget> getSubSkillsList(){
