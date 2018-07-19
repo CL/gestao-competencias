@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
@@ -53,6 +54,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   void save(){
+    new SkillsService().saveSkills(skills, user);
     Navigator.push(
           context,
           new MaterialPageRoute(

@@ -12,12 +12,12 @@ import '../Shared/Constants.dart';
 
 class SkillsService {
 
-  String urlGetUserSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS;
+  String urlUserSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS;
 
-  String urlGetAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
+  String urlAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
 
   Future<List<Skill>> getUserSkills(User user) async {
-    Response response = await http.get(urlGetUserSkills, headers: {"content-type": "application/json", 
+    Response response = await http.get(urlUserSkills, headers: {"content-type": "application/json", 
                                                                    "email": user.email, 
                                                                    "id": user.id,
                                                                    "name": user.name,
@@ -29,7 +29,7 @@ class SkillsService {
     }*/
     return [];
 
-    List<Map<String, String>> jsonResponse = JSON.decode(response.body);
+    List<Map<String, String>> jsonResponse = json.decode(response.body);
 
     List<Skill> skills = new List<Skill>();
 
@@ -41,7 +41,7 @@ class SkillsService {
   }
 
   Future<List<Skill>> getAllSkills(User user) async {
-    String urlParams = urlGetAllSkills + "?email="+user.email+"&id="+user.id+"&name="
+    String urlParams = urlAllSkills + "?email="+user.email+"&id="+user.id+"&name="
                       +user.name+"&password="+user.password+"&role=" + user.role;
     Response response = await http.get(urlParams, headers: {"content-type": "application/json"});
     
@@ -49,37 +49,21 @@ class SkillsService {
       return [];
     }
 
-    List<dynamic> jsonResponse = JSON.decode(response.body);
+    List<dynamic> jsonResponse = json.decode(response.body);
 
     List<Skill> skills = new List<Skill>();
 
     for(Map<String, dynamic> skill in jsonResponse) {
-      Skill skillObj = new Skill(
-        skillId: skill["skill_id"].toString(),
-        skillName: skill["skill_name"].toString(),
-        skillRating: double.parse(skill["skill_rating"].toString()),
-        totalSubSkills: int.parse(skill["total_sub_skills"].toString())
-      );
-
-      List<SubSkill> subskillList = [];
-
-      skill["sub_skills"].forEach((subskill) {
-        SubSkill subSkillObj = new SubSkill(
-          subSkillId: subskill["subskill_id"].toString(),
-          subSkillInterest: subskill["sub_skill_interest"],
-          subSkillName: subskill["subskill_name"].toString(),
-          subSkillRating: double.parse(subskill["subskill_rating"].toString()),
-          associationId: subskill["subskill_assoc_id"].toString()
-        );
-
-        subskillList.add(subSkillObj);
-      });
-
-      skillObj.subSkills = subskillList;
-
+      Skill skillObj = Skill.fromJson(skill);
       skills.add(skillObj);
     }
 
     return skills;
+  }
+
+  Future<bool> saveSkills(List<Skill> selectedSkills, User user) async {
+    String jsonSkills = json.encode(selectedSkills);
+    Response response = await http.post(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password});
+    return json.decode(response.body);
   }
 }

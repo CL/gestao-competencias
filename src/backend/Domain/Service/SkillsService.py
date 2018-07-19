@@ -4,12 +4,15 @@ from collections import defaultdict
 from Domain.Model.Skill import Skill
 from Domain.Model.Subskill import Subskill
 
-def save_skills(skill_list,user_data):
+
+def save_skills(skill_list, user_data):
     if user_data.email is None or user_data.password is None or user_data.id is None:
         return None
+
     for skill in skill_list:
         if skill.funcionario is None or skill.categoria is None or skill.nivelConhecimento is None or skill.interesse is None:
             return None
+
     return NetSuiteSkillsAgent.save_skills(skill_list, user_data)
 
 
