@@ -39,6 +39,11 @@ flutter:
     - assets/loadingCircle-xhdpi.png
     - assets/loadingCircle-xxhdpi.png
     - assets/loadingCircle-xxxhdpi.png
+    - assets/assessment.png
+    - assets/assessment-hdpi.png
+    - assets/assessment-xhdpi.png
+    - assets/assessment-xxhdpi.png
+    - assets/assessment-xxxhdpi.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
