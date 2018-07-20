@@ -102,7 +102,7 @@ class FirstLoginState extends State<FirstLoginView>{
                               Navigator.push(
                                 context,
                                 new MaterialPageRoute(
-                                    builder: (context) => new MapSkillsView(skills, user)));
+                                    builder: (context) => new MapSkillsView(skills, user, [])));
                             });
                           },
                         )

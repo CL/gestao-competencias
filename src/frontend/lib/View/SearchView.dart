@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../Model/Skill.dart';
-import '../View/BottomNavBar.dart';
+import '../Components/BottomNavBar.dart';
 import '../Model/User.dart';
 
 class SearchView extends StatefulWidget{

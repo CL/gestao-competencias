@@ -1,7 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import '../View/BottomNavBar.dart';
+import 'package:frontend/Service/SkillsService.dart';
+import '../Components/BottomNavBar.dart';
 
 import '../Model/User.dart';
 import '../Model/Skill.dart';
@@ -9,26 +10,32 @@ import 'MapSubSkillsView.dart';
 
 
 class MapSkillsView extends StatefulWidget {
-  final List<Skill> skills;
+  final List<Skill> allSkills;
+  final List<Skill> oldSkills;
   final User user;
   
-  MapSkillsView(this.skills, this.user, {Key key}) : super(key: key);
+  MapSkillsView(this.allSkills, this.user, this.oldSkills, {Key key}) : super(key: key);
 
   @override
-  createState() => new MapSkillsState(skills, user);
+  createState() => new MapSkillsState(allSkills, user, oldSkills);
 }
 
 class MapSkillsState extends State<MapSkillsView>{
   HashMap<String, bool> selectedSkillsIds = new HashMap();
 
-  List<Skill> skills;
+  List<Skill> allSkills;
+  List<Skill> oldSkills;
   User user;
 
-  MapSkillsState(this.skills, this.user);
+  MapSkillsState(this.allSkills, this.user, this.oldSkills) {
+    allSkills.forEach((skill) {
+      selectedSkillsIds[skill.skillId] = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    skills.forEach((skill){
+    allSkills.forEach((skill){
       selectedSkillsIds.putIfAbsent(skill.skillId, () => false);
     });
 
@@ -56,7 +63,7 @@ class MapSkillsState extends State<MapSkillsView>{
           ),
         ) 
       ),
-      bottomNavigationBar: new BottomNavBar(this.user,skills,2),
+      bottomNavigationBar: new BottomNavBar(this.user, allSkills, 2),
     );
   }
 
@@ -64,14 +71,21 @@ class MapSkillsState extends State<MapSkillsView>{
     List<Skill> selectedSkills = [];
     selectedSkillsIds.forEach((key, value) {
       if(value){
-        selectedSkills.add(skills.firstWhere((element) => element.skillId == key));
+        selectedSkills.add(allSkills.firstWhere((element) => element.skillId == key));
+      }
+    });
+
+    oldSkills.forEach((skill) {
+      var skillsService = new SkillsService();
+      if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
+        skillsService.deleteSkill(skill, user);
       }
     });
 
     Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new MapSubSkillsView(selectedSkills, user)));
+              builder: (context) => new MapSubSkillsView(selectedSkills, user, oldSkills)));
   }
 
   List<Widget> getSkillsList(){
@@ -83,7 +97,7 @@ class MapSkillsState extends State<MapSkillsView>{
         fontSize: 14.0
       ),
     ));
-    skills.forEach((skill){
+    allSkills.forEach((skill){
       newWidgets.add(
         new Container(
           padding: new EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),

@@ -62,4 +62,14 @@ class SkillsService {
     Response response = await http.post(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
     return response.body == "True" ? true : false;
   }
+
+  void deleteSkill(Skill skill, User user) {
+    String urlParam = urlUserSkills+"?funcionario="+user.id+"&idMacro="+skill.skillId;
+    http.delete(urlUserSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
+  }
+
+  void updateSubskills(List<Skill> skills, User user) {
+    String jsonSkills = json.encode(skills);
+    http.put(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
+  }
 }

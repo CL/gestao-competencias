@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../View/BottomNavBar.dart';
+import '../Components/BottomNavBar.dart';
 
 import '../Model/Skill.dart';
 import '../Model/User.dart';
