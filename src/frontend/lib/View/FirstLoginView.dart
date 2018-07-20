@@ -110,14 +110,6 @@ class FirstLoginState extends State<FirstLoginView>{
                   ],
                 ),
               ),
-              new Container(
-                height: 56.0,
-                width: MediaQuery.of(context).size.width,
-                margin: new EdgeInsets.only(bottom: 0.0),
-                padding: new EdgeInsets.fromLTRB(32.0, 15.0, 32.0, 17.0),
-                color: Colors.blueAccent,
-                child: new Text("Bottom NavBar", textAlign: TextAlign.center,),
-              )
             ],
           )
 

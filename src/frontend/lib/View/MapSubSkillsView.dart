@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../View/BottomNavBar.dart';
 
 import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
@@ -53,8 +54,8 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
           )
           
         ),
-      )
-      
+      ),
+      bottomNavigationBar: new BottomNavBar(this.user,skills,2),
     );
   }
 

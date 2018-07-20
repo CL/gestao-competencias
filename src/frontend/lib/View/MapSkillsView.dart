@@ -56,7 +56,7 @@ class MapSkillsState extends State<MapSkillsView>{
           ),
         ) 
       ),
-      bottomNavigationBar: new BottomNavBar(this.user,skills),
+      bottomNavigationBar: new BottomNavBar(this.user,skills,2),
     );
   }
 
