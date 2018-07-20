@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/View/LoginView.dart';
 
 import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
@@ -20,8 +21,9 @@ class MapSubSkillsView extends StatefulWidget {
 class MapSubSkillsState extends State<MapSubSkillsView> {
   List<Skill> skills;
   User user;
+  bool loading;
 
-  MapSubSkillsState(this.skills, this.user);
+  MapSubSkillsState(this.skills, this.user, [this.loading=false]);
 
   final snackBarError = new SnackBar(
       content: new Text('Erro ao salvar. Tente novamente mais tarde.'),
@@ -59,12 +61,17 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   void save(){
+    setState(() { loading = true;} );
     new SkillsService().saveSkills(skills, user).then((success) {
       if(success) {
-        Navigator.push(
-          context,
-          new MaterialPageRoute(
-              builder: (context) => new ProfileView(skills, user)));
+        new SkillsService().getUserSkills(user).then((skills) {
+          setState(() { loading = false;} );
+          Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new ProfileView(skills, user)));
+        });
+        
       } else {
           Scaffold.of(context).showSnackBar(snackBarError);
       }
@@ -90,7 +97,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
             color: new Color.fromRGBO(97, 97, 97, 1.0),
             fontSize: 14.0
           ),
-        ),
+        )
       ],
     ));
 
@@ -149,6 +156,21 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       );
       
     });
+
+    newWidgets.add(
+      loading ? new Container(
+          child: new Center(
+            child: new Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: new Color(0xccffffff),
+            ),
+          ),
+        ): new Container()
+    );
+    newWidgets.add(
+      loading ? new LoadingCircleRotate(): new Container()
+    );
 
     return newWidgets;
   }
