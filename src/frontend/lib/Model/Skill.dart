@@ -46,10 +46,11 @@ class SubSkill{
   String subSkillId;
   String subSkillName;
   String associationId;
+  String entryId;
   double subSkillRating;
   bool subSkillInterest;
 
-  SubSkill({this.subSkillId, this.subSkillName, this.associationId, this.subSkillRating, this.subSkillInterest = false});
+  SubSkill({this.subSkillId, this.subSkillName, this.associationId, this.subSkillRating, this.entryId, this.subSkillInterest = false});
 
   SubSkill.fromJson(Map<String, dynamic> json) {
       subSkillId = json["subskill_id"].toString();
@@ -57,6 +58,7 @@ class SubSkill{
       subSkillName = json["subskill_name"].toString();
       subSkillRating = double.parse(json["subskill_rating"].toString());
       associationId = json["subskill_assoc_id"].toString();
+      entryId = json["entry_id"].toString();
   }
 
   Map<String, dynamic> toJson() => {
@@ -64,6 +66,7 @@ class SubSkill{
     "sub_skill_interest": subSkillInterest,
     "subskill_name": subSkillName,
     "subskill_rating": subSkillRating,
-    "subskill_assoc_id": associationId
+    "subskill_assoc_id": associationId,
+    "entry_id": entryId
   };
 }

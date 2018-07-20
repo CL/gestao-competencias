@@ -71,6 +71,6 @@ def list_all_skills():
 
     return json.dumps(SkillsService.list_all_skills(user_data), default=object_handler)
 
-@skills.route('/', methods=['PUT'])
+@skills.route('', methods=['PUT'])
 def update_skills():
     return ''

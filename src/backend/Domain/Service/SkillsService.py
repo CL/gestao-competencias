@@ -25,7 +25,7 @@ def list_user_skills(user_data):
     macro_dict = defaultdict(Skill)
 
     for competence in competences:
-        subskill = Subskill(competence.id_subskill, competence.text_subskill, competence.category, competence.rating, competence.interest)
+        subskill = Subskill(competence.id_subskill, competence.text_subskill, competence.category, competence.rating, competence.interest, competence.id)
         if macro_dict[competence.id_skill].skill_id is '':
             macro_dict[competence.id_skill].skill_id = competence.id_skill
             macro_dict[competence.id_skill].skill_name = competence.text_skill
