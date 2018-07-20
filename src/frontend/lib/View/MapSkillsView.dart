@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import '../View/BottomNavBar.dart';
 
 import '../Model/User.dart';
 import '../Model/Skill.dart';
@@ -55,6 +56,7 @@ class MapSkillsState extends State<MapSkillsView>{
           ),
         ) 
       ),
+      bottomNavigationBar: new BottomNavBar(this.user,skills,2),
     );
   }
 
