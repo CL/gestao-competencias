@@ -109,7 +109,7 @@ class FirstLoginState extends State<FirstLoginView>{
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           )
 

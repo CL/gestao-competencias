@@ -115,13 +115,10 @@ class ProfileState extends State<ProfileView> {
     List<Widget> chips = [];
 
     skillsProfile.forEach((skill){
-      skill.subSkills.forEach((subskill){
-        if(subskill.subSkillRating != 0.0) {
-          chips.add(new ChipProfile(subskill.subSkillName));
-        }
-      });
-      });
-    }
+      if(skill.skillRating != 0.0) {
+        chips.add(new ChipProfile(skill.skillName));
+      }
+    });
 
     return chips;
   }
