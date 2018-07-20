@@ -61,6 +61,8 @@ class ProfileState extends State<ProfileView> {
                               fontSize: 14.0,
                             ),
                           ),
+                  /*
+                  */
                           new Divider(),
                           new Row(
                               children: [
@@ -99,9 +101,12 @@ class ProfileState extends State<ProfileView> {
   List<Widget> getCardsList(){
     List<Widget> skillsCards = [];
 
-    skillsProfile.forEach((skill){
-      skillsCards.add(new CardProfile(skill));
-    });
+    if(skillsProfile.isNotEmpty){
+      skillsProfile.forEach((skill){
+        skillsCards.add(new CardProfile(skill));
+      });
+    }
+
 
     return skillsCards;
   }
@@ -115,7 +120,8 @@ class ProfileState extends State<ProfileView> {
           chips.add(new ChipProfile(subskill.subSkillName));
         }
       });
-    });
+      });
+    }
 
     return chips;
   }
