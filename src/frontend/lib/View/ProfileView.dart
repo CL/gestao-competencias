@@ -69,6 +69,7 @@ class ProfileState extends State<ProfileView> {
                       fontSize: 14.0,
                     ),
                   ),
+                  /*
                   new Text(
                     user.phone,
                     style: new TextStyle(
@@ -76,6 +77,7 @@ class ProfileState extends State<ProfileView> {
                       fontSize: 14.0,
                     ),
                   ),
+                  */
                   new Divider(),
                   new Row(
                     children: getChipList(),
@@ -98,9 +100,12 @@ class ProfileState extends State<ProfileView> {
   List<Widget> getCardsList(){
     List<Widget> skillsCards = [];
 
-    skillsProfile.forEach((skill){
-      skillsCards.add(new CardProfile(skill));
-    });
+    if(skillsProfile.isNotEmpty){
+      skillsProfile.forEach((skill){
+        skillsCards.add(new CardProfile(skill));
+      });
+    }
+
 
     return skillsCards;
   }
@@ -108,9 +113,11 @@ class ProfileState extends State<ProfileView> {
   List<Widget> getChipList(){
     List<Widget> chips = [];
 
-    user.skillsSummary.forEach((skill){
-      chips.add(new ChipProfile(skill));
-    });
+    if(user.skillsSummary.isNotEmpty){
+      user.skillsSummary.forEach((skill){
+        chips.add(new ChipProfile(skill));
+      });
+    }
 
     return chips;
   }
