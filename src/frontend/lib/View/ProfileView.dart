@@ -35,7 +35,6 @@ class ProfileState extends State<ProfileView> {
       body: new CustomScrollView(
         slivers: [
          new SliverAppBar(
-           title: new Icon(Icons.arrow_back),
            expandedHeight: _flexibleSpaceMaxHeight,
            flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/RedSquare_SaintBasile_%28pixinn.net%29.jpg/398px-RedSquare_SaintBasile_%28pixinn.net%29.jpg").image),
            bottom: new PreferredSize(
@@ -63,7 +62,22 @@ class ProfileState extends State<ProfileView> {
                   ),
                   new Divider(),
                   new Row(
-                    children: getChipList(),
+                    children: [
+                      new SizedBox(
+                        width: MediaQuery.of(context).size.width-32.0,
+                        height: _flexibleSpaceMaxHeight*0.15,
+                        child: new Scrollbar(
+                          child: new CustomScrollView(
+                          scrollDirection: Axis.horizontal,
+                          slivers: [new SliverList(
+                            delegate: new SliverChildListDelegate(
+                              getChipList()
+                            )
+                          )]
+                        ),
+                        ) 
+                      )
+                    ]
                   )
                 ],
               ),

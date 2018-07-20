@@ -26,7 +26,7 @@ class ChipProfile extends StatelessWidget {
           child: new Text(
             this.text,
             style: new TextStyle(
-              color: Colors.white
+              color: Colors.grey
             ),
           ),
         )
