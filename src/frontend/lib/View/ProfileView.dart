@@ -35,7 +35,6 @@ class ProfileState extends State<ProfileView> {
       body: new CustomScrollView(
         slivers: [
          new SliverAppBar(
-           title: new Icon(Icons.arrow_back),
            expandedHeight: _flexibleSpaceMaxHeight,
            flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/RedSquare_SaintBasile_%28pixinn.net%29.jpg/398px-RedSquare_SaintBasile_%28pixinn.net%29.jpg").image),
            bottom: new PreferredSize(
@@ -55,22 +54,7 @@ class ProfileState extends State<ProfileView> {
                     ),
                   ),
                   new Text(
-                    user.role,
-                    style: new TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  new Divider(),
-                  new Text(
                     user.email,
-                    style: new TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  new Text(
-                    user.phone,
                     style: new TextStyle(
                       color: Colors.white,
                       fontSize: 14.0,
@@ -78,7 +62,22 @@ class ProfileState extends State<ProfileView> {
                   ),
                   new Divider(),
                   new Row(
-                    children: getChipList(),
+                    children: [
+                      new SizedBox(
+                        width: MediaQuery.of(context).size.width-32.0,
+                        height: _flexibleSpaceMaxHeight*0.15,
+                        child: new Scrollbar(
+                          child: new CustomScrollView(
+                          scrollDirection: Axis.horizontal,
+                          slivers: [new SliverList(
+                            delegate: new SliverChildListDelegate(
+                              getChipList()
+                            )
+                          )]
+                        ),
+                        ) 
+                      )
+                    ]
                   )
                 ],
               ),
@@ -108,8 +107,12 @@ class ProfileState extends State<ProfileView> {
   List<Widget> getChipList(){
     List<Widget> chips = [];
 
-    user.skillsSummary.forEach((skill){
-      chips.add(new ChipProfile(skill));
+    skillsProfile.forEach((skill){
+      skill.subSkills.forEach((subskill){
+        if(subskill.subSkillRating != 0.0) {
+          chips.add(new ChipProfile(subskill.subSkillName));
+        }
+      });
     });
 
     return chips;

@@ -17,24 +17,20 @@ class SkillsService {
   String urlAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
 
   Future<List<Skill>> getUserSkills(User user) async {
-    Response response = await http.get(urlUserSkills, headers: {"content-type": "application/json", 
-                                                                   "email": user.email, 
-                                                                   "id": user.id,
-                                                                   "name": user.name,
-                                                                   "password": user.password,
-                                                                   "role": user.role});
+    String urlParams = urlUserSkills + "?email="+user.email+"&id="+user.id+"&name="
+                      +user.name+"&password="+user.password+"&role=" + user.role;
+    Response response = await http.get(urlParams, headers: {"content-type": "application/json"});
     
-    /*if(response.statusCode != 200 || response.body == ""){
+    if(response.statusCode != 200 || response.body == ""){
       return [];
-    }*/
-    return [];
+    }
 
-    List<Map<String, String>> jsonResponse = json.decode(response.body);
+    List<dynamic> jsonResponse = json.decode(response.body);
 
     List<Skill> skills = new List<Skill>();
 
     jsonResponse.forEach((skill) {
-      
+      skills.add(new Skill.fromJson(skill));
     });
 
     return skills;
@@ -63,7 +59,7 @@ class SkillsService {
 
   Future<bool> saveSkills(List<Skill> selectedSkills, User user) async {
     String jsonSkills = json.encode(selectedSkills);
-    Response response = await http.post(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password});
-    return json.decode(response.body);
+    Response response = await http.post(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
+    return response.body == "True" ? true : false;
   }
 }

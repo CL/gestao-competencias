@@ -21,7 +21,7 @@ class LoginService {
       return null;
     }
     
-    Map<String, dynamic> jsonResponse = JSON.decode(response.body);
+    Map<String, dynamic> jsonResponse = json.decode(response.body);
 
     User user = new User(
       id: jsonResponse["id"].toString(), 

@@ -70,7 +70,7 @@ class CardProfileState extends State<CardProfile>{
                   new Container(
                     padding: new EdgeInsets.only(right: 8.0),
                     child: new Text(
-                      skillProfile.skillRating.toString(),
+                      skillProfile.skillRating.toStringAsFixed(1),
                       style: new TextStyle(
                         fontWeight: FontWeight.w600,
                         color: new Color.fromRGBO(97, 97, 97, 100.0)
