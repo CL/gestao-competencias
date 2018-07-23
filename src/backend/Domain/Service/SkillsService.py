@@ -69,3 +69,9 @@ def list_all_skills(user_data):
     for item in macro_dict.values():
         all_skills.append(item)
     return all_skills
+
+def delete_skill(id_macro, funcionario, user_data):
+    if user_data.email is None or user_data.password is None or user_data.id is None or id_macro is None or funcionario is None:
+        return None
+
+    return NetSuiteSkillsAgent.delete_skill(id_macro, funcionario, user_data)

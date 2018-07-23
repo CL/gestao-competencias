@@ -65,7 +65,7 @@ class SkillsService {
 
   void deleteSkill(Skill skill, User user) {
     String urlParam = urlUserSkills+"?funcionario="+user.id+"&idMacro="+skill.skillId;
-    http.delete(urlUserSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
+    http.delete(urlParam, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
   }
 
   void updateSubskills(List<SubSkill> skills, User user) {

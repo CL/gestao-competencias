@@ -87,7 +87,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
     selectedSkills.forEach((selectedSkill) {
       selectedSkill.subSkills.forEach((subSkill) {
-        if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId) == null) {
+        if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null) {
           subskillsToSave.add(subSkill);
         }
       });

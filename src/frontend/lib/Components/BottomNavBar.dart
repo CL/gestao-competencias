@@ -106,7 +106,7 @@ class BottomNavBarState extends State<BottomNavBar>{
                   Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new MapSkillsView(skills, user, allSkills)));
+                        builder: (context) => new MapSkillsView(allSkills, user, skills)));
                 });
                 break;
               }

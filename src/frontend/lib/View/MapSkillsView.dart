@@ -1,9 +1,9 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/Service/SkillsService.dart';
-import '../Components/BottomNavBar.dart';
 
+import '../Service/SkillsService.dart';
+import '../Components/BottomNavBar.dart';
 import '../Model/User.dart';
 import '../Model/Skill.dart';
 import 'MapSubSkillsView.dart';
@@ -28,7 +28,7 @@ class MapSkillsState extends State<MapSkillsView>{
   User user;
 
   MapSkillsState(this.allSkills, this.user, this.oldSkills) {
-    allSkills.forEach((skill) {
+    oldSkills.forEach((skill) {
       selectedSkillsIds[skill.skillId] = true;
     });
   }
@@ -85,7 +85,21 @@ class MapSkillsState extends State<MapSkillsView>{
       }
     });
 
-    oldSkills.removeWhere((skill) => deletedSkills.firstWhere((skillDeleted) => skillDeleted.skillId == skill.skillId) != null);
+    oldSkills.removeWhere((skill) => deletedSkills.firstWhere((skillDeleted) => skillDeleted.skillId == skill.skillId, orElse: () => null) != null);
+
+    oldSkills.forEach((oldSkill) {
+      selectedSkills.forEach((selectedSkill) {
+        if(oldSkill.skillId == selectedSkill.skillId) {
+          oldSkill.subSkills.forEach((oldSubSkill) {
+            selectedSkill.subSkills.forEach((selectedSubSkill){
+              if(oldSubSkill.subSkillId == selectedSubSkill.subSkillId) {
+                selectedSubSkill.subSkillRating = oldSubSkill.subSkillRating;
+              }
+            });
+          });
+        }
+      });
+    });
 
     Navigator.push(
           context,

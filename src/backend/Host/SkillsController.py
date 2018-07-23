@@ -73,3 +73,19 @@ def list_all_skills():
 @skills.route('', methods=['PUT'])
 def update_skills():
     return ''
+
+@skills.route('', methods=['DELETE'])
+def delete_skill():
+    id_macro = request.args.get('idMacro')
+    funcionario = request.args.get('funcionario')
+    authorization_header = request.headers['Authorization']
+    authorization_split_comma = authorization_header.split(',')
+    email = authorization_split_comma[0].split('=')[1]
+    signature = authorization_split_comma[1].split('=')[1]
+    id = authorization_split_comma[2].split('=')[1]
+
+    user_data = User(email=email, password=signature, user_id=id)
+
+    SkillsService.delete_skill(id_macro, funcionario, user_data)
+
+    return ''
