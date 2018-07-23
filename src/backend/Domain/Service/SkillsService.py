@@ -34,7 +34,7 @@ def list_user_skills(user_data):
 
             macro_dict[competence.id_skill].sub_skills.append(subskill)
             macro_dict[competence.id_skill].skill_rating += float(competence.rating)
-            macro_dict[competence.id_skill].skill_rating /= 2
+            macro_dict[competence.id_skill].skill_rating /= len(macro_dict[competence.id_skill].sub_skills)
 
         macro_dict[competence.id_skill].total_sub_skills += 1
 
