@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../Service/SkillsService.dart';
 import '../View/MapSkillsView.dart';
 import '../View/SearchView.dart';
 import '../Model/Skill.dart';
@@ -101,10 +102,12 @@ class BottomNavBarState extends State<BottomNavBar>{
               }
             case 2:
               {
-                Navigator.push(
+                new SkillsService().getAllSkills(user).then((allSkills) {
+                  Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new MapSkillsView(skills, user)));
+                        builder: (context) => new MapSkillsView(allSkills, user, skills)));
+                });
                 break;
               }
             case 3:

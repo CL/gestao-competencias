@@ -22,16 +22,15 @@ def save_skills():
     skill_list = list()
 
     for data in request.json:
-        for subskill in data["sub_skills"]:
-            employee = id
-            category = subskill['subskill_assoc_id']
-            knowledge_level = int(subskill['subskill_rating'])
-            interest = subskill['sub_skill_interest']
+        employee = id
+        category = data['subskill_assoc_id']
+        knowledge_level = int(data['subskill_rating'])
+        interest = data['sub_skill_interest']
 
-            skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
+        skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
 
-            if skill_data.nivelConhecimento > 0:
-                skill_list.append(skill_data)
+        if skill_data.nivelConhecimento > 0:
+            skill_list.append(skill_data)
 
     skill_response = SkillsService.save_skills(skill_list, user_data)
 
@@ -71,6 +70,22 @@ def list_all_skills():
 
     return json.dumps(SkillsService.list_all_skills(user_data), default=object_handler)
 
-@skills.route('/', methods=['PUT'])
+@skills.route('', methods=['PUT'])
 def update_skills():
+    return ''
+
+@skills.route('', methods=['DELETE'])
+def delete_skill():
+    id_macro = request.args.get('idMacro')
+    funcionario = request.args.get('funcionario')
+    authorization_header = request.headers['Authorization']
+    authorization_split_comma = authorization_header.split(',')
+    email = authorization_split_comma[0].split('=')[1]
+    signature = authorization_split_comma[1].split('=')[1]
+    id = authorization_split_comma[2].split('=')[1]
+
+    user_data = User(email=email, password=signature, user_id=id)
+
+    SkillsService.delete_skill(id_macro, funcionario, user_data)
+
     return ''
