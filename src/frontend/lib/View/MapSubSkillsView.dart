@@ -67,6 +67,8 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
     setState(() { loading = true;} );
 
     List<SubSkill> subskillsToUpdate = [];
+    List<SubSkill> subskillsToSave = [];
+
 
     selectedSkills.forEach((selectedSkill) {
       oldSkills.forEach((oldSkill) {
@@ -83,7 +85,19 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       });
     });
 
-    new SkillsService().saveSkills(selectedSkills, user).then((success) {
+    selectedSkills.forEach((selectedSkill) {
+      selectedSkill.subSkills.forEach((subSkill) {
+        if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId) == null) {
+          subskillsToSave.add(subSkill);
+        }
+      });
+    });
+
+    var skillService = new SkillsService();
+
+    skillService.updateSubskills(subskillsToUpdate, user);
+
+    skillService.saveSkills(subskillsToSave, user).then((success) {
       if(success) {
         new SkillsService().getUserSkills(user).then((skills) {
           setState(() { loading = false;} );

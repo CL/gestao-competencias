@@ -57,7 +57,7 @@ class SkillsService {
     return skills;
   }
 
-  Future<bool> saveSkills(List<Skill> selectedSkills, User user) async {
+  Future<bool> saveSkills(List<SubSkill> selectedSkills, User user) async {
     String jsonSkills = json.encode(selectedSkills);
     Response response = await http.post(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
     return response.body == "True" ? true : false;
@@ -68,7 +68,7 @@ class SkillsService {
     http.delete(urlUserSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
   }
 
-  void updateSubskills(List<Skill> skills, User user) {
+  void updateSubskills(List<SubSkill> skills, User user) {
     String jsonSkills = json.encode(skills);
     http.put(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
   }

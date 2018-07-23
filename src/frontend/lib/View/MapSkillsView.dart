@@ -75,12 +75,17 @@ class MapSkillsState extends State<MapSkillsView>{
       }
     });
 
+    List<Skill> deletedSkills = [];
+
     oldSkills.forEach((skill) {
       var skillsService = new SkillsService();
       if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
         skillsService.deleteSkill(skill, user);
+        deletedSkills.add(skill);
       }
     });
+
+    oldSkills.removeWhere((skill) => deletedSkills.firstWhere((skillDeleted) => skillDeleted.skillId == skill.skillId) != null);
 
     Navigator.push(
           context,

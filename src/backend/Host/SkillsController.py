@@ -22,16 +22,15 @@ def save_skills():
     skill_list = list()
 
     for data in request.json:
-        for subskill in data["sub_skills"]:
-            employee = id
-            category = subskill['subskill_assoc_id']
-            knowledge_level = int(subskill['subskill_rating'])
-            interest = subskill['sub_skill_interest']
+        employee = id
+        category = data['subskill_assoc_id']
+        knowledge_level = int(data['subskill_rating'])
+        interest = data['sub_skill_interest']
 
-            skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
+        skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
 
-            if skill_data.nivelConhecimento > 0:
-                skill_list.append(skill_data)
+        if skill_data.nivelConhecimento > 0:
+            skill_list.append(skill_data)
 
     skill_response = SkillsService.save_skills(skill_list, user_data)
 
