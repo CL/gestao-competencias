@@ -16,4 +16,4 @@ def login(login_data):
     if "error" in response_data:
             return None
 
-    return User(response_data["email"], response_data["name"], response_data["id"], response_data["role"], password)
+    return User(response_data["email"], response_data["name"], response_data["id"], response_data["role"], login_data.password)

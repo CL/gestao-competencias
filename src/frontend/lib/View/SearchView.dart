@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../Model/Skill.dart';
+import '../Components/BottomNavBar.dart';
 import '../Model/User.dart';
 
 class SearchView extends StatefulWidget{
+
+  User user;
+  List<Skill> skills;
+
+  SearchView(user,skills){
+    this.user = user;
+    this.skills = skills;
+  }
+
   @override
-  createState() => new SearchViewState([]);
+  createState() => new SearchViewState([],this.user,this.skills);
 }
 
 class SearchViewState extends State<SearchView>{
   final TextEditingController _controllerPesquisa = new TextEditingController();
+  User user;
   List<User> users;
+  List<Skill> skills;
   List<String> roles;
   String searchedRole="";
   String searchedName="";
 
-  SearchViewState(List<User> users){
+  SearchViewState(List<User> users, user,skills){
     this.users = this.getUsers();
     this.roles = this.getRoles();
+    this.skills = skills;
+    this.user = user;
   }
 
   List<User> getUsers({String role = "", String name = ""}){
@@ -191,20 +206,11 @@ class SearchViewState extends State<SearchView>{
                         }),
                       ),
                     ),
-                new Container(
-                  height: 66.3,
-                  margin: new EdgeInsets.only(bottom: 0.0),
-                  padding: new EdgeInsets.fromLTRB(32.0, 15.0, 32.0, 17.0),
-                  color: Colors.blueAccent,
-                  child: new Container(
-                    width: MediaQuery.of(context).size.width,
-                      child: new Text('Bottom NavBar', textAlign: TextAlign.center,),
-                  )
-                )
               ],
             )
           ],
         ),
+        bottomNavigationBar: new BottomNavBar(this.user,this.skills,1),
       ),
     );
   }
