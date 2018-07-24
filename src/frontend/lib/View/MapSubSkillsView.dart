@@ -99,7 +99,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
     skillService.saveSkills(subskillsToSave, user).then((success) {
       if(success) {
-        new SkillsService().getUserSkills(user).then((skills) {
+        new SkillsService().getUserSkills(user, user.id).then((skills) {
           setState(() { loading = false;} );
           Navigator.push(
             context,

@@ -172,7 +172,7 @@ class _LoginInputState extends State<LoginInput> {
 
   void logInUser(User user){
     if(user != null){
-      new SkillsService().getUserSkills(user).then((List<Skill> skills){
+      new SkillsService().getUserSkills(user, user.id).then((List<Skill> skills){
         setState(() { logingIn = false;} );
         if(skills.length == 0) {
           Navigator.push(

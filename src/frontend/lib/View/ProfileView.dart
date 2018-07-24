@@ -94,7 +94,7 @@ class ProfileState extends State<ProfileView> {
             ),
           ],
         ),
-      bottomNavigationBar: new BottomNavBar(this.user,skillsProfile,4),
+      bottomNavigationBar: new BottomNavBar(user, skillsProfile, 4),
     );
   }
 

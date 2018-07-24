@@ -5,6 +5,7 @@ from Shared import Constants
 from Domain.Model.Employee import Employee
 from Domain.Model.EmployeeByCategory import EmployeeByCategory
 
+
 def list_by_category(association_id, user_data):
     email = user_data.email
     password = urllib.parse.quote(user_data.password)
@@ -25,6 +26,7 @@ def list_by_category(association_id, user_data):
                       json_employee.get("nivelConhecimento"), json_employee.get("interesse"))
         employee_list.append(ep)
     return employee_list
+
 
 def list_all(user_data):
     email = user_data.email

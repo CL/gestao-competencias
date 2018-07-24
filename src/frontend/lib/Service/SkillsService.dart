@@ -16,8 +16,8 @@ class SkillsService {
 
   String urlAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
 
-  Future<List<Skill>> getUserSkills(User user) async {
-    String urlParams = urlUserSkills + "?email="+user.email+"&id="+user.id+"&name="
+  Future<List<Skill>> getUserSkills(User user, String id) async {
+    String urlParams = urlUserSkills + "?email="+user.email+"&id="+id+"&name="
                       +user.name+"&password="+user.password+"&role=" + user.role;
     Response response = await http.get(urlParams, headers: {"content-type": "application/json"});
     
