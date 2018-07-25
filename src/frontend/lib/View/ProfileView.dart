@@ -96,7 +96,7 @@ class ProfileState extends State<ProfileView> {
             ),
           ],
         ),
-      bottomNavigationBar: new BottomNavBar(contextData, 4),
+      bottomNavigationBar: new BottomNavBar(contextData, 2),
     );
   }
 

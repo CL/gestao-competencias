@@ -164,7 +164,7 @@ class SearchViewState extends State<SearchView>{
           loading ? new LoadingCircleRotate(): new Container(),
           ]
         ),
-        bottomNavigationBar: new BottomNavBar(contextData ,1),
+        bottomNavigationBar: new BottomNavBar(contextData ,0),
       ),
     );
   }
