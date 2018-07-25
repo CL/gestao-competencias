@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../View/FirstLoginView.dart';
 
+import '../Model/ContextData.dart';
+import '../View/FirstLoginView.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
 import '../Service/LoginService.dart';
@@ -155,7 +156,7 @@ class _LoginInputState extends State<LoginInput> {
             );
           },
         ),
-        logingIn == true ? new Container(
+        logingIn ? new Container(
           child: new Center(
             child: new Container(
               height: MediaQuery.of(context).size.height,
@@ -164,7 +165,7 @@ class _LoginInputState extends State<LoginInput> {
             ),
           ),
         ): new Container(),
-        logingIn == true ? new LoadingCircleRotate(
+        logingIn ? new LoadingCircleRotate(
         ): new Container(),
       ],
     );
@@ -173,19 +174,20 @@ class _LoginInputState extends State<LoginInput> {
   void logInUser(User user){
     if(user != null){
       new SkillsService().getUserSkills(user, user.id).then((List<Skill> skills){
-        setState(() { logingIn = false;} );
-        if(skills.length == 0) {
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new FirstLoginView(user)));
-        } else {
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new ProfileView(skills, user)));
-        }
-        
+        new SkillsService().getAllSkills(user).then((allSkills) {
+          setState(() { logingIn = false;} );
+          if(skills.length == 0) {
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new FirstLoginView(new ContextData(user, skills, allSkills))));
+          } else {
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new ProfileView(skills, user, new ContextData(user, skills, allSkills))));
+          }
+        });
       });
 
       

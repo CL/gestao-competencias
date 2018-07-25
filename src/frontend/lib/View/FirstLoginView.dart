@@ -1,24 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Model/Skill.dart';
-import '../Model/User.dart';
-import '../Service/SkillsService.dart';
+import '../Model/ContextData.dart';
 import 'MapSkillsView.dart';
 
 class FirstLoginView extends StatefulWidget {
-  final User user;
+  ContextData context;
 
-  FirstLoginView(this.user);
+  FirstLoginView(this.context, {Key key}) : super(key: key);
 
   @override
-  createState() => new FirstLoginState(user);
+  createState() => new FirstLoginState(context);
 }
 
 class FirstLoginState extends State<FirstLoginView>{
 
-  User user;
+  ContextData contextData;
 
-  FirstLoginState(this.user);
+  FirstLoginState(this.contextData);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class FirstLoginState extends State<FirstLoginView>{
                     new Container(
                       margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 27.0),
                       child: new Text(
-                        'Olá ' + user.name,
+                        'Olá ' + contextData.user.name,
                         style: new TextStyle(
                           fontWeight: FontWeight.bold,
                           color: new Color(0xff616161),
@@ -98,12 +96,10 @@ class FirstLoginState extends State<FirstLoginView>{
                             ),
                           ),
                           onPressed: () {
-                            new SkillsService().getAllSkills(user).then((List<Skill> skills) {
-                              Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => new MapSkillsView(skills, user, [])));
-                            });
+                            Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new MapSkillsView(contextData)));
                           },
                         )
                     ),

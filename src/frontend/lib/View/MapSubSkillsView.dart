@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
-import '../Components/BottomNavBar.dart';
-import '../View/LoginView.dart';
 
+import '../Model/ContextData.dart';
+import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
-import '../Model/User.dart';
 import 'ProfileView.dart';
 
 
 class MapSubSkillsView extends StatefulWidget {
-  final List<Skill> allSkills;
-  final List<Skill> oldSkills;
-  final User user;
+  final List<Skill> selectedSkills;
+  final ContextData contextData;
   
-  MapSubSkillsView(this.allSkills, this.user, this.oldSkills, {Key key}) : super(key: key);
+  MapSubSkillsView(this.selectedSkills, this.contextData, {Key key}) : super(key: key);
 
   @override
-  createState() => new MapSubSkillsState(allSkills, user, oldSkills);
+  createState() => new MapSubSkillsState(selectedSkills, contextData);
 }
 
 class MapSubSkillsState extends State<MapSubSkillsView> {
   List<Skill> selectedSkills;
-  List<Skill> oldSkills;
-  User user;
+  ContextData contextData;
   bool loading;
 
-  MapSubSkillsState(this.selectedSkills, this.user, this.oldSkills, [this.loading=false]);
+  MapSubSkillsState(this.selectedSkills, this.contextData, [this.loading=false]);
 
   final snackBarError = new SnackBar(
       content: new Text('Erro ao salvar. Tente novamente mais tarde.'),
@@ -46,20 +43,32 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
         ],
         leading: new Icon(Icons.arrow_back),
       ),
-      body: new Container(
-        padding: new EdgeInsets.all(18.0),
-        child: new Scrollbar(
-          child: new CustomScrollView(
-            slivers: [new SliverList(
-              delegate: new SliverChildListDelegate(
-                getSubSkillsList()
-              ),
-            )]
-          )
-          
+      body: new Stack(
+      children: [
+        new Container(
+          padding: new EdgeInsets.all(18.0),
+          child: new Scrollbar(
+            child: new CustomScrollView(
+              slivers: [new SliverList(
+                delegate: new SliverChildListDelegate(
+                  getSubSkillsList()
+                ),
+              )]
+            )  
+          ),
         ),
-      ),
-      bottomNavigationBar: new BottomNavBar(this.user, selectedSkills, 2),
+        loading ? new Container(
+          child: new Center(
+            child: new Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: new Color(0xccffffff),
+            ),
+          ),
+        ): new Container(),
+        loading ? new LoadingCircleRotate(): 
+        new Container(),]
+      )
     );
   }
 
@@ -71,11 +80,11 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
 
     selectedSkills.forEach((selectedSkill) {
-      oldSkills.forEach((oldSkill) {
+      contextData.userSkills.forEach((oldSkill) {
         if(selectedSkill.skillId == oldSkill.skillId) {
           selectedSkill.subSkills.forEach((selectedSubskill) {
              oldSkill.subSkills.forEach((oldSubskill) {
-               if(oldSubskill.subSkillRating != selectedSubskill.subSkillRating || oldSubskill.subSkillInterest != selectedSubskill.subSkillInterest) {
+               if(oldSubskill.subSkillId == selectedSubskill.subSkillId && (oldSubskill.subSkillRating != selectedSubskill.subSkillRating || oldSubskill.subSkillInterest != selectedSubskill.subSkillInterest)) {
                  selectedSubskill.entryId = oldSubskill.entryId;
                  subskillsToUpdate.add(selectedSubskill);             
                }
@@ -95,16 +104,16 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
     var skillService = new SkillsService();
 
-    skillService.updateSubskills(subskillsToUpdate, user);
+    skillService.updateSubskills(subskillsToUpdate, contextData.user);
 
-    skillService.saveSkills(subskillsToSave, user).then((success) {
+    skillService.saveSkills(subskillsToSave, contextData.user).then((success) {
       if(success) {
-        new SkillsService().getUserSkills(user, user.id).then((skills) {
+        new SkillsService().getUserSkills(contextData.user, contextData.user.id).then((skills) {
           setState(() { loading = false;} );
           Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new ProfileView(skills, user)));
+                builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
         });
         
       } else {
@@ -191,21 +200,6 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       );
       
     });
-
-    newWidgets.add(
-      loading ? new Container(
-          child: new Center(
-            child: new Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: new Color(0xccffffff),
-            ),
-          ),
-        ): new Container()
-    );
-    newWidgets.add(
-      loading ? new LoadingCircleRotate(): new Container()
-    );
 
     return newWidgets;
   }

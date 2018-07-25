@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../Components/BottomNavBar.dart';
 
+import '../Model/ContextData.dart';
+import '../Components/BottomNavBar.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
 import '../Components/BackgroundProfileAppBar.dart';
@@ -12,11 +13,12 @@ class ProfileView extends StatefulWidget {
 
   final List<Skill> skillsProfile;
   final User user;
+  final ContextData contextData;
 
-  ProfileView(this.skillsProfile, this.user);
+  ProfileView(this.skillsProfile, this.user, this.contextData, {Key key}) : super(key: key);
 
   @override
-  createState() => new ProfileState(skillsProfile, user);
+  createState() => new ProfileState(skillsProfile, user, contextData);
 
 }
 
@@ -24,9 +26,11 @@ class ProfileState extends State<ProfileView> {
 
   List<Skill> skillsProfile;
   User user;
+  ContextData contextData;
+
   GlobalKey globalKey = new GlobalKey();
 
-  ProfileState(this.skillsProfile, this.user);
+  ProfileState(this.skillsProfile, this.user, this.contextData);
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +65,6 @@ class ProfileState extends State<ProfileView> {
                               fontSize: 14.0,
                             ),
                           ),
-                  /*
-                  */
                           new Divider(),
                           new Row(
                               children: [
@@ -94,7 +96,7 @@ class ProfileState extends State<ProfileView> {
             ),
           ],
         ),
-      bottomNavigationBar: new BottomNavBar(user, skillsProfile, 4),
+      bottomNavigationBar: new BottomNavBar(contextData, 4),
     );
   }
 

@@ -43,6 +43,6 @@ def list_all(user_data):
     employee_list = []
 
     for json_employee in response_data:
-        ep = Employee(json_employee.get("id"), json_employee.get("nome"))
+        ep = Employee(json_employee.get("id"), json_employee.get("nome"), '')
         employee_list.append(ep)
     return employee_list

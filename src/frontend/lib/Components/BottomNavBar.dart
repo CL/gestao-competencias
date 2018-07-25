@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Service/SkillsService.dart';
+
+import '../Model/ContextData.dart';
 import '../View/MapSkillsView.dart';
 import '../View/SearchView.dart';
 import '../Model/Skill.dart';
@@ -9,29 +10,20 @@ import '../View/ProfileView.dart';
 
 class BottomNavBar extends StatefulWidget{
 
-  User user;
-  List<Skill> skills;
+  ContextData contextData;
   int index;
 
-  BottomNavBar(user,skills,index){
-    this.user = user;
-    this.skills = skills;
-    this.index = index;
-  }
+  BottomNavBar(this.contextData, this.index);
+
   @override
-  State<StatefulWidget> createState() => new BottomNavBarState(user,skills,this.index);
+  State<StatefulWidget> createState() => new BottomNavBarState(contextData, index);
 }
 
 class BottomNavBarState extends State<BottomNavBar>{
   int index;
+  ContextData contextData;
 
-  BottomNavBarState(user,skills,index){
-      this.user = user;
-      this.skills = skills;
-      this.index = index;
-  }
-  User user;
-  List<Skill> skills;
+  BottomNavBarState(this.contextData, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -97,17 +89,15 @@ class BottomNavBarState extends State<BottomNavBar>{
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new SearchView(this.user,this.skills)));
+                        builder: (context) => new SearchView(contextData)));
                 break;
               }
             case 2:
               {
-                new SkillsService().getAllSkills(user).then((allSkills) {
-                  Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => new MapSkillsView(allSkills, user, skills)));
-                });
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new MapSkillsView(contextData)));
                 break;
               }
             case 3:
@@ -120,7 +110,7 @@ class BottomNavBarState extends State<BottomNavBar>{
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new ProfileView(skills, user)));
+                        builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
                 break;
               }
             default:
