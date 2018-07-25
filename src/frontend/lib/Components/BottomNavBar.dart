@@ -31,6 +31,7 @@ class BottomNavBarState extends State<BottomNavBar>{
         type: BottomNavigationBarType.fixed,
         currentIndex: this.index,
         items: <BottomNavigationBarItem>[
+          /*
           new BottomNavigationBarItem(
             backgroundColor: Colors.white,
             icon: new Icon(
@@ -39,11 +40,13 @@ class BottomNavBarState extends State<BottomNavBar>{
               size: 24.0,
             ),
             title: new Text("", style: new TextStyle(fontSize: 1.0),),
-          ),new BottomNavigationBarItem(
+          ),
+          */
+          new BottomNavigationBarItem(
             backgroundColor: Colors.white,
             icon: new Icon(
               Icons.search,
-              color: index == 1 ? Color(0xff5e529d) : Colors.grey,
+              color: index == 0 ? Color(0xff5e529d) : Colors.grey,
               size: 24.0,
             ),
             title: new Text("", style: new TextStyle(fontSize: 1.0),),
@@ -57,6 +60,7 @@ class BottomNavBarState extends State<BottomNavBar>{
             ),
             title: new Text("", style: new TextStyle(fontSize: 1.0),),
           ),
+          /*
           new BottomNavigationBarItem(
             backgroundColor: Colors.white,
             icon: new Icon(
@@ -65,11 +69,12 @@ class BottomNavBarState extends State<BottomNavBar>{
             ),
             title: new Text("", style: new TextStyle(fontSize: 1.0),),
           ),
+          */
           new BottomNavigationBarItem(
             backgroundColor: Colors.white,
             icon: new Icon(
               Icons.person_outline,
-              color: index == 4 ? Color(0xff5e529d) : Colors.grey,
+              color: index == 2 ? Color(0xff5e529d) : Colors.grey,
             ),
             title: new Text("", style: new TextStyle(fontSize: 1.0),),
           ),
@@ -81,7 +86,10 @@ class BottomNavBarState extends State<BottomNavBar>{
           switch(i){
             case 0:
               {
-
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new SearchView(contextData)));
                 break;
               }
             case 1:
@@ -89,23 +97,10 @@ class BottomNavBarState extends State<BottomNavBar>{
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new SearchView(contextData)));
+                        builder: (context) => new MapSkillsView(contextData)));
                 break;
               }
             case 2:
-              {
-                Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new MapSkillsView(contextData)));
-                break;
-              }
-            case 3:
-              {
-
-                break;
-              }
-            case 4:
               {
                 Navigator.push(
                     context,

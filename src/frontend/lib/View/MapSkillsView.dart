@@ -60,7 +60,7 @@ class MapSkillsState extends State<MapSkillsView>{
           ),
         ) 
       ),
-      bottomNavigationBar: new BottomNavBar(contextData, 2),
+      bottomNavigationBar: new BottomNavBar(contextData, 1),
     );
   }
 
