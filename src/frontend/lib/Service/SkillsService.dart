@@ -16,8 +16,8 @@ class SkillsService {
 
   String urlAllSkills = Constants.URL_BACKEND + Constants.PATH_SKILLS + Constants.PATH_ALL;
 
-  Future<List<Skill>> getUserSkills(User user) async {
-    String urlParams = urlUserSkills + "?email="+user.email+"&id="+user.id+"&name="
+  Future<List<Skill>> getUserSkills(User user, String id) async {
+    String urlParams = urlUserSkills + "?email="+user.email+"&id="+id+"&name="
                       +user.name+"&password="+user.password+"&role=" + user.role;
     Response response = await http.get(urlParams, headers: {"content-type": "application/json"});
     
@@ -57,9 +57,19 @@ class SkillsService {
     return skills;
   }
 
-  Future<bool> saveSkills(List<Skill> selectedSkills, User user) async {
+  Future<bool> saveSkills(List<SubSkill> selectedSkills, User user) async {
     String jsonSkills = json.encode(selectedSkills);
     Response response = await http.post(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
     return response.body == "True" ? true : false;
+  }
+
+  void deleteSkill(Skill skill, User user) {
+    String urlParam = urlUserSkills+"?funcionario="+user.id+"&idMacro="+skill.skillId;
+    http.delete(urlParam, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
+  }
+
+  void updateSubskills(List<SubSkill> skills, User user) {
+    String jsonSkills = json.encode(skills);
+    http.put(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
   }
 }

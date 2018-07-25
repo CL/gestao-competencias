@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
-import '../View/BottomNavBar.dart';
-import '../View/LoginView.dart';
 
+import '../Model/ContextData.dart';
+import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
-import '../Model/User.dart';
 import 'ProfileView.dart';
 
 
 class MapSubSkillsView extends StatefulWidget {
-  final List<Skill> skills;
-  final User user;
+  final List<Skill> selectedSkills;
+  final ContextData contextData;
   
-  MapSubSkillsView(this.skills, this.user, {Key key}) : super(key: key);
+  MapSubSkillsView(this.selectedSkills, this.contextData, {Key key}) : super(key: key);
 
   @override
-  createState() => new MapSubSkillsState(skills, user);
+  createState() => new MapSubSkillsState(selectedSkills, contextData);
 }
 
 class MapSubSkillsState extends State<MapSubSkillsView> {
-  List<Skill> skills;
-  User user;
+  List<Skill> selectedSkills;
+  ContextData contextData;
   bool loading;
 
-  MapSubSkillsState(this.skills, this.user, [this.loading=false]);
+  MapSubSkillsState(this.selectedSkills, this.contextData, [this.loading=false]);
 
   final snackBarError = new SnackBar(
       content: new Text('Erro ao salvar. Tente novamente mais tarde.'),
@@ -44,33 +43,77 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
         ],
         leading: new Icon(Icons.arrow_back),
       ),
-      body: new Container(
-        padding: new EdgeInsets.all(18.0),
-        child: new Scrollbar(
-          child: new CustomScrollView(
-            slivers: [new SliverList(
-              delegate: new SliverChildListDelegate(
-                getSubSkillsList()
-              ),
-            )]
-          )
-          
+      body: new Stack(
+      children: [
+        new Container(
+          padding: new EdgeInsets.all(18.0),
+          child: new Scrollbar(
+            child: new CustomScrollView(
+              slivers: [new SliverList(
+                delegate: new SliverChildListDelegate(
+                  getSubSkillsList()
+                ),
+              )]
+            )  
+          ),
         ),
-      ),
-      bottomNavigationBar: new BottomNavBar(this.user,skills,2),
+        loading ? new Container(
+          child: new Center(
+            child: new Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: new Color(0xccffffff),
+            ),
+          ),
+        ): new Container(),
+        loading ? new LoadingCircleRotate(): 
+        new Container(),]
+      )
     );
   }
 
   void save(){
     setState(() { loading = true;} );
-    new SkillsService().saveSkills(skills, user).then((success) {
+
+    List<SubSkill> subskillsToUpdate = [];
+    List<SubSkill> subskillsToSave = [];
+
+
+    selectedSkills.forEach((selectedSkill) {
+      contextData.userSkills.forEach((oldSkill) {
+        if(selectedSkill.skillId == oldSkill.skillId) {
+          selectedSkill.subSkills.forEach((selectedSubskill) {
+             oldSkill.subSkills.forEach((oldSubskill) {
+               if(oldSubskill.subSkillId == selectedSubskill.subSkillId && (oldSubskill.subSkillRating != selectedSubskill.subSkillRating || oldSubskill.subSkillInterest != selectedSubskill.subSkillInterest)) {
+                 selectedSubskill.entryId = oldSubskill.entryId;
+                 subskillsToUpdate.add(selectedSubskill);             
+               }
+             });
+          });
+        }
+      });
+    });
+
+    selectedSkills.forEach((selectedSkill) {
+      selectedSkill.subSkills.forEach((subSkill) {
+        if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null) {
+          subskillsToSave.add(subSkill);
+        }
+      });
+    });
+
+    var skillService = new SkillsService();
+
+    skillService.updateSubskills(subskillsToUpdate, contextData.user);
+
+    skillService.saveSkills(subskillsToSave, contextData.user).then((success) {
       if(success) {
-        new SkillsService().getUserSkills(user).then((skills) {
+        new SkillsService().getUserSkills(contextData.user, contextData.user.id).then((skills) {
           setState(() { loading = false;} );
           Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new ProfileView(skills, user)));
+                builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
         });
         
       } else {
@@ -102,7 +145,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       ],
     ));
 
-    skills.forEach((skill){
+    selectedSkills.forEach((skill){
       newWidgets.add(
         new Card(
           child: new Column(
@@ -157,21 +200,6 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       );
       
     });
-
-    newWidgets.add(
-      loading ? new Container(
-          child: new Center(
-            child: new Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: new Color(0xccffffff),
-            ),
-          ),
-        ): new Container()
-    );
-    newWidgets.add(
-      loading ? new LoadingCircleRotate(): new Container()
-    );
 
     return newWidgets;
   }
@@ -234,18 +262,18 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   void changeRating(double rating, Skill skill, SubSkill sub) {
-    int indexSkill = skills.indexOf(skill);
+    int indexSkill = selectedSkills.indexOf(skill);
     int indexSubskill = skill.subSkills.indexOf(sub);
-    List<Skill> skillsTemp = skills;
+    List<Skill> skillsTemp = selectedSkills;
     skillsTemp[indexSkill].subSkills[indexSubskill].subSkillRating = rating;
-    setState(() { skills = skillsTemp; });
+    setState(() { selectedSkills = skillsTemp; });
   }
 
   void favoritarSubSkill(Skill skill, SubSkill sub) {
-    int indexSkill = skills.indexOf(skill);
+    int indexSkill = selectedSkills.indexOf(skill);
     int indexSubskill = skill.subSkills.indexOf(sub);
-    List<Skill> skillsTemp = skills;
+    List<Skill> skillsTemp = selectedSkills;
     skillsTemp[indexSkill].subSkills[indexSubskill].subSkillInterest = !skillsTemp[indexSkill].subSkills[indexSubskill].subSkillInterest;
-    setState(() { skills = skillsTemp; });
+    setState(() { selectedSkills = skillsTemp; });
   }
 }
