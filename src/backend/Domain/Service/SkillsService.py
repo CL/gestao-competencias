@@ -16,6 +16,17 @@ def save_skills(skill_list, user_data):
     return NetSuiteSkillsAgent.save_skills(skill_list, user_data)
 
 
+def update_skills(skill_list,user_data):
+    if user_data.email is None or user_data.password is None or user_data.id is None:
+        return None
+
+    for skill in skill_list:
+        if skill.funcionario is None or skill.categoria is None or skill.nivelConhecimento is None or skill.interesse is None or skill.id is None:
+            return None
+
+    return NetSuiteSkillsAgent.update_skills(skill_list, user_data)
+
+
 def list_user_skills(user_data):
     if user_data.email is None or user_data.password is None or user_data.id is None:
         return None

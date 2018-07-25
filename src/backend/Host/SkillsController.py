@@ -1,6 +1,8 @@
 from flask import Blueprint, request
 
 import json
+
+from Domain.Model.UpdateCompetence import UpdateCompetence
 from Domain.Model.User import User
 from Domain.Model.InputCompetence import InputCompetence
 from Domain.Service import SkillsService
@@ -28,8 +30,8 @@ def save_skills():
         interest = data['sub_skill_interest']
 
         skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
-
-        if skill_data.nivelConhecimento > 0:
+        
+        if skill_data.nivelConhecimento > 0 or skill_data.interesse:
             skill_list.append(skill_data)
 
     skill_response = SkillsService.save_skills(skill_list, user_data)
@@ -72,7 +74,33 @@ def list_all_skills():
 
 @skills.route('', methods=['PUT'])
 def update_skills():
-    return ''
+    authorization_header = request.headers['Authorization']
+    authorization_split_comma = authorization_header.split(',')
+    email = authorization_split_comma[0].split('=')[1]
+    signature = authorization_split_comma[1].split('=')[1]
+    id = authorization_split_comma[2].split('=')[1]
+
+    user_data = User(email=email, password=signature, user_id=id)
+    skill_list = list()
+
+    for data in request.json:
+        employee = id
+        category = data['subskill_assoc_id']
+        knowledge_level = int(data['subskill_rating'])
+        interest = data['sub_skill_interest']
+        registry_id = data['entry_id']
+
+        skill_data = UpdateCompetence(employee=employee, category=category, knowledge_level=knowledge_level,
+                                     interest=interest,id=registry_id)
+
+        skill_list.append(skill_data)
+
+    skill_response = SkillsService.update_skills(skill_list, user_data)
+    for response in skill_response:
+        if response is None:
+            return "False"
+
+    return "True"
 
 @skills.route('', methods=['DELETE'])
 def delete_skill():
@@ -85,7 +113,6 @@ def delete_skill():
     id = authorization_split_comma[2].split('=')[1]
 
     user_data = User(email=email, password=signature, user_id=id)
-
+    
     SkillsService.delete_skill(id_macro, funcionario, user_data)
-
     return ''
