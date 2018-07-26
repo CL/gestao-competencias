@@ -11,4 +11,4 @@ app.register_blueprint(login, url_prefix='/login')
 app.register_blueprint(skills, url_prefix='/skills')
 app.register_blueprint(search, url_prefix='/search')
 
-app.run(host='0.0.0.0', port=os.environ.get("PORT", 5000))
+app.run(host='0.0.0.0', port=int(os.environ.get("PORT", "5000")))
