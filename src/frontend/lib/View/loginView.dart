@@ -41,14 +41,27 @@ class LoginInput extends StatefulWidget {
 }
 
 class _LoginInputState extends State<LoginInput> {
+  final dataKey = new GlobalKey();
+
   final TextEditingController _controllerEmail = new TextEditingController();
-  final TextEditingController _controllerSenha = new TextEditingController();
+  final TextEditingController _controllerPassword = new TextEditingController();
+  final FocusNode _focusEmail = new FocusNode();
+  final FocusNode _focusPassword = new FocusNode();
+  final ScrollController _scrollController = new ScrollController();
+
   final snackBarError = new SnackBar(
       content: new Text('Email ou senha incorretos. Você só pode errar a senha por 3 vezes ou seu login será bloqueado.'),
       duration: new Duration(seconds: 3)
   );
   bool logingIn = false;
   bool wrongPassword = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusEmail.addListener(_scrollViewKeyboard);
+    _focusPassword.addListener(_scrollViewKeyboard);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +71,8 @@ class _LoginInputState extends State<LoginInput> {
         new LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints ){
             return new SingleChildScrollView(
+              reverse: true,
+              controller: _scrollController,
               child: new ConstrainedBox(
                   constraints: new BoxConstraints(
                     minHeight: viewportConstraints.maxHeight,
@@ -97,6 +112,7 @@ class _LoginInputState extends State<LoginInput> {
                                       new Container(
                                         margin: const EdgeInsets.only(bottom: 32.0),
                                         child: new TextField(
+                                          focusNode: _focusEmail,
                                           keyboardType: TextInputType.emailAddress,
                                           style: new TextStyle(
                                             color: Colors.white,
@@ -109,6 +125,7 @@ class _LoginInputState extends State<LoginInput> {
                                       ),
                                       new TextField(
                                         obscureText: true,
+                                        focusNode: _focusPassword,
                                         style: new TextStyle(
                                           color: Colors.white,
                                         ),
@@ -116,7 +133,7 @@ class _LoginInputState extends State<LoginInput> {
                                             hintText: 'senha',
                                             prefixIcon:
                                             new Icon(Icons.lock_outline, color: Colors.white)),
-                                        controller: _controllerSenha,
+                                        controller: _controllerPassword,
                                       ),
                                     ],
                                   )
@@ -141,9 +158,7 @@ class _LoginInputState extends State<LoginInput> {
                             ),
                             onPressed: () {
                               setState(() { logingIn = true;} );
-                              debugPrint("Senha: " + _controllerSenha.text);
-                              debugPrint("Senha URL encode: " + Uri.encodeQueryComponent(_controllerSenha.text));
-                              _loginViewModel.logIn(_controllerEmail.text, _controllerSenha.text)
+                              _loginViewModel.logIn(_controllerEmail.text, _controllerPassword.text)
                                   .catchError(() {setState(() { logingIn = false;} );})
                                   .then(logInUser);
                             },
@@ -171,6 +186,10 @@ class _LoginInputState extends State<LoginInput> {
     );
   }
 
+  void _scrollViewKeyboard() {
+    _scrollController.jumpTo(100.0);
+  }
+
   void logInUser(User user){
     if(user != null){
       new SkillsService().getUserSkills(user, user.id).then((List<Skill> skills){
@@ -189,8 +208,6 @@ class _LoginInputState extends State<LoginInput> {
           }
         });
       });
-
-      
     }
     else{
       setState(() { logingIn = false;} );
