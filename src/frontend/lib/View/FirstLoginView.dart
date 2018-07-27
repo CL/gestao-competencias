@@ -4,7 +4,7 @@ import '../Model/ContextData.dart';
 import 'MapSkillsView.dart';
 
 class FirstLoginView extends StatefulWidget {
-  ContextData context;
+  final ContextData context;
 
   FirstLoginView(this.context, {Key key}) : super(key: key);
 

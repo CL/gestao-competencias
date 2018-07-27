@@ -68,8 +68,9 @@ class SkillsService {
     http.delete(urlParam, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
   }
 
-  void updateSubskills(List<SubSkill> skills, User user) {
+  Future<bool> updateSubskills(List<SubSkill> skills, User user) async {
     String jsonSkills = json.encode(skills);
     http.put(urlUserSkills, body: jsonSkills, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
+    return true;
   }
 }

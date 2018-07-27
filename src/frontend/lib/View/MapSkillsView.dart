@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../Model/ContextData.dart';
 import '../Service/SkillsService.dart';
 import '../Components/BottomNavBar.dart';
-import '../Model/User.dart';
 import '../Model/Skill.dart';
 import 'MapSubSkillsView.dart';
 
@@ -72,17 +71,13 @@ class MapSkillsState extends State<MapSkillsView>{
       }
     });
 
-    List<Skill> deletedSkills = [];
-
     contextData.userSkills.forEach((skill) {
       var skillsService = new SkillsService();
       if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
         skillsService.deleteSkill(skill, contextData.user);
-        deletedSkills.add(skill);
+        contextData.userSkills.removeWhere((userSkill) => userSkill.skillId == skill.skillId);
       }
     });
-
-    contextData.userSkills.removeWhere((skill) => deletedSkills.firstWhere((skillDeleted) => skillDeleted.skillId == skill.skillId, orElse: () => null) != null);
 
     contextData.userSkills.forEach((oldSkill) {
       selectedSkills.forEach((selectedSkill) {
