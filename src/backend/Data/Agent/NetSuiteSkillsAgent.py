@@ -34,14 +34,11 @@ def update_skills(skill_list, user_data):
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
     response_list = list()
-    print(headers)
 
     for skill_data in skill_list:
         skill_data_json = json.dumps(skill_data.__dict__)
-        print(skill_data_json)
         response = requests.put(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json,
                                  headers=headers)
-        print(response.text)
         response_data = json.loads(response.text)
 
         if "error" in response_data:

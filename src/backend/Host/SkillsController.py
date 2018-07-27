@@ -83,10 +83,7 @@ def update_skills():
 
     skill_list = list()
 
-
-
     for data in request.json:
-        print(data)
         employee = id
         category = data['subskill_assoc_id']
         knowledge_level = int(data['subskill_rating'])
@@ -95,7 +92,6 @@ def update_skills():
 
         skill_data = UpdateCompetence(employee=employee, category=category, knowledge_level=knowledge_level,
                                      interest=interest,entry_id=registry_id)
-
         skill_list.append(skill_data)
 
     skill_response = SkillsService.update_skills(skill_list, user_data)
