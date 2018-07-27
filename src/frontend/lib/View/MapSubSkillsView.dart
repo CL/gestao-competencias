@@ -95,11 +95,17 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
     });
 
     selectedSkills.forEach((selectedSkill) {
-      selectedSkill.subSkills.forEach((subSkill) {
-        if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null) {
-          subskillsToSave.add(subSkill);
+      contextData.userSkills.forEach((oldSkill) {
+        if(selectedSkill.skillId == oldSkill.skillId) {
+          selectedSkill.subSkills.forEach((subSkill) {
+            if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null
+                && oldSkill.subSkills.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null) {
+              subskillsToSave.add(subSkill);
+            }
+          });
         }
       });
+
     });
 
     var skillService = new SkillsService();
@@ -110,6 +116,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       if(success) {
         new SkillsService().getUserSkills(contextData.user, contextData.user.id).then((skills) {
           setState(() { loading = false;} );
+          contextData.userSkills = skills;
           Navigator.push(
             context,
             new MaterialPageRoute(

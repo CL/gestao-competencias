@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import '../View/ProfileView.dart';
 
 import '../Model/ContextData.dart';
 import '../Service/SkillsService.dart';
@@ -79,6 +80,13 @@ class MapSkillsState extends State<MapSkillsView>{
       if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
         skillsService.deleteSkill(skill, contextData.user);
         deletedSkills.add(skill);
+        skillsService.getUserSkills(contextData.user, contextData.user.id).then((skills) {
+          contextData.userSkills = skills;
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
+        });;
       }
     });
 

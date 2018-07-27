@@ -23,17 +23,17 @@ def save_skills():
 
     skill_list = list()
 
+    print(request.json)
     for data in request.json:
-        for subskill in data["sub_skills"]:
-            employee = id
-            category = subskill['subskill_assoc_id']
-            knowledge_level = int(subskill['subskill_rating'])
-            interest = subskill['sub_skill_interest']
+        employee = id
+        category = data['subskill_assoc_id']
+        knowledge_level = int(data['subskill_rating'])
+        interest = data['sub_skill_interest']
 
-            skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
+        skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
 
-            if skill_data.nivelConhecimento > 0 or skill_data.interesse:
-                skill_list.append(skill_data)
+        if skill_data.nivelConhecimento > 0 or skill_data.interesse:
+            skill_list.append(skill_data)
 
     skill_response = SkillsService.save_skills(skill_list, user_data)
 
@@ -86,17 +86,16 @@ def update_skills():
     skill_list = list()
 
     for data in request.json:
-        for subskill in data["sub_skills"]:
-            employee = id
-            category = subskill['subskill_assoc_id']
-            knowledge_level = int(subskill['subskill_rating'])
-            interest = subskill['sub_skill_interest']
-            registry_id = subskill['entry_id']
+        employee = id
+        category = data['subskill_assoc_id']
+        knowledge_level = int(data['subskill_rating'])
+        interest = data['sub_skill_interest']
+        registry_id = data['entry_id']
 
-            skill_data = UpdateCompetence(employee=employee, category=category, knowledge_level=knowledge_level,
-                                         interest=interest,entry_id=registry_id)
+        skill_data = UpdateCompetence(employee=employee, category=category, knowledge_level=knowledge_level,
+                                     interest=interest,entry_id=registry_id)
 
-            skill_list.append(skill_data)
+        skill_list.append(skill_data)
 
     skill_response = SkillsService.update_skills(skill_list, user_data)
     for response in skill_response:
