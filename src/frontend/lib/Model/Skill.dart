@@ -58,7 +58,7 @@ class SubSkill{
       subSkillName = json["subskill_name"].toString();
       subSkillRating = double.parse(json["subskill_rating"].toString());
       associationId = json["subskill_assoc_id"].toString();
-      entryId = json["entry_id"].toString();
+      entryId = json["subskill_entry_id"].toString();
   }
 
   Map<String, dynamic> toJson() => {

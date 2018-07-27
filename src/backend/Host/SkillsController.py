@@ -23,7 +23,6 @@ def save_skills():
 
     skill_list = list()
 
-    print(request.json)
     for data in request.json:
         employee = id
         category = data['subskill_assoc_id']
@@ -47,12 +46,11 @@ def save_skills():
 @skills.route('', methods=['GET'])
 def list_user_skills():
     id = request.args.get('id')
-    role = request.args.get('role')
     email = request.args.get('email')
     name = request.args.get('name')
     password = request.args.get('password')
 
-    user_data = User(email=email, name=name, user_id=id, role=role, password=password)
+    user_data = User(email=email, name=name, user_id=id, password=password)
 
     user_skills = SkillsService.list_user_skills(user_data)
 
@@ -85,7 +83,10 @@ def update_skills():
 
     skill_list = list()
 
+
+
     for data in request.json:
+        print(data)
         employee = id
         category = data['subskill_assoc_id']
         knowledge_level = int(data['subskill_rating'])

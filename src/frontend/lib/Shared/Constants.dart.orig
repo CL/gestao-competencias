@@ -1,0 +1,11 @@
+class Constants {
+<<<<<<< HEAD
+  static const String URL_BACKEND = "https://7ed24331.ngrok.io/";
+=======
+  static const String URL_BACKEND = "https://dry-temple-65102.herokuapp.com/";
+>>>>>>> 46286e5f7645911f6b9f1c4e277fde6aa8716395
+  static const String PATH_LOGIN = "login";
+  static const String PATH_SKILLS = "skills";
+  static const String PATH_SEARCH = "search";
+  static const String PATH_ALL = "/all";
+}

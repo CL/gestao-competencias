@@ -4,4 +4,4 @@ class UpdateCompetence:
         self.categoria = category
         self.nivelConhecimento = knowledge_level
         self.interesse = interest
-        self.id = entry_id
+        self.entry_id = entry_id
