@@ -45,12 +45,12 @@ def list_user_skills(user_data):
 
             macro_dict[competence.id_skill].sub_skills.append(subskill)
             macro_dict[competence.id_skill].skill_rating += float(competence.rating)
-            macro_dict[competence.id_skill].skill_rating /= len(macro_dict[competence.id_skill].sub_skills)
 
         macro_dict[competence.id_skill].total_sub_skills += 1
 
     all_skills = []
     for item in macro_dict.values():
+        item.skill_rating /= len(item.sub_skills)
         all_skills.append(item)
     return all_skills
 
