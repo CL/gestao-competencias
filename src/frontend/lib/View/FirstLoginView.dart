@@ -4,7 +4,7 @@ import '../Model/ContextData.dart';
 import 'MapSkillsView.dart';
 
 class FirstLoginView extends StatefulWidget {
-  ContextData context;
+  final ContextData context;
 
   FirstLoginView(this.context, {Key key}) : super(key: key);
 
@@ -20,23 +20,24 @@ class FirstLoginState extends State<FirstLoginView>{
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return new MaterialApp(
       title: 'Welcome to Flutter',
       home: new Scaffold(
           body: new Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.fromLTRB(36.0, 113.0, 36.0, 40.0),
+                margin: new EdgeInsets.fromLTRB(36.0, height * 0.176, 36.0, height * 0.0625),
                 child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     new Container(
                       child: new Image.asset('assets/logo.png'),
-                      padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 48.0),
+                      padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.075),
                     ),
                     new Container(
-                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 27.0),
+                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.0375),
                       child: new Text(
                         'Olá ' + contextData.user.name,
                         style: new TextStyle(
@@ -47,7 +48,7 @@ class FirstLoginState extends State<FirstLoginView>{
                       ),
                     ),
                     new Container(
-                        margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 24.0),
+                        margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.0375),
                         child: new Text(
                           'Informe quais habilidades você possui e quais você ainda '
                               'não tem domínio, mas tem interesse em aprender.',
@@ -58,7 +59,7 @@ class FirstLoginState extends State<FirstLoginView>{
                         )
                     ),
                     new Container(
-                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 24.0),
+                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.0375),
                       child: new Text('Reserve 5 minutos para iniciar o mapeamento das suas '
                           'skills.',
                         style: new TextStyle(
@@ -68,7 +69,7 @@ class FirstLoginState extends State<FirstLoginView>{
                       ),
                     ),
                     new Container(
-                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 48.0),
+                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.075),
                       child: new Text('É importante manter seu perfil sempre atualizado.',
                         style: new TextStyle(
                           color: new Color(4284572001),

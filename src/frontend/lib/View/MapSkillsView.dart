@@ -79,18 +79,9 @@ class MapSkillsState extends State<MapSkillsView>{
       var skillsService = new SkillsService();
       if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
         skillsService.deleteSkill(skill, contextData.user);
-        deletedSkills.add(skill);
-        skillsService.getUserSkills(contextData.user, contextData.user.id).then((skills) {
-          contextData.userSkills = skills;
-          Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
-        });;
+        contextData.userSkills.removeWhere((userSkill) => userSkill.skillId == skill.skillId);
       }
     });
-
-    contextData.userSkills.removeWhere((skill) => deletedSkills.firstWhere((skillDeleted) => skillDeleted.skillId == skill.skillId, orElse: () => null) != null);
 
     contextData.userSkills.forEach((oldSkill) {
       selectedSkills.forEach((selectedSkill) {

@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import '../Model/ContextData.dart';
 import '../View/MapSkillsView.dart';
 import '../View/SearchView.dart';
-import '../Model/Skill.dart';
-import '../Model/User.dart';
 import '../View/ProfileView.dart';
 
 class BottomNavBar extends StatefulWidget{
 
-  ContextData contextData;
-  int index;
+  final ContextData contextData;
+  final int index;
 
   BottomNavBar(this.contextData, this.index);
 

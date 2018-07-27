@@ -84,7 +84,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
         if(selectedSkill.skillId == oldSkill.skillId) {
           selectedSkill.subSkills.forEach((selectedSubskill) {
              oldSkill.subSkills.forEach((oldSubskill) {
-               if(oldSubskill.subSkillId == selectedSubskill.subSkillId && (oldSubskill.subSkillRating != selectedSubskill.subSkillRating || oldSubskill.subSkillInterest != selectedSubskill.subSkillInterest)) {
+               if(oldSubskill.subSkillId == selectedSubskill.subSkillId) {
                  selectedSubskill.entryId = oldSubskill.entryId;
                  subskillsToUpdate.add(selectedSubskill);             
                }
@@ -95,17 +95,11 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
     });
 
     selectedSkills.forEach((selectedSkill) {
-      contextData.userSkills.forEach((oldSkill) {
-        if(selectedSkill.skillId == oldSkill.skillId) {
-          selectedSkill.subSkills.forEach((subSkill) {
-            if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null
-                && oldSkill.subSkills.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null) {
-              subskillsToSave.add(subSkill);
-            }
-          });
+      selectedSkill.subSkills.forEach((subSkill) {
+        if(subskillsToUpdate.firstWhere((updateSubskill) => updateSubskill.subSkillId == subSkill.subSkillId, orElse: () => null) == null) {
+          subskillsToSave.add(subSkill);
         }
       });
-
     });
 
     var skillService = new SkillsService();
