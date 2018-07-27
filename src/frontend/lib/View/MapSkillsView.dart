@@ -86,6 +86,7 @@ class MapSkillsState extends State<MapSkillsView>{
             selectedSkill.subSkills.forEach((selectedSubSkill){
               if(oldSubSkill.subSkillId == selectedSubSkill.subSkillId) {
                 selectedSubSkill.subSkillRating = oldSubSkill.subSkillRating;
+                selectedSubSkill.subSkillInterest = oldSubSkill.subSkillInterest;
               }
             });
           });
