@@ -71,8 +71,8 @@ class MapSkillsState extends State<MapSkillsView>{
       }
     });
 
+    var skillsService = new SkillsService();
     contextData.userSkills.forEach((skill) {
-      var skillsService = new SkillsService();
       if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
         skillsService.deleteSkill(skill, contextData.user);
         contextData.userSkills.removeWhere((userSkill) => userSkill.skillId == skill.skillId);
