@@ -21,7 +21,7 @@ def update_skills(skill_list,user_data):
         return None
 
     for skill in skill_list:
-        if skill.funcionario is None or skill.categoria is None or skill.nivelConhecimento is None or skill.interesse is None or skill.entry_id is None:
+        if skill.funcionario is None or skill.categoria is None or skill.nivelConhecimento is None or skill.interesse is None or skill.id is None:
             return None
 
     return NetSuiteSkillsAgent.update_skills(skill_list, user_data)
