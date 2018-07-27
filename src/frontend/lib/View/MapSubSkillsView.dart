@@ -104,23 +104,22 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
     var skillService = new SkillsService();
 
-    skillService.updateSubskills(subskillsToUpdate, contextData.user);
-
-    skillService.saveSkills(subskillsToSave, contextData.user).then((success) {
-      if(success) {
-        new SkillsService().getUserSkills(contextData.user, contextData.user.id).then((skills) {
-          setState(() { loading = false;} );
-          contextData.userSkills = skills;
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
-        });
-        
-      } else {
-          Scaffold.of(context).showSnackBar(snackBarError);
-      }
-      
+    skillService.updateSubskills(subskillsToUpdate, contextData.user).then((success) {
+      skillService.saveSkills(subskillsToSave, contextData.user).then((success) {
+        if(success) {
+          new SkillsService().getUserSkills(contextData.user, contextData.user.id).then((skills) {
+            setState(() { loading = false;} );
+            contextData.userSkills = skills;
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
+          });
+          
+        } else {
+            Scaffold.of(context).showSnackBar(snackBarError);
+        }
+      });
     });
     
   }
