@@ -52,7 +52,7 @@ def list_user_skills(user_data):
     for item in macro_dict.values():
         if len(item.sub_skills) > 0:
             item.skill_rating /= len(item.sub_skills)
-        all_skills.append(item)
+            all_skills.append(item)
     return all_skills
 
 
