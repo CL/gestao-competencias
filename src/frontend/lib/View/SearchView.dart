@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import '../View/FilterView.dart';
 import '../Model/ContextData.dart';
 import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
@@ -78,14 +78,24 @@ class SearchViewState extends State<SearchView>{
                   decoration: new InputDecoration(
                       hintText: 'Pesquisa',
                       prefixIcon:
-                      new Icon(Icons.search, color: new Color(0xffbebebe))),
-                      controller: _controllerPesquisa,
-                      onChanged: (text) {
-                          setState(() {
-                            searchedName = text;
-                          });
-                          users = getUsers(searchedName);
-                      },
+                        new Icon(Icons.search, color: new Color(0xffbebebe)),
+                      suffixIcon:
+                        new IconButton(
+                            icon: new Icon(Icons.filter_list),
+                            onPressed: () {
+                              Navigator.push(context, new MaterialPageRoute(
+                                  builder: (context) => new FilterView(contextData)),
+                              );
+                            },
+                        ),
+                  ),
+                  controller: _controllerPesquisa,
+                  onChanged: (text) {
+                    setState(() {
+                      searchedName = text;
+                    });
+                      users = getUsers(searchedName);
+                  },
                 ),
               ),
               new Column(
