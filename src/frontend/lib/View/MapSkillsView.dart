@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../Model/ContextData.dart';
 import '../Service/SkillsService.dart';
-import '../Components/BottomNavBar.dart';
 import '../Model/Skill.dart';
 import 'MapSubSkillsView.dart';
 
@@ -12,7 +11,7 @@ import 'MapSubSkillsView.dart';
 class MapSkillsView extends StatefulWidget {
   final ContextData contextData;
   
-  MapSkillsView(this.contextData, {Key key}) : super(key: key);
+  MapSkillsView(this.contextData);
 
   @override
   createState() => new MapSkillsState(contextData);
@@ -44,7 +43,7 @@ class MapSkillsState extends State<MapSkillsView>{
             icon: new Icon(Icons.save)
           )
         ],
-        leading: new Icon(Icons.arrow_back),
+        backgroundColor: Colors.cyan
       ),
       body: new Container(
         padding: new EdgeInsets.all(18.0),
@@ -59,7 +58,6 @@ class MapSkillsState extends State<MapSkillsView>{
           ),
         ) 
       ),
-      bottomNavigationBar: new BottomNavBar(contextData, 1),
     );
   }
 

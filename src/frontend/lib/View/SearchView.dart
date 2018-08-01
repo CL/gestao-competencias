@@ -8,7 +8,6 @@ import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
 import '../View/ProfileView.dart';
 import '../Service/SearchService.dart';
-import '../Components/BottomNavBar.dart';
 import '../Model/User.dart';
 
 class SearchView extends StatefulWidget{
@@ -69,7 +68,7 @@ class SearchViewState extends State<SearchView>{
           children: [new Column(
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.all(24.0),
+                margin: new EdgeInsets.fromLTRB(24.0, 44.0, 24.0, 24.0),
                 child: new TextField(
                   style: new TextStyle(
                     color: const Color(0xffbebebe),
@@ -174,7 +173,6 @@ class SearchViewState extends State<SearchView>{
           loading ? new LoadingCircleRotate(): new Container(),
           ]
         ),
-        bottomNavigationBar: new BottomNavBar(contextData ,0),
       ),
     );
   }

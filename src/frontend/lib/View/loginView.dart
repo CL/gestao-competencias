@@ -257,4 +257,11 @@ class _LoadingCircleRotateState extends State<LoadingCircleRotate>
       ),
     );
   }
+
+  @protected
+  @mustCallSuper
+  void dispose() {
+    super.dispose();
+    animationController.dispose();
+  }
 }

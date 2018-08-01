@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../View/HomeAppView.dart';
 import '../Model/ContextData.dart';
 import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
-import 'ProfileView.dart';
 
 
 class MapSubSkillsView extends StatefulWidget {
   final List<Skill> selectedSkills;
   final ContextData contextData;
   
-  MapSubSkillsView(this.selectedSkills, this.contextData, {Key key}) : super(key: key);
+  MapSubSkillsView(this.selectedSkills, this.contextData);
 
   @override
   createState() => new MapSubSkillsState(selectedSkills, contextData);
@@ -113,7 +113,7 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
             Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (context) => new ProfileView(contextData.userSkills, contextData.user, contextData)));
+                  builder: (context) => new HomeAppView(contextData)));
           });
           
         } else {
