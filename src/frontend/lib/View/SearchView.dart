@@ -32,6 +32,7 @@ class SearchViewState extends State<SearchView>{
     this.contextData = contextData;
 
     if(contextData.filteredUsers == null) {
+      contextData.isAllUsers = true; 
       this.loading = true;
       this.users = users ?? [];
       this.getAllUsers().then((allUsers) {
@@ -65,19 +66,26 @@ class SearchViewState extends State<SearchView>{
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return new MaterialApp(
       title: 'Mulambos dti',
       home: new Scaffold(
+        appBar: new AppBar(
+          backgroundColor: Colors.cyan,
+          title: Text('Ex-Mulambos'),
+        ),
         resizeToAvoidBottomPadding: false,
         body: new Stack(
           children: [new Column(
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.fromLTRB(24.0, 44.0, 24.0, 24.0),
+                margin: new EdgeInsets.fromLTRB(width*0.03, height*0.02, width*0.03, 0.0),
                 child: new TextField(
                   style: new TextStyle(
                     color: const Color(0xffbebebe),
-                    fontSize: 16.0,
+                    fontSize: height*0.028,
                   ),
                   decoration: new InputDecoration(
                       hintText: 'Pesquisa',
@@ -85,7 +93,7 @@ class SearchViewState extends State<SearchView>{
                         new Icon(Icons.search, color: new Color(0xffbebebe)),
                       suffixIcon:
                         new IconButton(
-                            icon: new Icon(Icons.filter_list),
+                            icon: new Icon(Icons.filter_list, color: contextData.isAllUsers == true ? new Color(0xffbebebe): Colors.deepPurple),
                             onPressed: () {
                               Navigator.push(context, new MaterialPageRoute(
                                   builder: (context) => new FilterView(contextData)),
@@ -103,8 +111,8 @@ class SearchViewState extends State<SearchView>{
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   new Container(
-                    padding: new EdgeInsets.only(left: 12.0,top: 10.0),
-                    height: MediaQuery.of(context).size.height*0.72,
+                    padding: new EdgeInsets.only(left: width*0.03,top: 18.0),
+                    height: MediaQuery.of(context).size.height*0.69,
                     child: new ListView(
                       padding: new EdgeInsets.all(0.0),
                       scrollDirection: Axis.vertical,
@@ -121,12 +129,12 @@ class SearchViewState extends State<SearchView>{
                             });
                           },
                           child: new Container(
-                            height: 52.0,
+                            height: height*0.085,
                             child: new Row(
                               children: <Widget>[
                                 new Container(
-                                  height: 48.0,
-                                  width: 48.0,
+                                  height: height*0.085,
+                                  width: width*0.12,
                                   decoration: new BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: new DecorationImage(
@@ -139,13 +147,13 @@ class SearchViewState extends State<SearchView>{
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         new Container(
-                                            margin: new EdgeInsets.only(top: 6.0),
-                                            padding: new EdgeInsets.only(left: 16.0),
+                                            margin: new EdgeInsets.only(top: height*0.025),
+                                            padding: new EdgeInsets.only(left: width*0.05),
                                             child: new Text(
                                               users[index].name,
                                               style: new TextStyle(
                                                   color: const Color(0xff616161),
-                                              fontSize: 16.0,
+                                              fontSize: height*0.028,
                                             ),
                                             ),
                                         ),
