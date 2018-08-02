@@ -38,7 +38,7 @@ class FilterState extends State<FilterView>{
     double height = MediaQuery.of(context).size.height;
 
     return MaterialApp(
-      title: 'Filter View',
+      title: 'Gestão de Skills',
       home: new Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
@@ -106,26 +106,31 @@ class FilterState extends State<FilterView>{
                 new Container(
                   margin: new EdgeInsets.all(width*0.035),
                   width: width*0.9,
-                  child: new DropdownButton<SubSkill>(
-                    onChanged: (item) {
-                      setState(() => selectedSubSkill = item);
-                    },
-                    value: selectedSubSkill,
-                    items: selectedSkill!=null?getSubSkillsList(selectedSkill.subSkills): [],
-                    hint: new Container(
-                      padding: selectedSkill!=null?EdgeInsets.all(0.0): EdgeInsets.only(bottom: 13.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Icon(Icons.timeline, color: Colors.deepPurple),
-                          new Container(
-                            padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
-                            child: new Text('Escolher', textScaleFactor: 1.0),
-                          ),
-                        ],
-                      ),
+                  child: new ConstrainedBox(
+                    constraints: new BoxConstraints(
+                      maxHeight: 100.0
                     ),
-                    iconSize: width*0.08,
-                  ),
+                    child: new DropdownButton<SubSkill>(
+                      onChanged: (item) {
+                        setState(() => selectedSubSkill = item);
+                      },
+                      value: selectedSubSkill,
+                      items: selectedSkill!=null?getSubSkillsList(selectedSkill.subSkills): [],
+                      hint: new Container(
+                        padding: selectedSkill!=null?EdgeInsets.all(0.0): EdgeInsets.only(bottom: 13.0),
+                        child: new Row(
+                          children: <Widget>[
+                            new Icon(Icons.timeline, color: Colors.deepPurple),
+                            new Container(
+                              padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
+                              child: new Text('Escolher', textScaleFactor: 1.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      iconSize: width*0.08,
+                    ),
+                  )
                 ),
                 new Expanded(child: new Container(),),
                 new Align(
