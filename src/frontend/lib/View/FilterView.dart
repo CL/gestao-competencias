@@ -123,6 +123,52 @@ class FilterState extends State<FilterView>{
                     ),
                     iconSize: width*0.08,
                   ),
+                ),
+                new Expanded(child: new Container(),),
+                new Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: new Container(
+                    padding: EdgeInsets.all(13.0),
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        new ButtonTheme(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(width*0.35)
+                          ),
+                          minWidth: width*0.45,
+                          height: height*0.09,
+                          child: new RaisedButton(
+                            elevation: 0.0,
+                            child: new Text('LIMPAR FILTROS'),
+                            textColor: Colors.deepPurple,
+                            color: Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                selectedSkill = null;
+                                selectedSubSkill = null;
+                              });
+                            },
+                          ),
+                        ),
+                        new ButtonTheme(
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(width),
+                          ),
+                          minWidth: width*0.45,
+                          height: height*0.09,
+                          child: new RaisedButton(
+                            elevation: 0.0,
+                            child: new Text('APLICAR'),
+                            textColor: Colors.white,
+                            color: Colors.deepPurple,
+                            onPressed:  filterUsers,
+                          ),
+                        ),
+                      ],
+                    )
+                ),
                 )
               ],
             ),
@@ -138,58 +184,16 @@ class FilterState extends State<FilterView>{
             loading ? new LoadingCircleRotate(): new Container(),
           ],
         ),
-        bottomNavigationBar: new Container(
-            padding: EdgeInsets.all(13.0),
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                new ButtonTheme(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(width*0.35)
-                  ),
-                  minWidth: width*0.45,
-                  height: height*0.09,
-                  child: new RaisedButton(
-                    elevation: 0.0,
-                    child: new Text('LIMPAR FILTROS'),
-                    textColor: Colors.deepPurple,
-                    color: Colors.white,
-                    onPressed: () {
-                      setState(() {
-                        selectedSkill = null;
-                        selectedSubSkill = null;
-                      });
-                    },
-                  ),
-                ),
-                new ButtonTheme(
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(width),
-                  ),
-                  minWidth: width*0.45,
-                  height: height*0.09,
-                  child: new RaisedButton(
-                    elevation: 0.0,
-                    child: new Text('APLICAR'),
-                    textColor: Colors.white,
-                    color: Colors.deepPurple,
-                    onPressed:  filterUsers,
-                  ),
-                ),
-              ],
-            )
-        ),
       ),
     );
   }
 
   void filterUsers() {
-    this.loading = true;
+    setState(() => loading = true);
     if(selectedSubSkill != null) {
       this.getUsersCategory().then((usersCategory) {
         this.setState(() {
-          this.loading = false;
+          setState(() => loading = false);
           this.contextData.filteredUsers = usersCategory;
           this.contextData.isAllUsers = false;
           Navigator.push(context, new MaterialPageRoute(
@@ -199,7 +203,7 @@ class FilterState extends State<FilterView>{
       });
     } else {
       new SearchService().getAllUsers(contextData.user).then((allUsers) {
-        this.loading = false;
+        setState(() => loading = false);
         this.contextData.filteredUsers = allUsers;
         this.contextData.isAllUsers = true;
         Navigator.push(context, new MaterialPageRoute(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import '../View/FilterView.dart';
 import '../Model/ContextData.dart';
 import '../View/LoginView.dart';
@@ -24,7 +25,6 @@ class SearchViewState extends State<SearchView>{
   List<User> users;
   List<User> filteredUsers;
   ContextData contextData;
-  String searchedRole="";
   String searchedName="";
   bool loading = false;
 
@@ -53,11 +53,11 @@ class SearchViewState extends State<SearchView>{
   }
 
   List<User> getUsers(String name){
-    List<User> filteredUsers;
-
+    name = name.toLowerCase();
+    List<User> matchingUsers;
     if(name != ""){
-      filteredUsers = filteredUsers.where( (i) => i.name.contains(name)).toList();
-      return filteredUsers;
+      matchingUsers = filteredUsers.where((i) => i.name.toLowerCase().contains(name)).toList();
+      return matchingUsers;
     }
 
     return [];
