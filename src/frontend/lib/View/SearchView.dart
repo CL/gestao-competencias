@@ -27,6 +27,7 @@ class SearchViewState extends State<SearchView>{
   ContextData contextData;
   String searchedName="";
   bool loading = false;
+  TextEditingController _controllerText = new TextEditingController();
 
   SearchViewState(ContextData contextData, List<User> users){
     this.contextData = contextData;
@@ -75,6 +76,7 @@ class SearchViewState extends State<SearchView>{
               new Container(
                 margin: new EdgeInsets.fromLTRB(24.0, 44.0, 24.0, 24.0),
                 child: new TextField(
+                  controller: _controllerText,
                   style: new TextStyle(
                     color: const Color(0xffbebebe),
                     fontSize: 16.0,
@@ -84,12 +86,23 @@ class SearchViewState extends State<SearchView>{
                       prefixIcon:
                         new Icon(Icons.search, color: new Color(0xffbebebe)),
                       suffixIcon:
+                        searchedName == "" ?
                         new IconButton(
                             icon: new Icon(Icons.filter_list),
                             onPressed: () {
                               Navigator.push(context, new MaterialPageRoute(
                                   builder: (context) => new FilterView(contextData)),
                               );
+                            },
+                        ) :
+                        new IconButton(
+                            icon: new Icon(Icons.close),
+                            onPressed: () {
+                              setState((){ 
+                                searchedName = "";
+                                users = getUsers(searchedName);
+                                _controllerText.text = "";
+                              });
                             },
                         ),
                   ),
