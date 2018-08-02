@@ -8,8 +8,6 @@ import '../Model/User.dart';
 import '../Service/LoginService.dart';
 import '../Service/SkillsService.dart';
 
-import 'ProfileView.dart';
-
 
 LoginService _loginViewModel = new LoginService();
 
@@ -46,9 +44,6 @@ class _LoginInputState extends State<LoginInput> {
 
   final TextEditingController _controllerEmail = new TextEditingController();
   final TextEditingController _controllerPassword = new TextEditingController();
-  final FocusNode _focusEmail = new FocusNode();
-  final FocusNode _focusPassword = new FocusNode();
-  final ScrollController _scrollController = new ScrollController();
 
   final snackBarError = new SnackBar(
       content: new Text('Email ou senha incorretos. Você só pode errar a senha por 3 vezes ou seu login será bloqueado.'),
@@ -60,8 +55,6 @@ class _LoginInputState extends State<LoginInput> {
   @override
   void initState() {
     super.initState();
-    _focusEmail.addListener(_scrollViewKeyboard);
-    _focusPassword.addListener(_scrollViewKeyboard);
   }
 
   @override
@@ -72,8 +65,6 @@ class _LoginInputState extends State<LoginInput> {
         new LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints ){
             return new SingleChildScrollView(
-              reverse: true,
-              controller: _scrollController,
               child: new ConstrainedBox(
                   constraints: new BoxConstraints(
                     minHeight: viewportConstraints.maxHeight,
@@ -113,7 +104,6 @@ class _LoginInputState extends State<LoginInput> {
                                       new Container(
                                         margin: const EdgeInsets.only(bottom: 32.0),
                                         child: new TextField(
-                                          focusNode: _focusEmail,
                                           keyboardType: TextInputType.emailAddress,
                                           style: new TextStyle(
                                             color: Colors.white,
@@ -126,7 +116,6 @@ class _LoginInputState extends State<LoginInput> {
                                       ),
                                       new TextField(
                                         obscureText: true,
-                                        focusNode: _focusPassword,
                                         style: new TextStyle(
                                           color: Colors.white,
                                         ),
@@ -138,8 +127,6 @@ class _LoginInputState extends State<LoginInput> {
                                       ),
                                     ],
                                   )
-
-
                               ),
                             ],
                           )),
@@ -185,10 +172,6 @@ class _LoginInputState extends State<LoginInput> {
         ): new Container(),
       ],
     );
-  }
-
-  void _scrollViewKeyboard() {
-    _scrollController.jumpTo(100.0);
   }
 
   void logInUser(User user){
