@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Model/User.dart';
 import '../Model/ContextData.dart';
 import '../View/MapSkillsView.dart';
 import '../View/ProfileView.dart';
@@ -7,15 +8,17 @@ import '../View/SearchView.dart';
 
 class HomeAppView extends StatelessWidget {
 
-  ContextData contextData;
 
-  HomeAppView(this.contextData);
+  ContextData contextData;
+  int selectedTab;
+
+  HomeAppView(this.contextData, { this.selectedTab = 2 });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        initialIndex: 2,
+        initialIndex: selectedTab,
         length: 3,
         child: Scaffold(
           bottomNavigationBar: new TabBar(

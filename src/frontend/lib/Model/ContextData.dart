@@ -5,6 +5,8 @@ class ContextData {
   User user;
   List<Skill> userSkills;
   List<Skill> allSkills;
+  List<User> filteredUsers;
+  bool isAllUsers;
   
-  ContextData(this.user, this.userSkills, this.allSkills);
+  ContextData(this.user, this.userSkills, this.allSkills, {this.filteredUsers, this.isAllUsers});
 }

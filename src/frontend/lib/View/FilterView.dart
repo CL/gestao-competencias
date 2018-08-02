@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../View/HomeAppView.dart';
+import '../View/LoginView.dart';
+import '../Service/SearchService.dart';
+import '../Model/User.dart';
 import '../Model/Skill.dart';
 import '../Model/ContextData.dart';
 
-
-
-
-
 class FilterView extends StatefulWidget{
   final ContextData contextData;
+  final List<User> users;
+  final List<User> filteredUsers;
 
   FilterView(this.contextData);
 
@@ -21,13 +25,17 @@ class FilterState extends State<FilterView>{
   ContextData contextData;
   Skill selectedSkill;
   SubSkill selectedSubSkill;
+  bool loading = false;
 
   FilterState(this.contextData);
+
+  Future<List<User>> getUsersCategory() {
+    return new SearchService().getUsersCategory(contextData.user, selectedSubSkill);
+  }
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
 
     return MaterialApp(
       title: 'Filter View',
@@ -46,17 +54,18 @@ class FilterState extends State<FilterView>{
             new Column(
               children: [
                 new Container(
-                  padding: new EdgeInsets.only(right: width*0.7),
+                  padding: new EdgeInsets.only(right: width*0.75, top: height*0.03),
                   child: new Text(
                     'SKILLS',
                     style: new TextStyle(
                       color: new Color.fromRGBO(45, 182, 195, 1.0),
                       fontSize: height*0.028,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
                 new Container(
-                  margin: new EdgeInsets.all(12.0),
+                  margin: new EdgeInsets.all(width*0.035),
                   width: width*0.9,
                   child: new DropdownButton<Skill>(
                     onChanged: (item) {
@@ -68,12 +77,11 @@ class FilterState extends State<FilterView>{
                     value: selectedSkill,
                     items: getSkillsList(),
                     hint: new Row(
-
                       children: <Widget>[
-                        new Icon(Icons.bookmark_border, color: new Color(0xffbebebe)),
+                        new Icon(Icons.bookmark_border, color: Colors.deepPurple),
                         new Container(
                           padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
-                          child: new Text('Escolher', textScaleFactor: 1.5),
+                          child: new Text('Escolher', textScaleFactor: 1.0),
                         ),
                       ],
                     ),
@@ -81,39 +89,53 @@ class FilterState extends State<FilterView>{
                   ),
                 ),
                 new Container(
-                  padding: new EdgeInsets.only(right: width*0.7),
+                  padding: new EdgeInsets.only(right: width*0.71, top: height*0.03),
                   child: new Text(
                     'DOMÍNIO',
                     textAlign: TextAlign.start,
                     style: new TextStyle(
                       color: new Color.fromRGBO(45, 182, 195, 1.0),
                       fontSize: height*0.028,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
                 new Container(
-                  margin: new EdgeInsets.all(12.0),
+                  margin: new EdgeInsets.all(width*0.035),
                   width: width*0.9,
                   child: new DropdownButton<SubSkill>(
                     onChanged: (item) {
                       setState(() => selectedSubSkill = item);
                     },
                     value: selectedSubSkill,
-                    items: selectedSkill!=null?getSubSkillsList(selectedSkill.subSkills):[],
-                    hint: new Row(
-                      children: <Widget>[
-                        new Icon(Icons.timeline, color: new Color(0xffbebebe)),
-                        new Container(
-                          padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
-                          child: new Text('Escolher', textScaleFactor: 1.5),
-                        ),
-                      ],
+                    items: selectedSkill!=null?getSubSkillsList(selectedSkill.subSkills): [],
+                    hint: new Container(
+                      padding: selectedSkill!=null?EdgeInsets.all(0.0): EdgeInsets.only(bottom: 13.0),
+                      child: new Row(
+                        children: <Widget>[
+                          new Icon(Icons.timeline, color: Colors.deepPurple),
+                          new Container(
+                            padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
+                            child: new Text('Escolher', textScaleFactor: 1.0),
+                          ),
+                        ],
+                      ),
                     ),
                     iconSize: width*0.08,
                   ),
                 )
               ],
             ),
+            loading ? new Container(
+              child: new Center(
+                child: new Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: new Color(0xccffffff),
+                ),
+              ),
+            ): new Container(),
+            loading ? new LoadingCircleRotate(): new Container(),
           ],
         ),
         bottomNavigationBar: new Container(
@@ -148,12 +170,11 @@ class FilterState extends State<FilterView>{
                   minWidth: width*0.45,
                   height: height*0.09,
                   child: new RaisedButton(
+                    elevation: 0.0,
                     child: new Text('APLICAR'),
                     textColor: Colors.white,
                     color: Colors.deepPurple,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed:  filterUsers,
                   ),
                 ),
               ],
@@ -162,6 +183,33 @@ class FilterState extends State<FilterView>{
       ),
     );
   }
+
+  void filterUsers() {
+    this.loading = true;
+    if(selectedSubSkill != null) {
+      this.getUsersCategory().then((usersCategory) {
+        this.setState(() {
+          this.loading = false;
+          this.contextData.filteredUsers = usersCategory;
+          this.contextData.isAllUsers = false;
+          Navigator.push(context, new MaterialPageRoute(
+            builder: (context) => new HomeAppView(contextData, selectedTab: 0),
+          ));
+        });
+      });
+    } else {
+      new SearchService().getAllUsers(contextData.user).then((allUsers) {
+        this.loading = false;
+        this.contextData.filteredUsers = allUsers;
+        this.contextData.isAllUsers = true;
+        Navigator.push(context, new MaterialPageRoute(
+          builder: (context) => new HomeAppView(contextData, selectedTab: 0),
+        ));
+      });
+    }
+
+  }
+
   List<Widget> getSkillsList(){
     List<DropdownMenuItem<Skill>> newTextSkill = [];
     contextData.allSkills.forEach((skill){

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../View/HomeAppView.dart';
 import '../Model/ContextData.dart';
 import '../View/FirstLoginView.dart';
 import '../Model/Skill.dart';
@@ -204,7 +205,7 @@ class _LoginInputState extends State<LoginInput> {
             Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (context) => new ProfileView(skills, user, new ContextData(user, skills, allSkills))));
+                  builder: (context) => new HomeAppView(new ContextData(user, skills, allSkills))));
           }
         });
       });
@@ -261,7 +262,7 @@ class _LoadingCircleRotateState extends State<LoadingCircleRotate>
   @protected
   @mustCallSuper
   void dispose() {
-    super.dispose();
     animationController.dispose();
+    super.dispose();
   }
 }

@@ -13,33 +13,38 @@ import '../Model/User.dart';
 class SearchView extends StatefulWidget{
 
   final ContextData contextData;
-
-  SearchView(this.contextData);
+  final List<User> users;
+  SearchView(this.contextData, { this.users });
 
   @override
-  createState() => new SearchViewState([], contextData);
+  createState() => new SearchViewState(contextData, users);
 }
 
 class SearchViewState extends State<SearchView>{
-  final TextEditingController _controllerPesquisa = new TextEditingController();
   List<User> users;
-  List<User> allUsers;
+  List<User> filteredUsers;
   ContextData contextData;
   String searchedRole="";
   String searchedName="";
-  bool loading;
+  bool loading = false;
 
-  SearchViewState(List<User> users, ContextData contextData){
+  SearchViewState(ContextData contextData, List<User> users){
     this.contextData = contextData;
-    this.users = [];
-    this.loading = true;
 
-    this.getAllUsers().then((allUsers) {
-      this.setState(() {
-        this.loading = false;
-        this.allUsers = allUsers;
+    if(contextData.filteredUsers == null) {
+      this.loading = true;
+      this.users = users ?? [];
+      this.getAllUsers().then((allUsers) {
+        this.setState(() {
+          this.loading = false;
+          this.filteredUsers = allUsers;
+        });
       });
-    });
+    }
+    else {
+      this.filteredUsers = contextData.filteredUsers;
+      this.users = contextData.isAllUsers ? [] : this.filteredUsers;
+    }
 
   }
 
@@ -51,7 +56,7 @@ class SearchViewState extends State<SearchView>{
     List<User> filteredUsers;
 
     if(name != ""){
-      filteredUsers = allUsers.where( (i) => i.name.contains(name)).toList();
+      filteredUsers = filteredUsers.where( (i) => i.name.contains(name)).toList();
       return filteredUsers;
     }
 
@@ -88,13 +93,10 @@ class SearchViewState extends State<SearchView>{
                             },
                         ),
                   ),
-                  controller: _controllerPesquisa,
-                  onChanged: (text) {
-                    setState(() {
-                      searchedName = text;
-                    });
-                      users = getUsers(searchedName);
-                  },
+                  onChanged: (text) => setState(() {
+                    searchedName = text;
+                    users = getUsers(searchedName);
+                  })
                 ),
               ),
               new Column(
