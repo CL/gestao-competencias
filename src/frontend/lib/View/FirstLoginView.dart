@@ -101,7 +101,7 @@ class FirstLoginState extends State<FirstLoginView>{
                             Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) => new HomeAppView(contextData)));
+                                  builder: (context) => new HomeAppView(contextData, selectedTab: 1)));
                           },
                         )
                     ),
