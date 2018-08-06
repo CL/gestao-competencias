@@ -106,10 +106,8 @@ class FilterState extends State<FilterView>{
                 new Container(
                   margin: new EdgeInsets.all(width*0.035),
                   width: width*0.9,
-                  child: new ConstrainedBox(
-                    constraints: new BoxConstraints(
-                      maxHeight: 100.0
-                    ),
+                  child: new ButtonTheme(
+                    alignedDropdown: true,
                     child: new DropdownButton<SubSkill>(
                       onChanged: (item) {
                         setState(() => selectedSubSkill = item);

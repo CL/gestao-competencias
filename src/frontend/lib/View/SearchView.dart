@@ -96,19 +96,36 @@ class SearchViewState extends State<SearchView>{
                       suffixIcon:
                         searchedName == "" ?
                         new IconButton(
-                            icon: new Icon(Icons.filter_list, color: contextData.isAllUsers == true ? new Color(0xffbebebe): Colors.deepPurple),
-                            onPressed: () {
+                          icon: new Icon(Icons.filter_list, color:  contextData.isAllUsers == true ? new Color(0xffbebebe): Colors.deepPurple),
+                          onPressed: () {
+                            setState(() {
+                              loading = true;
+                            });
+                            getAllUsers().then((allUsers) {
+                              contextData.isAllUsers == true ?
                               Navigator.push(context, new MaterialPageRoute(
-                                  builder: (context) => new FilterView(contextData)),
-                              );
-                            },
+                                  builder: (context) =>
+                                  new FilterView(contextData)),
+                              ) :
+                              setState(() {
+                                loading = false;
+                                contextData.isAllUsers = true;
+                                searchedName = "";
+                                users = [];
+                                filteredUsers = allUsers;
+                                _controllerText.text = "";
+                              });
+                            });
+                          }
                         ) :
                         new IconButton(
                             icon: new Icon(Icons.close),
                             onPressed: () {
                               setState((){ 
                                 searchedName = "";
-                                users = getUsers(searchedName);
+                                contextData.isAllUsers ?
+                                users = getUsers(searchedName) :
+                                users = filteredUsers;
                                 _controllerText.text = "";
                               });
                             },
