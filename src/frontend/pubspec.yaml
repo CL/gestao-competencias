@@ -44,6 +44,7 @@ flutter:
     - assets/assessment-xhdpi.png
     - assets/assessment-xxhdpi.png
     - assets/assessment-xxxhdpi.png
+    - assets/background-profile.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 

@@ -38,7 +38,7 @@ class ProfileState extends State<ProfileView> {
           slivers: [
             new SliverAppBar(
                 expandedHeight: _flexibleSpaceMaxHeight,
-                flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/RedSquare_SaintBasile_%28pixinn.net%29.jpg/398px-RedSquare_SaintBasile_%28pixinn.net%29.jpg").image),
+                flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.asset('assets/background-profile.png').image),
                 bottom: new PreferredSize(
                     preferredSize: new Size.fromHeight(_flexibleSpaceMaxHeight*0.67),
                     child: new Container(
@@ -62,7 +62,7 @@ class ProfileState extends State<ProfileView> {
                               fontSize: 14.0,
                             ),
                           ),
-                          new Divider(),
+                          new Divider(color: Colors.transparent,),
                           new Row(
                               children: [
                                 new SizedBox(
@@ -120,4 +120,5 @@ class ProfileState extends State<ProfileView> {
 
     return chips;
   }
+  
 }
