@@ -8,7 +8,7 @@ from Domain.Model.EmployeeByCategory import EmployeeByCategory
 
 def list_by_category(association_id, user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
@@ -30,7 +30,7 @@ def list_by_category(association_id, user_data):
 
 def list_all(user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}

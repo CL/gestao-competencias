@@ -7,7 +7,7 @@ from Shared import Constants
 
 def login(login_data):
     email = login_data.email
-    password = urllib.parse.quote(login_data.password)
+    password = login_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
