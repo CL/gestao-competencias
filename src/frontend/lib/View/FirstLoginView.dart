@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../View/HomeAppView.dart';
 import '../Model/ContextData.dart';
-import 'MapSkillsView.dart';
 
 class FirstLoginView extends StatefulWidget {
   final ContextData context;
 
-  FirstLoginView(this.context, {Key key}) : super(key: key);
+  FirstLoginView(this.context);
 
   @override
   createState() => new FirstLoginState(context);
@@ -22,7 +23,7 @@ class FirstLoginState extends State<FirstLoginView>{
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return new MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Gestão de Skills',
       home: new Scaffold(
           body: new Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -100,7 +101,7 @@ class FirstLoginState extends State<FirstLoginView>{
                             Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) => new MapSkillsView(contextData)));
+                                  builder: (context) => new HomeAppView(contextData, selectedTab: 1)));
                           },
                         )
                     ),

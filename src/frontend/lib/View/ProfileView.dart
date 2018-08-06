@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../Model/ContextData.dart';
-import '../Components/BottomNavBar.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
 import '../Components/BackgroundProfileAppBar.dart';
@@ -15,7 +14,7 @@ class ProfileView extends StatefulWidget {
   final User user;
   final ContextData contextData;
 
-  ProfileView(this.skillsProfile, this.user, this.contextData, {Key key}) : super(key: key);
+  ProfileView(this.skillsProfile, this.user, this.contextData);
 
   @override
   createState() => new ProfileState(skillsProfile, user, contextData);
@@ -28,8 +27,6 @@ class ProfileState extends State<ProfileView> {
   User user;
   ContextData contextData;
 
-  GlobalKey globalKey = new GlobalKey();
-
   ProfileState(this.skillsProfile, this.user, this.contextData);
 
   @override
@@ -41,7 +38,7 @@ class ProfileState extends State<ProfileView> {
           slivers: [
             new SliverAppBar(
                 expandedHeight: _flexibleSpaceMaxHeight,
-                flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/RedSquare_SaintBasile_%28pixinn.net%29.jpg/398px-RedSquare_SaintBasile_%28pixinn.net%29.jpg").image),
+                flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.asset('assets/background-profile.png').image),
                 bottom: new PreferredSize(
                     preferredSize: new Size.fromHeight(_flexibleSpaceMaxHeight*0.67),
                     child: new Container(
@@ -65,7 +62,7 @@ class ProfileState extends State<ProfileView> {
                               fontSize: 14.0,
                             ),
                           ),
-                          new Divider(),
+                          new Divider(color: Colors.transparent,),
                           new Row(
                               children: [
                                 new SizedBox(
@@ -96,7 +93,6 @@ class ProfileState extends State<ProfileView> {
             ),
           ],
         ),
-      bottomNavigationBar: new BottomNavBar(contextData, 2),
     );
   }
 
@@ -124,4 +120,5 @@ class ProfileState extends State<ProfileView> {
 
     return chips;
   }
+  
 }

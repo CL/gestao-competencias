@@ -22,9 +22,9 @@ def list_by_category(association_id, user_data):
     employee_list = []
 
     for json_employee in response_data:
-        ep = EmployeeByCategory(json_employee.get("idFuncionario"), json_employee.get("nomeFuncionario"),
-                      json_employee.get("nivelConhecimento"), json_employee.get("interesse"))
-        employee_list.append(ep)
+        ep = EmployeeByCategory(json_employee.get("idFuncionario"), json_employee.get("nomeFuncionario"), json_employee.get("nivelConhecimento"), json_employee.get("interesse"))
+        if ep.knowledge > 0:
+            employee_list.append(ep)
     return employee_list
 
 

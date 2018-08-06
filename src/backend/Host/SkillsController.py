@@ -31,8 +31,7 @@ def save_skills():
 
         skill_data = InputCompetence(employee=employee, category=category, knowledge_level=knowledge_level, interest=interest)
 
-        if skill_data.nivelConhecimento > 0 or skill_data.interesse:
-            skill_list.append(skill_data)
+        skill_list.append(skill_data)
 
     skill_response = SkillsService.save_skills(skill_list, user_data)
 

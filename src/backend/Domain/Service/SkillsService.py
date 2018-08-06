@@ -50,8 +50,9 @@ def list_user_skills(user_data):
 
     all_skills = []
     for item in macro_dict.values():
-        item.skill_rating /= len(item.sub_skills)
-        all_skills.append(item)
+        if len(item.sub_skills) > 0:
+            item.skill_rating /= len(item.sub_skills)
+            all_skills.append(item)
     return all_skills
 
 

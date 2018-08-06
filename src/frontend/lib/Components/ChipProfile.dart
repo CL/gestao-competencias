@@ -9,24 +9,18 @@ class ChipProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Padding(
+    return new Container(
+      color: Colors.transparent,
       padding: new EdgeInsets.all(4.0),
       child: new Chip(
-        /*
-        border: new StadiumBorder(
-          side: new BorderSide(
-            color: Colors.white,
-            width: 1.5
-          )
-        ),
-        */
         backgroundColor: Colors.transparent,
-        label: new Padding(
+        label: new Container(
+          color: Colors.transparent,
           padding: new EdgeInsets.only(left: 2.0, right: 2.0),
           child: new Text(
             this.text,
             style: new TextStyle(
-              color: Colors.grey
+              color: Colors.grey,
             ),
           ),
         )

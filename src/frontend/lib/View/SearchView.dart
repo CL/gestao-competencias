@@ -3,44 +3,50 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../View/FilterView.dart';
 import '../Model/ContextData.dart';
 import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
 import '../View/ProfileView.dart';
 import '../Service/SearchService.dart';
-import '../Components/BottomNavBar.dart';
 import '../Model/User.dart';
 
 class SearchView extends StatefulWidget{
 
   final ContextData contextData;
-
-  SearchView(this.contextData);
+  final List<User> users;
+  SearchView(this.contextData, { this.users });
 
   @override
-  createState() => new SearchViewState([], contextData);
+  createState() => new SearchViewState(contextData, users);
 }
 
 class SearchViewState extends State<SearchView>{
-  final TextEditingController _controllerPesquisa = new TextEditingController();
   List<User> users;
-  List<User> allUsers;
+  List<User> filteredUsers;
   ContextData contextData;
-  String searchedRole="";
   String searchedName="";
-  bool loading;
+  bool loading = false;
+  TextEditingController _controllerText = new TextEditingController();
 
-  SearchViewState(List<User> users, ContextData contextData){
+  SearchViewState(ContextData contextData, List<User> users){
     this.contextData = contextData;
-    this.users = [];
-    this.loading = true;
 
-    this.getAllUsers().then((allUsers) {
-      this.setState(() {
-        this.loading = false;
-        this.allUsers = allUsers;
+    if(contextData.filteredUsers == null) {
+      contextData.isAllUsers = true; 
+      this.loading = true;
+      this.users = users ?? [];
+      this.getAllUsers().then((allUsers) {
+        this.setState(() {
+          this.loading = false;
+          this.filteredUsers = allUsers;
+        });
       });
-    });
+    }
+    else {
+      this.filteredUsers = contextData.filteredUsers;
+      this.users = contextData.isAllUsers ? [] : this.filteredUsers;
+    }
 
   }
 
@@ -49,11 +55,11 @@ class SearchViewState extends State<SearchView>{
   }
 
   List<User> getUsers(String name){
-    List<User> filteredUsers;
-
+    name = name.toLowerCase();
+    List<User> matchingUsers;
     if(name != ""){
-      filteredUsers = allUsers.where( (i) => i.name.contains(name)).toList();
-      return filteredUsers;
+      matchingUsers = filteredUsers.where((i) => i.name.toLowerCase().contains(name)).toList();
+      return matchingUsers;
     }
 
     return [];
@@ -61,39 +67,82 @@ class SearchViewState extends State<SearchView>{
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return new MaterialApp(
       title: 'Mulambos dti',
       home: new Scaffold(
+        appBar: new AppBar(
+          backgroundColor: Colors.cyan,
+          title: Text('Ex-Mulambos'),
+        ),
         resizeToAvoidBottomPadding: false,
         body: new Stack(
           children: [new Column(
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.all(24.0),
+                margin: new EdgeInsets.fromLTRB(width*0.03, height*0.02, width*0.03, 0.0),
                 child: new TextField(
+                  controller: _controllerText,
                   style: new TextStyle(
                     color: const Color(0xffbebebe),
-                    fontSize: 16.0,
+                    fontSize: height*0.028,
                   ),
                   decoration: new InputDecoration(
                       hintText: 'Pesquisa',
                       prefixIcon:
-                      new Icon(Icons.search, color: new Color(0xffbebebe))),
-                      controller: _controllerPesquisa,
-                      onChanged: (text) {
-                          setState(() {
-                            searchedName = text;
-                          });
-                          users = getUsers(searchedName);
-                      },
+                        new Icon(Icons.search, color: new Color(0xffbebebe)),
+                      suffixIcon:
+                        searchedName == "" ?
+                        new IconButton(
+                          icon: new Icon(Icons.filter_list, color:  contextData.isAllUsers == true ? new Color(0xffbebebe): Colors.deepPurple),
+                          onPressed: () {
+                            setState(() {
+                              loading = true;
+                            });
+                            getAllUsers().then((allUsers) {
+                              contextData.isAllUsers == true ?
+                              Navigator.push(context, new MaterialPageRoute(
+                                  builder: (context) =>
+                                  new FilterView(contextData)),
+                              ) :
+                              setState(() {
+                                loading = false;
+                                contextData.isAllUsers = true;
+                                searchedName = "";
+                                users = [];
+                                filteredUsers = allUsers;
+                                _controllerText.text = "";
+                              });
+                            });
+                          }
+                        ) :
+                        new IconButton(
+                            icon: new Icon(Icons.close),
+                            onPressed: () {
+                              setState((){ 
+                                searchedName = "";
+                                contextData.isAllUsers ?
+                                users = getUsers(searchedName) :
+                                users = filteredUsers;
+                                _controllerText.text = "";
+                              });
+                            },
+                        ),
+                  ),
+                  onChanged: (text) => setState(() {
+                    searchedName = text;
+                    users = getUsers(searchedName);
+                  })
                 ),
               ),
               new Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   new Container(
-                    padding: new EdgeInsets.only(left: 12.0,top: 10.0),
-                    height: MediaQuery.of(context).size.height*0.72,
+                    padding: new EdgeInsets.only(left: width*0.03,top: 18.0),
+                    height: MediaQuery.of(context).size.height*0.69,
                     child: new ListView(
                       padding: new EdgeInsets.all(0.0),
                       scrollDirection: Axis.vertical,
@@ -110,12 +159,12 @@ class SearchViewState extends State<SearchView>{
                             });
                           },
                           child: new Container(
-                            height: 52.0,
+                            height: height*0.085,
                             child: new Row(
                               children: <Widget>[
                                 new Container(
-                                  height: 48.0,
-                                  width: 48.0,
+                                  height: height*0.085,
+                                  width: width*0.12,
                                   decoration: new BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: new DecorationImage(
@@ -128,13 +177,13 @@ class SearchViewState extends State<SearchView>{
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         new Container(
-                                            margin: new EdgeInsets.only(top: 6.0),
-                                            padding: new EdgeInsets.only(left: 16.0),
+                                            margin: new EdgeInsets.only(top: height*0.025),
+                                            padding: new EdgeInsets.only(left: width*0.05),
                                             child: new Text(
                                               users[index].name,
                                               style: new TextStyle(
                                                   color: const Color(0xff616161),
-                                              fontSize: 16.0,
+                                              fontSize: height*0.028,
                                             ),
                                             ),
                                         ),
@@ -164,7 +213,6 @@ class SearchViewState extends State<SearchView>{
           loading ? new LoadingCircleRotate(): new Container(),
           ]
         ),
-        bottomNavigationBar: new BottomNavBar(contextData ,0),
       ),
     );
   }
