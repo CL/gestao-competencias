@@ -5,6 +5,7 @@ click==6.7
 colorama==0.3.9
 Flask==0.12.2
 gunicorn==19.9.0
+grequests==0.3.0
 idna==2.6
 isort==4.3.4
 itsdangerous==0.24
