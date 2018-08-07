@@ -70,11 +70,18 @@ class MapSkillsState extends State<MapSkillsView>{
     });
 
     var skillsService = new SkillsService();
+
+    List<Skill> toBeRemovedSkills = [];
+
     contextData.userSkills.forEach((skill) {
       if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
         skillsService.deleteSkill(skill, contextData.user);
-        contextData.userSkills.removeWhere((userSkill) => userSkill.skillId == skill.skillId);
+        toBeRemovedSkills.add(skill);
       }
+    });
+    
+    toBeRemovedSkills.forEach((removedSkill) {
+      contextData.userSkills.removeWhere((userSkill) => userSkill.skillId == removedSkill.skillId);
     });
 
     contextData.userSkills.forEach((oldSkill) {
