@@ -1,6 +1,6 @@
 import requests
 from flask import json
-import grequest
+import grequests
 
 from Domain.Model.AssociationSkillDto import AssociationSkillDto
 from Domain.Model.CompetenceRegistry import CompetenceRegistry
@@ -19,10 +19,10 @@ def save_skills(skill_list, user_data):
 
     for skill_data in skill_list:
         skill_data_json = json.dumps(skill_data.__dict__)
-        request = grequest.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
+        request = grequests.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
         request_list.append(request)
 
-    responses = grequest.map(request_list)
+    responses = grequests.map(request_list)
 
     for response in responses:
         response_data = json.loads(response.text)
@@ -44,10 +44,10 @@ def update_skills(skill_list, user_data):
 
     for skill_data in skill_list:
         skill_data_json = json.dumps(skill_data.__dict__)
-        request = requests.put(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
+        request = grequests.put(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
         request_list.append(request)
 
-    responses = grequest.map(request_list)
+    responses = grequests.map(request_list)
 
     for response in responses:
         response_data = json.loads(response.text)
