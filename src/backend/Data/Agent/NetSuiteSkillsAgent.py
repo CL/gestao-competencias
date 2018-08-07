@@ -1,6 +1,6 @@
-import requests
 from flask import json
 import grequests
+import requests
 
 from Domain.Model.AssociationSkillDto import AssociationSkillDto
 from Domain.Model.CompetenceRegistry import CompetenceRegistry
