@@ -10,7 +10,7 @@ from Shared import Constants
 
 def save_skills(skill_list, user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
@@ -29,7 +29,7 @@ def save_skills(skill_list, user_data):
 
 def update_skills(skill_list, user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
@@ -49,7 +49,7 @@ def update_skills(skill_list, user_data):
 
 def list_user_skills(user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
@@ -70,7 +70,7 @@ def list_user_skills(user_data):
 
 def list_all_skills(user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
@@ -90,7 +90,7 @@ def list_all_skills(user_data):
 
 def delete_skill(id_macro, funcionario, user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}

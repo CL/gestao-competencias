@@ -146,7 +146,7 @@ class _LoginInputState extends State<LoginInput> {
                             ),
                             onPressed: () {
                               setState(() { logingIn = true;} );
-                              _loginViewModel.logIn(_controllerEmail.text, _controllerPassword.text)
+                              _loginViewModel.logIn(_controllerEmail.text, Uri.encodeQueryComponent(_controllerPassword.text))
                                   .catchError(() {setState(() { logingIn = false;} );})
                                   .then(logInUser);
                             },
