@@ -100,12 +100,14 @@ def list_all_skills(user_data):
 
     return skills_data
 
+
 def delete_skill(id_macro, funcionario, user_data):
+    session = FuturesSession()
     email = user_data.email
     password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
-    requests.delete(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'&idMacro='+id_macro+'&funcionario='+funcionario, headers=headers)
+    session.delete(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'&idMacro='+id_macro+'&funcionario='+funcionario, headers=headers)
 
     return ''
