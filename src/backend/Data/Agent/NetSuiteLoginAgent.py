@@ -1,4 +1,3 @@
-import urllib
 import requests
 from Domain.Model.User import User
 from flask import json

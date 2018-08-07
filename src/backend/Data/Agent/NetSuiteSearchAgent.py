@@ -1,4 +1,3 @@
-import urllib
 import requests
 from flask import json
 from Shared import Constants
