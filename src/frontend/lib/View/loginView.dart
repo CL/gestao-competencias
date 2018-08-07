@@ -59,6 +59,7 @@ class _LoginInputState extends State<LoginInput> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return new Stack(
       children: <Widget>[
@@ -110,7 +111,12 @@ class _LoginInputState extends State<LoginInput> {
                                           ),
                                           decoration: new InputDecoration(
                                               hintText: 'e-mail',
-                                              prefixIcon: new Icon(Icons.person, color: Colors.white)),
+                                              prefixIcon:
+                                              new Container(
+                                                child: new Icon(Icons.person, color: Colors.white),
+                                                padding: new EdgeInsets.only(right: width*0.03),
+                                              ),
+                                          ),
                                           controller: _controllerEmail,
                                         ),
                                       ),
@@ -122,7 +128,11 @@ class _LoginInputState extends State<LoginInput> {
                                         decoration: new InputDecoration(
                                             hintText: 'senha',
                                             prefixIcon:
-                                            new Icon(Icons.lock_outline, color: Colors.white)),
+                                              new Container(
+                                                child: new Icon(Icons.lock_outline, color: Colors.white),
+                                                padding: new EdgeInsets.only(right: width*0.03),
+                                              ),
+                                      ),
                                         controller: _controllerPassword,
                                       ),
                                     ],

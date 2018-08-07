@@ -90,9 +90,12 @@ class SearchViewState extends State<SearchView>{
                     fontSize: height*0.028,
                   ),
                   decoration: new InputDecoration(
-                      hintText: 'Pesquisa',
+                      hintText: 'Pesquisar',
                       prefixIcon:
-                        new Icon(Icons.search, color: new Color(0xffbebebe)),
+                        new Container(
+                          padding: EdgeInsets.only(right: width*0.0),
+                          child: new Icon(Icons.search, color: new Color(0xffbebebe)),
+                        ),
                       suffixIcon:
                         searchedName == "" ?
                         new IconButton(

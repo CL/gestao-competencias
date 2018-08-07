@@ -54,7 +54,7 @@ class FilterState extends State<FilterView>{
             new Column(
               children: [
                 new Container(
-                  padding: new EdgeInsets.only(right: width*0.75, top: height*0.03),
+                  padding: new EdgeInsets.only(right: width*0.78, top: height*0.03),
                   child: new Text(
                     'SKILLS',
                     style: new TextStyle(
@@ -64,38 +64,42 @@ class FilterState extends State<FilterView>{
                     ),
                   ),
                 ),
-                new Container(
-                  margin: new EdgeInsets.all(width*0.035),
-                  width: width*0.9,
-                  child: new ButtonTheme(
-                    alignedDropdown: true,
-                    child: new DropdownButton<Skill>(
-                      onChanged: (item) {
-                        setState(() {
-                          selectedSkill = item;
-                          selectedSubSkill = null;
-                        });
-                      },
-                      value: selectedSkill,
-                      items: getSkillsList(),
-                      hint: new Row(
-                        children: <Widget>[
-                          new Icon(Icons.bookmark_border, color: Colors.deepPurple),
-                          new Container(
-                            padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
-                            child: new Text('Escolher', textScaleFactor: 1.0),
-                          ),
-                        ],
-                      ),
-                      iconSize: width*0.08,
+                new Row(
+                  children: <Widget>[
+                    new Container(
+                      padding: new EdgeInsets.only(left: width*0.04),
+                      child: Icon(Icons.equalizer, color: selectedSkill != null ? Colors.deepPurple : const Color(0xffbebebe)),
                     ),
-                  ),
+                    new Container(
+                      margin: new EdgeInsets.all(width*0.035),
+                      width: width*0.8,
+                      child: new DropdownButtonHideUnderline(
+                        child: new ButtonTheme(
+                          alignedDropdown: true,
+                          child: new DropdownButton<Skill>(
+                            onChanged: (item) {
+                              setState(() {
+                                selectedSkill = item;
+                                selectedSubSkill = null;
+                              });
+                            },
+                            value: selectedSkill,
+                            items: getSkillsList(),
+                            hint: new Container(
+                              //padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
+                              child: new Text('Escolher', textScaleFactor: 1.0),
+                            ),
+                            iconSize: width*0.076,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 new Container(
-                  padding: new EdgeInsets.only(right: width*0.71, top: height*0.03),
+                  padding: new EdgeInsets.only(right: width*0.74, top: height*0.03),
                   child: new Text(
                     'DOMÍNIO',
-                    textAlign: TextAlign.start,
                     style: new TextStyle(
                       color: new Color.fromRGBO(45, 182, 195, 1.0),
                       fontSize: height*0.028,
@@ -103,32 +107,35 @@ class FilterState extends State<FilterView>{
                     ),
                   ),
                 ),
-                new Container(
-                  margin: new EdgeInsets.all(width*0.035),
-                  width: width*0.9,
-                  child: new ButtonTheme(
-                    alignedDropdown: true,
-                    child: new DropdownButton<SubSkill>(
-                      onChanged: (item) {
-                        setState(() => selectedSubSkill = item);
-                      },
-                      value: selectedSubSkill,
-                      items: selectedSkill!=null?getSubSkillsList(selectedSkill.subSkills): [],
-                      hint: new Container(
-                        padding: selectedSkill!=null?EdgeInsets.all(0.0): EdgeInsets.only(bottom: 13.0),
-                        child: new Row(
-                          children: <Widget>[
-                            new Icon(Icons.timeline, color: Colors.deepPurple),
-                            new Container(
-                              padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
+                new Row(
+                  children: <Widget>[
+                    new Container(
+                      padding: new EdgeInsets.only(left: width*0.04),
+                      child: new Icon(Icons.show_chart, color: selectedSubSkill != null ? Colors.deepPurple : const Color(0xffbebebe)),
+                    ),
+                    new Container(
+                      margin: new EdgeInsets.all(width*0.035),
+                      width: width*0.8,
+                      child: new ButtonTheme(
+                        alignedDropdown: true,
+                        child: new DropdownButton<SubSkill>(
+                          onChanged: (item) {
+                            setState(() => selectedSubSkill = item);
+                          },
+                          value: selectedSubSkill,
+                          items: selectedSkill!=null?getSubSkillsList(selectedSkill.subSkills): [],
+                          hint: new Container(
+                            padding: selectedSkill!=null?EdgeInsets.all(0.0): EdgeInsets.only(bottom: 13.0),
+                            child: new Container(
+                              padding: new EdgeInsets.only(right: width*0.51),
                               child: new Text('Escolher', textScaleFactor: 1.0),
                             ),
-                          ],
+                          ),
+                          iconSize: width*0.076,
                         ),
-                      ),
-                      iconSize: width*0.08,
+                      )
                     ),
-                  )
+                  ],
                 ),
                 new Expanded(child: new Container(),),
                 new Align(
