@@ -1,55 +1,67 @@
-import urllib
-
-import requests
 from flask import json
+from requests_futures.sessions import FuturesSession
+import requests
 
 from Domain.Model.AssociationSkillDto import AssociationSkillDto
 from Domain.Model.CompetenceRegistry import CompetenceRegistry
-from Domain.Model.Subskill import Subskill
 from Shared import Constants
 
+
 def save_skills(skill_list, user_data):
+    session = FuturesSession()
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
 
     response_list = list()
+    request_list = list()
 
     for skill_data in skill_list:
         skill_data_json = json.dumps(skill_data.__dict__)
-        response = requests.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
+        request = session.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
+        request_list.append(request)
+
+    for request in request_list:
+        response = request.result()
         response_data = json.loads(response.text)
         if "error" in response_data:
             return None
         response_list.append(response_data)
+
     return response_list
 
 
 def update_skills(skill_list, user_data):
+    session = FuturesSession()
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
     response_list = list()
+    request_list = list()
 
     for skill_data in skill_list:
         skill_data_json = json.dumps(skill_data.__dict__)
-        response = requests.put(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json,
-                                 headers=headers)
+        request = session.put(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
+        request_list.append(request)
+
+    for request in request_list:
+        response = request.result()
         response_data = json.loads(response.text)
 
         if "error" in response_data:
             return None
         response_list.append(response_data)
+
     return response_list
 
 
 def list_user_skills(user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
@@ -70,7 +82,7 @@ def list_user_skills(user_data):
 
 def list_all_skills(user_data):
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
@@ -88,12 +100,14 @@ def list_all_skills(user_data):
 
     return skills_data
 
+
 def delete_skill(id_macro, funcionario, user_data):
+    session = FuturesSession()
     email = user_data.email
-    password = urllib.parse.quote(user_data.password)
+    password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
-    requests.delete(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'&idMacro='+id_macro+'&funcionario='+funcionario, headers=headers)
+    session.delete(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'&idMacro='+id_macro+'&funcionario='+funcionario, headers=headers)
 
     return ''

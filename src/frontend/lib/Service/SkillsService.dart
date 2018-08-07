@@ -63,7 +63,7 @@ class SkillsService {
     return response.body == "True" ? true : false;
   }
 
-  void deleteSkill(Skill skill, User user) {
+  void deleteSkill(Skill skill, User user) async{
     String urlParam = urlUserSkills+"?funcionario="+user.id+"&idMacro="+skill.skillId;
     http.delete(urlParam, headers: {"content-type": "application/json", "Authorization": "email="+user.email+",signature="+user.password+",id="+user.id});
   }
