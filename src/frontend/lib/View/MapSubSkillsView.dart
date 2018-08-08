@@ -136,26 +136,32 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   List<Widget> getSubSkillsList(){
+    double width = MediaQuery.of(context).size.width;
+
     List<Widget> newWidgets = [];
     newWidgets.add(new Column(
-      child: new Container(
-        children:[
-          new Text(
+      children:[
+        new Container(
+          padding: EdgeInsets.only(right: width*0.333, bottom: 2.0),
+          child: new Text(
             "Classifique seu domínio nas skills.",
             style: new TextStyle(
               color: new Color.fromRGBO(97, 97, 97, 1.0),
               fontSize: 14.0
             ),
           ),
-          new Text(
+        ),
+        new Container(
+          padding: EdgeInsets.only(right: width*0.165, bottom: 15.0),
+          child: new Text(
             "Dê like nas quais tem interesse em aprender.",
             style: new TextStyle(
               color: new Color.fromRGBO(97, 97, 97, 1.0),
               fontSize: 14.0
             ),
           )
-        ],
-      ),
+        ),
+      ],
     ));
 
     selectedSkills.forEach((skill){
