@@ -4,3 +4,6 @@ class InputCompetence:
         self.categoria = category
         self.nivelConhecimento = knowledge_level
         self.interesse = interest
+
+    def to_dict(self):
+        return self.__dict__

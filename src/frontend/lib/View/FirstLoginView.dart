@@ -22,6 +22,8 @@ class FirstLoginState extends State<FirstLoginView>{
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return new MaterialApp(
       title: 'Gestão de Skills',
       home: new Scaffold(
@@ -29,7 +31,7 @@ class FirstLoginState extends State<FirstLoginView>{
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.fromLTRB(36.0, height * 0.176, 36.0, height * 0.0625),
+                margin: new EdgeInsets.fromLTRB(width*0.1, height * 0.176, width*0.1, height * 0.0625),
                 child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -79,13 +81,13 @@ class FirstLoginState extends State<FirstLoginView>{
                       ),
                     ),
                     new Container(
-                        height: 48.0,
-                        width: 272.0,
+                    height: height*0.058,
+                    width: width*0.8,
                         child: new RaisedButton.icon(
                           icon: new Icon(Icons.arrow_forward, color:const Color(0xff5e529d) ,),
                           color: Colors.white,
                           shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(36.0),
+                              borderRadius: new BorderRadius.circular(width),
                               side: new BorderSide(
                                 color: const Color(0xff5e529d),
                                 width: 1.0,

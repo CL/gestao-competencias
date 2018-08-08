@@ -73,24 +73,22 @@ class FilterState extends State<FilterView>{
                     new Container(
                       margin: new EdgeInsets.all(width*0.035),
                       width: width*0.8,
-                      child: new DropdownButtonHideUnderline(
-                        child: new ButtonTheme(
-                          alignedDropdown: true,
-                          child: new DropdownButton<Skill>(
-                            onChanged: (item) {
-                              setState(() {
-                                selectedSkill = item;
-                                selectedSubSkill = null;
-                              });
-                            },
-                            value: selectedSkill,
-                            items: getSkillsList(),
-                            hint: new Container(
-                              //padding: new EdgeInsets.fromLTRB(width*0.1, 0.0, width*0.41, 0.0),
-                              child: new Text('Escolher', textScaleFactor: 1.0),
-                            ),
-                            iconSize: width*0.076,
+                      child: new ButtonTheme(
+                        alignedDropdown: true,
+                        child: new DropdownButton<Skill>(
+                          onChanged: (item) {
+                            setState(() {
+                              selectedSkill = item;
+                              selectedSubSkill = null;
+                            });
+                          },
+                          value: selectedSkill,
+                          items: getSkillsList(),
+                          hint: new Container(
+                            padding: new EdgeInsets.only(right: width*0.51),
+                            child: new Text('Escolher', textScaleFactor: 1.0),
                           ),
+                          iconSize: width*0.076,
                         ),
                       ),
                     ),

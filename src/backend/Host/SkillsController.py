@@ -33,11 +33,10 @@ def save_skills():
 
         skill_list.append(skill_data)
 
-    skill_response = SkillsService.save_skills(skill_list, user_data)
-
-    for response in skill_response:
-        if response is None:
-            return "False"
+    try:
+        SkillsService.save_skills(skill_list, user_data)
+    except Exception:
+        return "False"
 
     return "True"
 
@@ -93,10 +92,10 @@ def update_skills():
                                      interest=interest,entry_id=registry_id)
         skill_list.append(skill_data)
 
-    skill_response = SkillsService.update_skills(skill_list, user_data)
-    for response in skill_response:
-        if response is None:
-            return "False"
+    try:
+        SkillsService.update_skills(skill_list, user_data)
+    except Exception:
+        return "False"
 
     return "True"
 
