@@ -37,13 +37,13 @@ class MapSkillsState extends State<MapSkillsView>{
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Mapear Skills"),
+        backgroundColor: Colors.cyan,
         actions: [
           new IconButton(
             onPressed: save,
             icon: new Icon(Icons.save)
           )
         ],
-        backgroundColor: Colors.cyan
       ),
       body: new Container(
         padding: new EdgeInsets.all(18.0),
@@ -106,14 +106,18 @@ class MapSkillsState extends State<MapSkillsView>{
   }
 
   List<Widget> getSkillsList(){
+    double width = MediaQuery.of(context).size.width;
+
     List<Widget> newWidgets = [];
-    newWidgets.add(new Text(
-      "Selecione as habilidades que você tem domínio de acordo com as skills listadas.",
-      style: new TextStyle(
-        color: new Color.fromRGBO(97, 97, 97, 1.0),
-        fontSize: 14.0
-      ),
-    ));
+    newWidgets.add(new Container(
+      padding: EdgeInsets.only(left: width*0.009),
+      child: new Text(
+        "Selecione as habilidades que você tem domínio de acordo com as skills listadas.",
+        style: new TextStyle(
+          color: new Color.fromRGBO(97, 97, 97, 1.0),
+          fontSize: 14.0
+        ),
+    )));
     contextData.allSkills.forEach((skill){
       newWidgets.add(
         new Container(
@@ -137,7 +141,7 @@ class MapSkillsState extends State<MapSkillsView>{
                       ),
                       new Checkbox(
                         value: selectedSkillsIds[skill.skillId], 
-                        activeColor: Theme.of(context).primaryColor,
+                        activeColor: Colors.cyan,
                         onChanged: (value){
                           setState((){
                             selectedSkillsIds[skill.skillId] = value;
@@ -146,26 +150,14 @@ class MapSkillsState extends State<MapSkillsView>{
                       )
                     ],
                   ),
-                  new Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      new Container(
-                        padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
-                        child: new Text(
-                          "Skills dessa categoria",
-                          style: new TextStyle(
-                            color: new Color.fromRGBO(97, 97, 97, 1.0),
-                            fontSize: 10.0
-                          ),
-                        ),
-                      )
-                    ]
+                  new Container(
+                    child: new Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 6.0,
+                      runSpacing: 4.0,
+                      children: getChipsSubSkills(skill.subSkills)
+                    ),
                   ),
-                  new Wrap(
-                    spacing: 6.0,
-                    runSpacing: 4.0,
-                    children: getChipsSubSkills(skill.subSkills)
-                  )
                 ],
               ) 
             ),

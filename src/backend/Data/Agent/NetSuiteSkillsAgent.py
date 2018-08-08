@@ -1,62 +1,51 @@
 from flask import json
-from requests_futures.sessions import FuturesSession
 import requests
 
 from Domain.Model.AssociationSkillDto import AssociationSkillDto
 from Domain.Model.CompetenceRegistry import CompetenceRegistry
 from Shared import Constants
+from Shared.ObjectHandler import object_handler
 
 
 def save_skills(skill_list, user_data):
-    session = FuturesSession()
     email = user_data.email
     password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
 
-    response_list = list()
-    request_list = list()
+    dict_lista_competencias = dict()
 
-    for skill_data in skill_list:
-        skill_data_json = json.dumps(skill_data.__dict__)
-        request = session.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
-        request_list.append(request)
+    dict_lista_competencias["listaCompetencias"] = json.dumps(skill_list, default=object_handler)
 
-    for request in request_list:
-        response = request.result()
-        response_data = json.loads(response.text)
-        if "error" in response_data:
-            return None
-        response_list.append(response_data)
+    json_lista_competencias = json.dumps(dict_lista_competencias, default=object_handler)
 
-    return response_list
+    request = requests.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=json_lista_competencias, headers=headers)
+
+    response = request.content
+
+    return response
 
 
 def update_skills(skill_list, user_data):
-    session = FuturesSession()
     email = user_data.email
     password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
-    response_list = list()
-    request_list = list()
 
-    for skill_data in skill_list:
-        skill_data_json = json.dumps(skill_data.__dict__)
-        request = session.put(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=skill_data_json, headers=headers)
-        request_list.append(request)
+    dict_lista_competencias = dict()
 
-    for request in request_list:
-        response = request.result()
-        response_data = json.loads(response.text)
+    dict_lista_competencias["listaCompetencias"] = json.dumps(skill_list, default=object_handler)
 
-        if "error" in response_data:
-            return None
-        response_list.append(response_data)
+    json_lista_competencias = json.dumps(dict_lista_competencias, default=object_handler)
 
-    return response_list
+    request = requests.post(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS), data=json_lista_competencias,
+                            headers=headers)
+
+    response = request.content
+
+    return response
 
 
 def list_user_skills(user_data):
@@ -102,12 +91,11 @@ def list_all_skills(user_data):
 
 
 def delete_skill(id_macro, funcionario, user_data):
-    session = FuturesSession()
     email = user_data.email
     password = user_data.password
     auth_string = "NLAuth nlauth_account={0}, nlauth_email={1}, nlauth_signature={2}"
     auth_header = auth_string.format(Constants.NLAUTH_ACCOUNT, email, password)
     headers = {"content-type": "application/json", "Authorization": auth_header}
-    session.delete(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'&idMacro='+id_macro+'&funcionario='+funcionario, headers=headers)
+    requests.delete(Constants.URL_NETSUITE.format(Constants.SCRIPT_COMPETENCIAS)+'&idMacro='+id_macro+'&funcionario='+funcionario, headers=headers)
 
     return ''

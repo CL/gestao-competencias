@@ -35,13 +35,24 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Mapear Skills"),
+        backgroundColor: Colors.cyan,
         actions: [
           new IconButton(
             onPressed: save,
             icon: new Icon(Icons.save)
           )
         ],
-        leading: new Icon(Icons.arrow_back),
+//          icon: new Icon(Icons.close),
+//          onPressed: () {
+//            Navigator.pop(context);
+//          })
+        leading:
+          new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () {
+            Navigator.pop(context);
+            }
+        ),
       ),
       body: new Stack(
       children: [
@@ -125,23 +136,31 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
   }
 
   List<Widget> getSubSkillsList(){
+    double width = MediaQuery.of(context).size.width;
+
     List<Widget> newWidgets = [];
     newWidgets.add(new Column(
-      children: [
-        new Text(
-          "Classifique seu domínio nas skills.",
-          style: new TextStyle(
-            color: new Color.fromRGBO(97, 97, 97, 1.0),
-            fontSize: 14.0
+      children:[
+        new Container(
+          padding: EdgeInsets.only(right: width*0.333, bottom: 2.0),
+          child: new Text(
+            "Classifique seu domínio nas skills.",
+            style: new TextStyle(
+              color: new Color.fromRGBO(97, 97, 97, 1.0),
+              fontSize: 14.0
+            ),
           ),
         ),
-        new Text(
-          "Dê like nas quais tem interesse em aprender.",
-          style: new TextStyle(
-            color: new Color.fromRGBO(97, 97, 97, 1.0),
-            fontSize: 14.0
-          ),
-        )
+        new Container(
+          padding: EdgeInsets.only(right: width*0.165, bottom: 15.0),
+          child: new Text(
+            "Dê like nas quais tem interesse em aprender.",
+            style: new TextStyle(
+              color: new Color.fromRGBO(97, 97, 97, 1.0),
+              fontSize: 14.0
+            ),
+          )
+        ),
       ],
     ));
 
