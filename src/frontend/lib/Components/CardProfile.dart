@@ -103,12 +103,23 @@ class CardProfileState extends State<CardProfile>{
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              new Text(
-                sub.subSkillName,
-                style: new TextStyle(
-                  color: new Color.fromRGBO(97, 97, 97, 100.0),
-                  fontSize: 12.0
-                ),
+              new Row(
+                children: [
+                  new Container(
+                    padding: new EdgeInsets.only(right: 6.0),
+                    child: new Icon(
+                      sub.subSkillInterest ? Icons.favorite : Icons.favorite_border,
+                      color: sub.subSkillInterest ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                  new Text(
+                    sub.subSkillName,
+                    style: new TextStyle(
+                      color: new Color.fromRGBO(97, 97, 97, 100.0),
+                      fontSize: 14.0
+                    ),
+                  ),
+                ],
               ),
               new StarRating(rating: sub.subSkillRating, color: new Color.fromRGBO(245, 184, 43, 100.0))
             ],
