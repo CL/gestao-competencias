@@ -13,7 +13,7 @@ class CardProfile extends StatefulWidget{
 
 }
 
-class CardProfileState extends State<CardProfile>{
+class CardProfileState extends State<CardProfile> {
   bool expanded = false;
   Skill skillProfile;
 
@@ -45,7 +45,7 @@ class CardProfileState extends State<CardProfile>{
                   new Row(
                     children: [
                       new Text(
-                        skillProfile.subSkills.length.toString() + "/" + skillProfile.totalSubSkills.toString(),
+                        getRatedSkills().toString() + "/" + skillProfile.totalSubSkills.toString(),
                         style: new TextStyle(
                           color: new Color.fromRGBO(97, 97, 97, 100.0),
                           fontSize: 14.0,
@@ -93,34 +93,41 @@ class CardProfileState extends State<CardProfile>{
     );
   }
 
+  int getRatedSkills() {
+    return skillProfile.subSkills.where((subskill) => subskill.subSkillRating != 0.0).length;
+  }
+
   List<Widget> listSubSkills(){
     List<Widget> subSkills = [];
 
     skillProfile.subSkills.forEach((sub) {
-      subSkills.add(
-        new Container(
-          padding: new EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 5.0),
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              new Text(
-                sub.subSkillName,
-                style: new TextStyle(
-                  color: new Color.fromRGBO(97, 97, 97, 100.0),
-                  fontSize: 12.0
-                ),
+      if(sub.subSkillRating != 0.0) {
+        subSkills.add(
+            new Container(
+              padding: new EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 5.0),
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  new Text(
+                    sub.subSkillName,
+                    style: new TextStyle(
+                        color: new Color.fromRGBO(97, 97, 97, 100.0),
+                        fontSize: 12.0
+                    ),
+                  ),
+                  new StarRating(rating: sub.subSkillRating,
+                      color: new Color.fromRGBO(245, 184, 43, 100.0))
+                ],
               ),
-              new StarRating(rating: sub.subSkillRating, color: new Color.fromRGBO(245, 184, 43, 100.0))
-            ],
+            )
+        );
+        subSkills.add(
+          new Container(
+              padding: new EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 5.0),
+              child: new Divider(height: 15.0, color: Colors.grey[300])
           ),
-        )
-      );
-      subSkills.add(
-        new Container(
-          padding: new EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 5.0),
-          child: new Divider(height: 15.0,color: Colors.grey[300])
-        ),
-      );
+        );
+      }
     });
 
     return subSkills;
