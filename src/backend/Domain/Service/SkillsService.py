@@ -35,6 +35,8 @@ def list_user_skills(user_data):
 
     macro_dict = defaultdict(Skill)
 
+    count_rated_skills = defaultdict(int)
+
     for competence in competences:
         subskill = Subskill(competence.id_subskill, competence.text_subskill, competence.category, competence.rating, competence.interest, competence.id)
         if macro_dict[competence.id_skill].skill_id is '':
@@ -45,13 +47,14 @@ def list_user_skills(user_data):
         macro_dict[competence.id_skill].sub_skills.append(subskill)
         if competence.rating is not '0':
             macro_dict[competence.id_skill].skill_rating += float(competence.rating)
+            count_rated_skills[competence.id_skill] += 1
 
         macro_dict[competence.id_skill].total_sub_skills += 1
 
     all_skills = []
     for item in macro_dict.values():
-        if len(item.sub_skills) > 0:
-            item.skill_rating /= len(item.sub_skills)
+        if count_rated_skills[item.skill_id] > 0:
+            item.skill_rating /= count_rated_skills[item.skill_id]
             all_skills.append(item)
     return all_skills
 
