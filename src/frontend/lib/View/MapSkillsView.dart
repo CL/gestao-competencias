@@ -2,53 +2,48 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import '../Model/ContextData.dart';
 import '../Service/SkillsService.dart';
-import '../Components/BottomNavBar.dart';
-import '../Model/User.dart';
 import '../Model/Skill.dart';
 import 'MapSubSkillsView.dart';
 
 
 class MapSkillsView extends StatefulWidget {
-  final List<Skill> allSkills;
-  final List<Skill> oldSkills;
-  final User user;
+  final ContextData contextData;
   
-  MapSkillsView(this.allSkills, this.user, this.oldSkills, {Key key}) : super(key: key);
+  MapSkillsView(this.contextData);
 
   @override
-  createState() => new MapSkillsState(allSkills, user, oldSkills);
+  createState() => new MapSkillsState(contextData);
 }
 
 class MapSkillsState extends State<MapSkillsView>{
   HashMap<String, bool> selectedSkillsIds = new HashMap();
 
-  List<Skill> allSkills;
-  List<Skill> oldSkills;
-  User user;
+  ContextData contextData;
 
-  MapSkillsState(this.allSkills, this.user, this.oldSkills) {
-    oldSkills.forEach((skill) {
+  MapSkillsState(this.contextData) {
+    contextData.userSkills.forEach((skill) {
       selectedSkillsIds[skill.skillId] = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    allSkills.forEach((skill){
+    contextData.allSkills.forEach((skill){
       selectedSkillsIds.putIfAbsent(skill.skillId, () => false);
     });
 
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Mapear Skills"),
+        backgroundColor: Colors.cyan,
         actions: [
           new IconButton(
             onPressed: save,
             icon: new Icon(Icons.save)
           )
         ],
-        leading: new Icon(Icons.arrow_back),
       ),
       body: new Container(
         padding: new EdgeInsets.all(18.0),
@@ -63,7 +58,6 @@ class MapSkillsState extends State<MapSkillsView>{
           ),
         ) 
       ),
-      bottomNavigationBar: new BottomNavBar(this.user, allSkills, 2),
     );
   }
 
@@ -71,29 +65,33 @@ class MapSkillsState extends State<MapSkillsView>{
     List<Skill> selectedSkills = [];
     selectedSkillsIds.forEach((key, value) {
       if(value){
-        selectedSkills.add(allSkills.firstWhere((element) => element.skillId == key));
+        selectedSkills.add(contextData.allSkills.firstWhere((element) => element.skillId == key));
       }
     });
 
-    List<Skill> deletedSkills = [];
+    var skillsService = new SkillsService();
 
-    oldSkills.forEach((skill) {
-      var skillsService = new SkillsService();
+    List<Skill> toBeRemovedSkills = [];
+
+    contextData.userSkills.forEach((skill) {
       if(selectedSkills.firstWhere((element) => element.skillId == skill.skillId, orElse: () => null) == null) {
-        skillsService.deleteSkill(skill, user);
-        deletedSkills.add(skill);
+        skillsService.deleteSkill(skill, contextData.user);
+        toBeRemovedSkills.add(skill);
       }
     });
+    
+    toBeRemovedSkills.forEach((removedSkill) {
+      contextData.userSkills.removeWhere((userSkill) => userSkill.skillId == removedSkill.skillId);
+    });
 
-    oldSkills.removeWhere((skill) => deletedSkills.firstWhere((skillDeleted) => skillDeleted.skillId == skill.skillId, orElse: () => null) != null);
-
-    oldSkills.forEach((oldSkill) {
+    contextData.userSkills.forEach((oldSkill) {
       selectedSkills.forEach((selectedSkill) {
         if(oldSkill.skillId == selectedSkill.skillId) {
           oldSkill.subSkills.forEach((oldSubSkill) {
             selectedSkill.subSkills.forEach((selectedSubSkill){
               if(oldSubSkill.subSkillId == selectedSubSkill.subSkillId) {
                 selectedSubSkill.subSkillRating = oldSubSkill.subSkillRating;
+                selectedSubSkill.subSkillInterest = oldSubSkill.subSkillInterest;
               }
             });
           });
@@ -104,19 +102,23 @@ class MapSkillsState extends State<MapSkillsView>{
     Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new MapSubSkillsView(selectedSkills, user, oldSkills)));
+              builder: (context) => new MapSubSkillsView(selectedSkills, contextData)));
   }
 
   List<Widget> getSkillsList(){
+    double width = MediaQuery.of(context).size.width;
+
     List<Widget> newWidgets = [];
-    newWidgets.add(new Text(
-      "Selecione as habilidades que você tem domínio de acordo com as skills listadas.",
-      style: new TextStyle(
-        color: new Color.fromRGBO(97, 97, 97, 1.0),
-        fontSize: 14.0
-      ),
-    ));
-    allSkills.forEach((skill){
+    newWidgets.add(new Container(
+      padding: EdgeInsets.only(left: width*0.009),
+      child: new Text(
+        "Selecione as habilidades que você tem domínio de acordo com as skills listadas.",
+        style: new TextStyle(
+          color: new Color.fromRGBO(97, 97, 97, 1.0),
+          fontSize: 14.0
+        ),
+    )));
+    contextData.allSkills.forEach((skill){
       newWidgets.add(
         new Container(
           padding: new EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),
@@ -139,7 +141,7 @@ class MapSkillsState extends State<MapSkillsView>{
                       ),
                       new Checkbox(
                         value: selectedSkillsIds[skill.skillId], 
-                        activeColor: Theme.of(context).primaryColor,
+                        activeColor: Colors.cyan,
                         onChanged: (value){
                           setState((){
                             selectedSkillsIds[skill.skillId] = value;
@@ -148,26 +150,14 @@ class MapSkillsState extends State<MapSkillsView>{
                       )
                     ],
                   ),
-                  new Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      new Container(
-                        padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
-                        child: new Text(
-                          "Skills dessa categoria",
-                          style: new TextStyle(
-                            color: new Color.fromRGBO(97, 97, 97, 1.0),
-                            fontSize: 10.0
-                          ),
-                        ),
-                      )
-                    ]
+                  new Container(
+                    child: new Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 6.0,
+                      runSpacing: 4.0,
+                      children: getChipsSubSkills(skill.subSkills)
+                    ),
                   ),
-                  new Wrap(
-                    spacing: 6.0,
-                    runSpacing: 4.0,
-                    children: getChipsSubSkills(skill.subSkills)
-                  )
                 ],
               ) 
             ),

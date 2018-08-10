@@ -3,167 +3,219 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../View/FilterView.dart';
+import '../Model/ContextData.dart';
+import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
 import '../View/ProfileView.dart';
 import '../Service/SearchService.dart';
-import '../Model/Skill.dart';
-import '../Components/BottomNavBar.dart';
 import '../Model/User.dart';
 
 class SearchView extends StatefulWidget{
 
-  final User user;
-  final List<Skill> skills;
-
-  SearchView(this.user, this.skills);
+  final ContextData contextData;
+  final List<User> users;
+  SearchView(this.contextData, { this.users });
 
   @override
-  createState() => new SearchViewState([],this.user,this.skills);
+  createState() => new SearchViewState(contextData, users);
 }
 
 class SearchViewState extends State<SearchView>{
-  final TextEditingController _controllerPesquisa = new TextEditingController();
-  User user;
   List<User> users;
-  List<Skill> skills;
-  List<String> roles;
-  String searchedRole="";
+  List<User> filteredUsers;
+  ContextData contextData;
   String searchedName="";
+  bool loading = false;
+  TextEditingController _controllerText = new TextEditingController();
 
-  SearchViewState(List<User> users, User user, List<Skill> skills){
-    this.user = user;
-    this.roles = this.getRoles();
-    this.skills = skills;
-    this.users = [];
-    this.getAllUsers().then((allUsers) {
-      this.setState(() => this.users = allUsers);
-    });
+  SearchViewState(ContextData contextData, List<User> users){
+    this.contextData = contextData;
+
+    if(contextData.filteredUsers == null) {
+      contextData.isAllUsers = true; 
+      this.loading = true;
+      this.users = users ?? [];
+      this.getAllUsers().then((allUsers) {
+        this.setState(() {
+          this.loading = false;
+          this.filteredUsers = allUsers;
+        });
+      });
+    }
+    else {
+      this.filteredUsers = contextData.filteredUsers;
+      this.users = contextData.isAllUsers ? [] : this.filteredUsers;
+    }
+
   }
 
   Future<List<User>> getAllUsers() {
-    return new SearchService().getAllUsers(user);
+    return new SearchService().getAllUsers(contextData.user);
   }
 
-  List<User> getUsers({String role = "", String name = ""}){
-    List<User> filteredUsers;
-    List<User> doubleFilteredUsers;
-    if(role != "" && name == ""){
-      filteredUsers = users.where((i) => i.role == role).toList();
-      return filteredUsers;
-    }else if(role != "" && name != ""){
-      filteredUsers = users.where((i) => i.role == role).toList();
-      doubleFilteredUsers = filteredUsers.where((i) => i.name.contains(name)).toList();
-      return doubleFilteredUsers;
-    }else if( role == "" && name != ""){
-      filteredUsers = users.where( (i) => i.name.contains(name)).toList();
-      return filteredUsers;
+  List<User> getUsers(String name){
+    name = name.toLowerCase();
+    List<User> matchingUsers;
+    if(name != ""){
+      matchingUsers = filteredUsers.where((i) => i.name.toLowerCase().contains(name)).toList();
+      return matchingUsers;
     }
 
-    return users;
-  }
-
-  List<String> getRoles(){
-    List<String> roles = [
-      "Design",
-      "DEV",
-      "GP",
-      "Outro",
-      "Outra",
-    ];
-    return roles;
+    return [];
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return new MaterialApp(
       title: 'Mulambos dti',
       home: new Scaffold(
+        appBar: new AppBar(
+          backgroundColor: Colors.cyan,
+          title: Text('Ex-Mulambos'),
+        ),
         resizeToAvoidBottomPadding: false,
-        body: new Column(
-          children: <Widget>[
-            new Container(
-              margin: new EdgeInsets.all(24.0),
-              child: new TextField(
-                style: new TextStyle(
-                  color: const Color(0xffbebebe),
-                  fontSize: 16.0,
+        body: new Stack(
+          children: [new Column(
+            children: <Widget>[
+              new Container(
+                margin: new EdgeInsets.fromLTRB(width*0.03, height*0.02, width*0.03, 0.0),
+                child: new TextField(
+                  controller: _controllerText,
+                  style: new TextStyle(
+                    color: const Color(0xffbebebe),
+                    fontSize: height*0.028,
+                  ),
+                  decoration: new InputDecoration(
+                      hintText: 'Pesquisar',
+                      prefixIcon:
+                        new Container(
+                          padding: EdgeInsets.only(right: width*0.0),
+                          child: new Icon(Icons.search, color: new Color(0xffbebebe)),
+                        ),
+                      suffixIcon:
+                        searchedName == "" ?
+                        new IconButton(
+                          icon: new Icon(Icons.filter_list, color:  contextData.isAllUsers == true ? new Color(0xffbebebe): Colors.deepPurple),
+                          onPressed: () {
+                            setState(() {
+                              loading = true;
+                            });
+                            getAllUsers().then((allUsers) {
+                              contextData.isAllUsers == true ?
+                              Navigator.push(context, new MaterialPageRoute(
+                                  builder: (context) =>
+                                  new FilterView(contextData)),
+                              ) :
+                              setState(() {
+                                loading = false;
+                                contextData.isAllUsers = true;
+                                searchedName = "";
+                                users = [];
+                                filteredUsers = allUsers;
+                                _controllerText.text = "";
+                              });
+                            });
+                          }
+                        ) :
+                        new IconButton(
+                            icon: new Icon(Icons.close),
+                            onPressed: () {
+                              setState((){ 
+                                searchedName = "";
+                                contextData.isAllUsers ?
+                                users = getUsers(searchedName) :
+                                users = filteredUsers;
+                                _controllerText.text = "";
+                              });
+                            },
+                        ),
+                  ),
+                  onChanged: (text) => setState(() {
+                    searchedName = text;
+                    users = getUsers(searchedName);
+                  })
                 ),
-                decoration: new InputDecoration(
-                    hintText: 'Pesquisa',
-                    prefixIcon:
-                    new Icon(Icons.search, color: new Color(0xffbebebe))),
-                    controller: _controllerPesquisa,
-                    onChanged: (text) {
-                        setState(() {
-                          searchedName = text;
-                        });
-                        users = getUsers(role: searchedRole, name: searchedName);
-                    },
+              ),
+              new Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  new Container(
+                    padding: new EdgeInsets.only(left: width*0.03,top: 18.0),
+                    height: MediaQuery.of(context).size.height*0.69,
+                    child: new ListView(
+                      padding: new EdgeInsets.all(0.0),
+                      scrollDirection: Axis.vertical,
+                      children: new List.generate(users.length, (int index){
+                        return new GestureDetector(
+                          onTap: () {
+                            setState(() { loading = true; });
+                            new SkillsService().getUserSkills(contextData.user, users[index].id).then((skillsSearch) {
+                              setState((){ loading = false; });
+                              Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new ProfileView(skillsSearch, users[index], contextData)));
+                            });
+                          },
+                          child: new Container(
+                            height: height*0.085,
+                            child: new Row(
+                              children: <Widget>[
+                                new Container(
+                                  height: height*0.085,
+                                  width: width*0.12,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        image: new AssetImage('assets/logo.png'),
+                                      )
+                                  ),
+                                ),
+                                new Expanded(
+                                    child: new Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        new Container(
+                                            margin: new EdgeInsets.only(top: height*0.025),
+                                            padding: new EdgeInsets.only(left: width*0.05),
+                                            child: new Text(
+                                              users[index].name,
+                                              style: new TextStyle(
+                                                  color: const Color(0xff616161),
+                                              fontSize: height*0.028,
+                                            ),
+                                            ),
+                                        ),
+                                      ],
+                                    )
+                                )
+                              ],
+                            ),
+                          )
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          loading ? new Container(
+            child: new Center(
+              child: new Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: new Color(0xccffffff),
               ),
             ),
-            new Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                new Container(
-                  padding: new EdgeInsets.only(left: 12.0,top: 10.0),
-                  height: MediaQuery.of(context).size.height*0.72,
-                  child: new ListView(
-                    padding: new EdgeInsets.all(0.0),
-                    scrollDirection: Axis.vertical,
-                    children: new List.generate(users.length, (int index){
-                      return new GestureDetector(
-                        onTap: () {
-                          new SkillsService().getUserSkills(user, users[index].id).then((skills) {
-                            Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new ProfileView(skills, users[index])));
-                          });
-                        },
-                        child: new Container(
-                          height: 52.0,
-                          child: new Row(
-                            children: <Widget>[
-                              new Container(
-                                height: 48.0,
-                                width: 48.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      image: new AssetImage('assets/logo.png'),
-                                    )
-                                ),
-                              ),
-                              new Expanded(
-                                  child: new Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      new Container(
-                                          margin: new EdgeInsets.only(top: 6.0),
-                                          padding: new EdgeInsets.only(left: 16.0),
-                                          child: new Text(
-                                            users[index].name,
-                                            style: new TextStyle(
-                                                color: const Color(0xff616161),
-                                            fontSize: 16.0,
-                                          ),
-                                          ),
-                                      ),
-                                    ],
-                                  )
-                              )
-                            ],
-                          ),
-                        )
-                      );
-                    }),
-                  ),
-                ),
-              ],
-            )
-          ],
+          ): new Container(),
+          loading ? new LoadingCircleRotate(): new Container(),
+          ]
         ),
-        bottomNavigationBar: new BottomNavBar(this.user,this.skills,1),
       ),
     );
   }

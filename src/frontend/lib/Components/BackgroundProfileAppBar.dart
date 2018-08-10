@@ -8,7 +8,7 @@ class _BackgroundLayer {
 
 class BackgroundProfileAppBar extends StatelessWidget {
 
-  const BackgroundProfileAppBar({ Key key, this.animation, this.image }) : super(key: key);
+  const BackgroundProfileAppBar({ this.animation, this.image });
 
   final ImageProvider image;
 

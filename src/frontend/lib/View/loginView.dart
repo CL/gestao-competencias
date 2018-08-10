@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../View/FirstLoginView.dart';
 
+import '../View/HomeAppView.dart';
+import '../Model/ContextData.dart';
+import '../View/FirstLoginView.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
 import '../Service/LoginService.dart';
 import '../Service/SkillsService.dart';
-
-import 'ProfileView.dart';
 
 
 LoginService _loginViewModel = new LoginService();
@@ -40,8 +40,11 @@ class LoginInput extends StatefulWidget {
 }
 
 class _LoginInputState extends State<LoginInput> {
+  final dataKey = new GlobalKey();
+
   final TextEditingController _controllerEmail = new TextEditingController();
-  final TextEditingController _controllerSenha = new TextEditingController();
+  final TextEditingController _controllerPassword = new TextEditingController();
+
   final snackBarError = new SnackBar(
       content: new Text('Email ou senha incorretos. Você só pode errar a senha por 3 vezes ou seu login será bloqueado.'),
       duration: new Duration(seconds: 3)
@@ -50,7 +53,13 @@ class _LoginInputState extends State<LoginInput> {
   bool wrongPassword = false;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return new Stack(
       children: <Widget>[
@@ -102,7 +111,12 @@ class _LoginInputState extends State<LoginInput> {
                                           ),
                                           decoration: new InputDecoration(
                                               hintText: 'e-mail',
-                                              prefixIcon: new Icon(Icons.person, color: Colors.white)),
+                                              prefixIcon:
+                                              new Container(
+                                                child: new Icon(Icons.person, color: Colors.white),
+                                                padding: new EdgeInsets.only(right: width*0.03),
+                                              ),
+                                          ),
                                           controller: _controllerEmail,
                                         ),
                                       ),
@@ -114,13 +128,15 @@ class _LoginInputState extends State<LoginInput> {
                                         decoration: new InputDecoration(
                                             hintText: 'senha',
                                             prefixIcon:
-                                            new Icon(Icons.lock_outline, color: Colors.white)),
-                                        controller: _controllerSenha,
+                                              new Container(
+                                                child: new Icon(Icons.lock_outline, color: Colors.white),
+                                                padding: new EdgeInsets.only(right: width*0.03),
+                                              ),
+                                      ),
+                                        controller: _controllerPassword,
                                       ),
                                     ],
                                   )
-
-
                               ),
                             ],
                           )),
@@ -140,9 +156,7 @@ class _LoginInputState extends State<LoginInput> {
                             ),
                             onPressed: () {
                               setState(() { logingIn = true;} );
-                              debugPrint("Senha: " + _controllerSenha.text);
-                              debugPrint("Senha URL encode: " + Uri.encodeQueryComponent(_controllerSenha.text));
-                              _loginViewModel.logIn(_controllerEmail.text, _controllerSenha.text)
+                              _loginViewModel.logIn(_controllerEmail.text, Uri.encodeQueryComponent(_controllerPassword.text))
                                   .catchError(() {setState(() { logingIn = false;} );})
                                   .then(logInUser);
                             },
@@ -155,7 +169,7 @@ class _LoginInputState extends State<LoginInput> {
             );
           },
         ),
-        logingIn == true ? new Container(
+        logingIn ? new Container(
           child: new Center(
             child: new Container(
               height: MediaQuery.of(context).size.height,
@@ -164,7 +178,7 @@ class _LoginInputState extends State<LoginInput> {
             ),
           ),
         ): new Container(),
-        logingIn == true ? new LoadingCircleRotate(
+        logingIn ? new LoadingCircleRotate(
         ): new Container(),
       ],
     );
@@ -173,22 +187,21 @@ class _LoginInputState extends State<LoginInput> {
   void logInUser(User user){
     if(user != null){
       new SkillsService().getUserSkills(user, user.id).then((List<Skill> skills){
-        setState(() { logingIn = false;} );
-        if(skills.length == 0) {
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new FirstLoginView(user)));
-        } else {
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new ProfileView(skills, user)));
-        }
-        
+        new SkillsService().getAllSkills(user).then((allSkills) {
+          setState(() { logingIn = false;} );
+          if(skills.length == 0) {
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new FirstLoginView(new ContextData(user, skills, allSkills))));
+          } else {
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new HomeAppView(new ContextData(user, skills, allSkills))));
+          }
+        });
       });
-
-      
     }
     else{
       setState(() { logingIn = false;} );
@@ -237,5 +250,12 @@ class _LoadingCircleRotateState extends State<LoadingCircleRotate>
         },
       ),
     );
+  }
+
+  @protected
+  @mustCallSuper
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 }

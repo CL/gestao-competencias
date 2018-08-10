@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Components/BottomNavBar.dart';
 
+import '../Model/ContextData.dart';
 import '../Model/Skill.dart';
 import '../Model/User.dart';
 import '../Components/BackgroundProfileAppBar.dart';
@@ -12,11 +12,12 @@ class ProfileView extends StatefulWidget {
 
   final List<Skill> skillsProfile;
   final User user;
+  final ContextData contextData;
 
-  ProfileView(this.skillsProfile, this.user);
+  ProfileView(this.skillsProfile, this.user, this.contextData);
 
   @override
-  createState() => new ProfileState(skillsProfile, user);
+  createState() => new ProfileState(skillsProfile, user, contextData);
 
 }
 
@@ -24,9 +25,9 @@ class ProfileState extends State<ProfileView> {
 
   List<Skill> skillsProfile;
   User user;
-  GlobalKey globalKey = new GlobalKey();
+  ContextData contextData;
 
-  ProfileState(this.skillsProfile, this.user);
+  ProfileState(this.skillsProfile, this.user, this.contextData);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class ProfileState extends State<ProfileView> {
           slivers: [
             new SliverAppBar(
                 expandedHeight: _flexibleSpaceMaxHeight,
-                flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/RedSquare_SaintBasile_%28pixinn.net%29.jpg/398px-RedSquare_SaintBasile_%28pixinn.net%29.jpg").image),
+                flexibleSpace: new BackgroundProfileAppBar(animation: kAlwaysDismissedAnimation, image: new Image.asset('assets/background-profile.png').image),
                 bottom: new PreferredSize(
                     preferredSize: new Size.fromHeight(_flexibleSpaceMaxHeight*0.67),
                     child: new Container(
@@ -61,9 +62,7 @@ class ProfileState extends State<ProfileView> {
                               fontSize: 14.0,
                             ),
                           ),
-                  /*
-                  */
-                          new Divider(),
+                          new Divider(color: Colors.transparent,),
                           new Row(
                               children: [
                                 new SizedBox(
@@ -94,7 +93,6 @@ class ProfileState extends State<ProfileView> {
             ),
           ],
         ),
-      bottomNavigationBar: new BottomNavBar(user, skillsProfile, 4),
     );
   }
 
@@ -122,4 +120,5 @@ class ProfileState extends State<ProfileView> {
 
     return chips;
   }
+  
 }

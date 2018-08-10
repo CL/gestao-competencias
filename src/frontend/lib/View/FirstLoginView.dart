@@ -1,46 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Model/Skill.dart';
-import '../Model/User.dart';
-import '../Service/SkillsService.dart';
-import 'MapSkillsView.dart';
+
+import '../View/HomeAppView.dart';
+import '../Model/ContextData.dart';
 
 class FirstLoginView extends StatefulWidget {
-  final User user;
+  final ContextData context;
 
-  FirstLoginView(this.user);
+  FirstLoginView(this.context);
 
   @override
-  createState() => new FirstLoginState(user);
+  createState() => new FirstLoginState(context);
 }
 
 class FirstLoginState extends State<FirstLoginView>{
 
-  User user;
+  ContextData contextData;
 
-  FirstLoginState(this.user);
+  FirstLoginState(this.contextData);
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return new MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Gestão de Skills',
       home: new Scaffold(
           body: new Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.fromLTRB(36.0, 113.0, 36.0, 40.0),
+                margin: new EdgeInsets.fromLTRB(width*0.1, height * 0.176, width*0.1, height * 0.0625),
                 child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     new Container(
                       child: new Image.asset('assets/logo.png'),
-                      padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 48.0),
+                      padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.075),
                     ),
                     new Container(
-                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 27.0),
+                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.0375),
                       child: new Text(
-                        'Olá ' + user.name,
+                        'Olá ' + contextData.user.name,
                         style: new TextStyle(
                           fontWeight: FontWeight.bold,
                           color: new Color(0xff616161),
@@ -49,7 +51,7 @@ class FirstLoginState extends State<FirstLoginView>{
                       ),
                     ),
                     new Container(
-                        margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 24.0),
+                        margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.0375),
                         child: new Text(
                           'Informe quais habilidades você possui e quais você ainda '
                               'não tem domínio, mas tem interesse em aprender.',
@@ -60,7 +62,7 @@ class FirstLoginState extends State<FirstLoginView>{
                         )
                     ),
                     new Container(
-                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 24.0),
+                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.0375),
                       child: new Text('Reserve 5 minutos para iniciar o mapeamento das suas '
                           'skills.',
                         style: new TextStyle(
@@ -70,7 +72,7 @@ class FirstLoginState extends State<FirstLoginView>{
                       ),
                     ),
                     new Container(
-                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 48.0),
+                      margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, height * 0.075),
                       child: new Text('É importante manter seu perfil sempre atualizado.',
                         style: new TextStyle(
                           color: new Color(4284572001),
@@ -79,13 +81,13 @@ class FirstLoginState extends State<FirstLoginView>{
                       ),
                     ),
                     new Container(
-                        height: 48.0,
-                        width: 272.0,
+                    height: height*0.058,
+                    width: width*0.8,
                         child: new RaisedButton.icon(
                           icon: new Icon(Icons.arrow_forward, color:const Color(0xff5e529d) ,),
                           color: Colors.white,
                           shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(36.0),
+                              borderRadius: new BorderRadius.circular(width),
                               side: new BorderSide(
                                 color: const Color(0xff5e529d),
                                 width: 1.0,
@@ -98,12 +100,10 @@ class FirstLoginState extends State<FirstLoginView>{
                             ),
                           ),
                           onPressed: () {
-                            new SkillsService().getAllSkills(user).then((List<Skill> skills) {
-                              Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => new MapSkillsView(skills, user, [])));
-                            });
+                            Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new HomeAppView(contextData, selectedTab: 1)));
                           },
                         )
                     ),

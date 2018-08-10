@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
-import '../Components/BottomNavBar.dart';
-import '../View/LoginView.dart';
 
+import '../View/HomeAppView.dart';
+import '../Model/ContextData.dart';
+import '../View/LoginView.dart';
 import '../Service/SkillsService.dart';
 import '../Components/StarRating.dart';
 import '../Model/Skill.dart';
-import '../Model/User.dart';
-import 'ProfileView.dart';
 
 
 class MapSubSkillsView extends StatefulWidget {
-  final List<Skill> allSkills;
-  final List<Skill> oldSkills;
-  final User user;
+  final List<Skill> selectedSkills;
+  final ContextData contextData;
   
-  MapSubSkillsView(this.allSkills, this.user, this.oldSkills, {Key key}) : super(key: key);
+  MapSubSkillsView(this.selectedSkills, this.contextData);
 
   @override
-  createState() => new MapSubSkillsState(allSkills, user, oldSkills);
+  createState() => new MapSubSkillsState(selectedSkills, contextData);
 }
 
 class MapSubSkillsState extends State<MapSubSkillsView> {
   List<Skill> selectedSkills;
-  List<Skill> oldSkills;
-  User user;
+  ContextData contextData;
   bool loading;
 
-  MapSubSkillsState(this.selectedSkills, this.user, this.oldSkills, [this.loading=false]);
+  MapSubSkillsState(this.selectedSkills, this.contextData, [this.loading=false]);
 
   final snackBarError = new SnackBar(
       content: new Text('Erro ao salvar. Tente novamente mais tarde.'),
@@ -38,28 +35,51 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Mapear Skills"),
+        backgroundColor: Colors.cyan,
         actions: [
           new IconButton(
             onPressed: save,
             icon: new Icon(Icons.save)
           )
         ],
-        leading: new Icon(Icons.arrow_back),
-      ),
-      body: new Container(
-        padding: new EdgeInsets.all(18.0),
-        child: new Scrollbar(
-          child: new CustomScrollView(
-            slivers: [new SliverList(
-              delegate: new SliverChildListDelegate(
-                getSubSkillsList()
-              ),
-            )]
-          )
-          
+//          icon: new Icon(Icons.close),
+//          onPressed: () {
+//            Navigator.pop(context);
+//          })
+        leading:
+          new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () {
+            Navigator.pop(context);
+            }
         ),
       ),
-      bottomNavigationBar: new BottomNavBar(this.user, selectedSkills, 2),
+      body: new Stack(
+      children: [
+        new Container(
+          padding: new EdgeInsets.all(18.0),
+          child: new Scrollbar(
+            child: new CustomScrollView(
+              slivers: [new SliverList(
+                delegate: new SliverChildListDelegate(
+                  getSubSkillsList()
+                ),
+              )]
+            )  
+          ),
+        ),
+        loading ? new Container(
+          child: new Center(
+            child: new Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: new Color(0xccffffff),
+            ),
+          ),
+        ): new Container(),
+        loading ? new LoadingCircleRotate(): 
+        new Container(),]
+      )
     );
   }
 
@@ -71,11 +91,11 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
 
     selectedSkills.forEach((selectedSkill) {
-      oldSkills.forEach((oldSkill) {
+      contextData.userSkills.forEach((oldSkill) {
         if(selectedSkill.skillId == oldSkill.skillId) {
           selectedSkill.subSkills.forEach((selectedSubskill) {
              oldSkill.subSkills.forEach((oldSubskill) {
-               if(oldSubskill.subSkillRating != selectedSubskill.subSkillRating || oldSubskill.subSkillInterest != selectedSubskill.subSkillInterest) {
+               if(oldSubskill.subSkillId == selectedSubskill.subSkillId) {
                  selectedSubskill.entryId = oldSubskill.entryId;
                  subskillsToUpdate.add(selectedSubskill);             
                }
@@ -95,44 +115,52 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
 
     var skillService = new SkillsService();
 
-    skillService.updateSubskills(subskillsToUpdate, user);
-
-    skillService.saveSkills(subskillsToSave, user).then((success) {
-      if(success) {
-        new SkillsService().getUserSkills(user, user.id).then((skills) {
-          setState(() { loading = false;} );
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new ProfileView(skills, user)));
-        });
-        
-      } else {
-          Scaffold.of(context).showSnackBar(snackBarError);
-      }
-      
+    skillService.updateSubskills(subskillsToUpdate, contextData.user).then((success) {
+      skillService.saveSkills(subskillsToSave, contextData.user).then((success) {
+        if(success) {
+          new SkillsService().getUserSkills(contextData.user, contextData.user.id).then((skills) {
+            setState(() { loading = false;} );
+            contextData.userSkills = skills;
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new HomeAppView(contextData)));
+          });
+          
+        } else {
+            Scaffold.of(context).showSnackBar(snackBarError);
+        }
+      });
     });
     
   }
 
   List<Widget> getSubSkillsList(){
+    double width = MediaQuery.of(context).size.width;
+
     List<Widget> newWidgets = [];
     newWidgets.add(new Column(
-      children: [
-        new Text(
-          "Classifique seu domínio nas skills.",
-          style: new TextStyle(
-            color: new Color.fromRGBO(97, 97, 97, 1.0),
-            fontSize: 14.0
+      children:[
+        new Container(
+          padding: EdgeInsets.only(right: width*0.333, bottom: 2.0),
+          child: new Text(
+            "Classifique seu domínio nas skills.",
+            style: new TextStyle(
+              color: new Color.fromRGBO(97, 97, 97, 1.0),
+              fontSize: 14.0
+            ),
           ),
         ),
-        new Text(
-          "Dê like nas quais tem interesse em aprender.",
-          style: new TextStyle(
-            color: new Color.fromRGBO(97, 97, 97, 1.0),
-            fontSize: 14.0
-          ),
-        )
+        new Container(
+          padding: EdgeInsets.only(right: width*0.165, bottom: 15.0),
+          child: new Text(
+            "Dê like nas quais tem interesse em aprender.",
+            style: new TextStyle(
+              color: new Color.fromRGBO(97, 97, 97, 1.0),
+              fontSize: 14.0
+            ),
+          )
+        ),
       ],
     ));
 
@@ -191,21 +219,6 @@ class MapSubSkillsState extends State<MapSubSkillsView> {
       );
       
     });
-
-    newWidgets.add(
-      loading ? new Container(
-          child: new Center(
-            child: new Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: new Color(0xccffffff),
-            ),
-          ),
-        ): new Container()
-    );
-    newWidgets.add(
-      loading ? new LoadingCircleRotate(): new Container()
-    );
 
     return newWidgets;
   }

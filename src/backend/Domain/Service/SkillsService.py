@@ -16,6 +16,17 @@ def save_skills(skill_list, user_data):
     return NetSuiteSkillsAgent.save_skills(skill_list, user_data)
 
 
+def update_skills(skill_list,user_data):
+    if user_data.email is None or user_data.password is None or user_data.id is None:
+        return None
+
+    for skill in skill_list:
+        if skill.funcionario is None or skill.categoria is None or skill.nivelConhecimento is None or skill.interesse is None or skill.id is None:
+            return None
+
+    return NetSuiteSkillsAgent.update_skills(skill_list, user_data)
+
+
 def list_user_skills(user_data):
     if user_data.email is None or user_data.password is None or user_data.id is None:
         return None
@@ -24,23 +35,27 @@ def list_user_skills(user_data):
 
     macro_dict = defaultdict(Skill)
 
-    for competence in competences:
-        if competence.rating is not '0':
-            subskill = Subskill(competence.id_subskill, competence.text_subskill, competence.category, competence.rating, competence.interest, competence.id)
-            if macro_dict[competence.id_skill].skill_id is '':
-                macro_dict[competence.id_skill].skill_id = competence.id_skill
-                macro_dict[competence.id_skill].skill_name = competence.text_skill
-                macro_dict[competence.id_skill].sub_skills = []
+    count_rated_skills = defaultdict(int)
 
-            macro_dict[competence.id_skill].sub_skills.append(subskill)
+    for competence in competences:
+        subskill = Subskill(competence.id_subskill, competence.text_subskill, competence.category, competence.rating, competence.interest, competence.id)
+        if macro_dict[competence.id_skill].skill_id is '':
+            macro_dict[competence.id_skill].skill_id = competence.id_skill
+            macro_dict[competence.id_skill].skill_name = competence.text_skill
+            macro_dict[competence.id_skill].sub_skills = []
+
+        macro_dict[competence.id_skill].sub_skills.append(subskill)
+        if competence.rating is not '0':
             macro_dict[competence.id_skill].skill_rating += float(competence.rating)
-            macro_dict[competence.id_skill].skill_rating /= len(macro_dict[competence.id_skill].sub_skills)
+            count_rated_skills[competence.id_skill] += 1
 
         macro_dict[competence.id_skill].total_sub_skills += 1
 
     all_skills = []
     for item in macro_dict.values():
-        all_skills.append(item)
+        if count_rated_skills[item.skill_id] > 0:
+            item.skill_rating /= count_rated_skills[item.skill_id]
+            all_skills.append(item)
     return all_skills
 
 
