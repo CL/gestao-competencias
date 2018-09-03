@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../View/HomeAppView.dart';
 import '../Model/ContextData.dart';
@@ -39,7 +40,7 @@ class LoginInput extends StatefulWidget {
   _LoginInputState createState() => new _LoginInputState();
 }
 
-class _LoginInputState extends State<LoginInput> {
+class _LoginInputState extends State<LoginInput>{
   final dataKey = new GlobalKey();
 
   final TextEditingController _controllerEmail = new TextEditingController();
@@ -105,12 +106,13 @@ class _LoginInputState extends State<LoginInput> {
                                       new Container(
                                         margin: const EdgeInsets.only(bottom: 32.0),
                                         child: new TextField(
+                                          autofocus: false,
                                           keyboardType: TextInputType.emailAddress,
                                           style: new TextStyle(
                                             color: Colors.white,
                                           ),
                                           decoration: new InputDecoration(
-                                              hintText: 'e-mail',
+                                              hintText: 'E-mail',
                                               prefixIcon:
                                               new Container(
                                                 child: new Icon(Icons.person, color: Colors.white),
@@ -121,12 +123,13 @@ class _LoginInputState extends State<LoginInput> {
                                         ),
                                       ),
                                       new TextField(
+                                        autofocus: false,
                                         obscureText: true,
                                         style: new TextStyle(
                                           color: Colors.white,
                                         ),
                                         decoration: new InputDecoration(
-                                            hintText: 'senha',
+                                            hintText: 'Senha',
                                             prefixIcon:
                                               new Container(
                                                 child: new Icon(Icons.lock_outline, color: Colors.white),
