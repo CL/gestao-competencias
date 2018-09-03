@@ -14,6 +14,8 @@
 *.iml
 *.ipr
 *.iws
+*.pyc
+**/__pycache__/**
 .idea/
 
 # Visual Studio Code related
